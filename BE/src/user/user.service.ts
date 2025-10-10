@@ -36,4 +36,12 @@ export class UserService {
     await this.userRepository.save(user);
     await this.mailService.sendVerificationMail(user.email, user.token_active);
   }
+
+  async findAll(): Promise<User[]> {
+    return await this.userRepository.find({
+      where: {
+        is_active: false,
+      },
+    });
+  }
 }

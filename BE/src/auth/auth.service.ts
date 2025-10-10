@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { ConfigService } from '@nestjs/config';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -6,6 +7,7 @@ import { User } from 'src/user/user.entity';
 import { Repository } from 'typeorm';
 import { LoginDTO } from './dtos/login.dto';
 import bcrypt from 'node_modules/bcryptjs';
+import { RefreshTokenDTO } from './dtos/refresh-token.dto';
 
 @Injectable()
 export class AuthService {
@@ -19,7 +21,7 @@ export class AuthService {
   async generateToken(
     payload: object,
     secretSignature: string,
-    expire: number,
+    expire: string,
   ): Promise<string> {
     return await this.jwtService.signAsync(payload, {
       secret: secretSignature,
@@ -52,12 +54,12 @@ export class AuthService {
       this.generateToken(
         payload,
         this.configService.get<string>('ACCESS_TOKEN')!,
-        1 * 60 * 60,
+        '1h',
       ),
       this.generateToken(
         payload,
         this.configService.get<string>('REFRESH_TOKEN')!,
-        7 * 24 * 60 * 60,
+        '7d',
       ),
     ]);
 
@@ -66,5 +68,36 @@ export class AuthService {
       accessToken: accessToken,
       refreshToken: refreshToken,
     };
+  }
+
+  async refresh(tokenDTO: RefreshTokenDTO): Promise<{ accessToken: string }> {
+    try {
+      const refreshTokenDecoded = await this.jwtService.verify(
+        tokenDTO.refreshToken,
+        {
+          secret: this.configService.get<string>('REFRESH_TOKEN'),
+        },
+      );
+
+      const payload = {
+        id: refreshTokenDecoded.id,
+        email: refreshTokenDecoded.email,
+        user_name: refreshTokenDecoded.user_name,
+        avatar: refreshTokenDecoded.avatar_url,
+      };
+
+      const accessToken = await this.generateToken(
+        payload,
+        this.configService.get<string>('ACCESS_TOKEN')!,
+        '1h',
+      );
+
+      return {
+        accessToken: accessToken,
+      };
+    } catch (error) {
+      console.log('Refresh token failed: ', error);
+      throw new UnauthorizedException('Invalid refresh token!');
+    }
   }
 }

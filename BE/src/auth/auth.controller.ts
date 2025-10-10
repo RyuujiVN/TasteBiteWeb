@@ -5,6 +5,7 @@ import { CreateUserDTO } from 'src/user/dtos/create-user.dto';
 import { UserService } from 'src/user/user.service';
 import { LoginDTO } from './dtos/login.dto';
 import { AuthService } from './auth.service';
+import { RefreshTokenDTO } from './dtos/refresh-token.dto';
 
 @Controller('auth')
 @ApiTags('auth')
@@ -60,5 +61,16 @@ export class AuthController {
     const response = await this.authService.login(loginDTO);
 
     res.status(HttpStatus.OK).json(response);
+  }
+
+  @Post('refresh-token')
+  @ApiOperation({ summary: 'Cấp lại access token' })
+  @ApiBody({
+    type: RefreshTokenDTO,
+  })
+  async refresh(
+    @Body() tokenDTO: RefreshTokenDTO,
+  ): Promise<{ accessToken: string }> {
+    return this.authService.refresh(tokenDTO);
   }
 }
