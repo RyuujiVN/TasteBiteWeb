@@ -57,8 +57,8 @@ export class AuthController {
       },
     },
   })
-  async login(@Body() loginDTO: LoginDTO, @Res() res: Response) {
-    const response = await this.authService.login(loginDTO);
+  login(@Body() loginDTO: LoginDTO, @Res() res: Response) {
+    const response = this.authService.login(loginDTO);
 
     res.status(HttpStatus.OK).json(response);
   }
@@ -68,9 +68,7 @@ export class AuthController {
   @ApiBody({
     type: RefreshTokenDTO,
   })
-  async refresh(
-    @Body() tokenDTO: RefreshTokenDTO,
-  ): Promise<{ accessToken: string }> {
+  refresh(@Body() tokenDTO: RefreshTokenDTO): Promise<{ accessToken: string }> {
     return this.authService.refresh(tokenDTO);
   }
 }

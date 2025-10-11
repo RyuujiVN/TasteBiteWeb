@@ -8,6 +8,8 @@ import { AuthModule } from './auth/auth.module';
 import configurationConfig from './configs/configuration.config';
 import { User } from './user/user.entity';
 import { MailModule } from './mail/mail.module';
+import { CategoryModule } from './category/category.module';
+import { Category } from './category/category.entity';
 
 @Module({
   imports: [
@@ -23,11 +25,12 @@ import { MailModule } from './mail/mail.module';
       username: 'postgres',
       password: '123456',
       database: 'TasteBite',
-      entities: [User],
+      entities: [User, Category],
       synchronize: true,
     }),
     AuthModule,
     MailModule,
+    CategoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],
