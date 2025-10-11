@@ -2,12 +2,15 @@ import {
   Body,
   Controller,
   DefaultValuePipe,
+  Delete,
   Get,
+  HttpStatus,
   Param,
   ParseIntPipe,
   Post,
   Put,
   Query,
+  Res,
   UseGuards,
 } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
@@ -17,7 +20,7 @@ import { Pagination } from 'nestjs-typeorm-paginate';
 import { Category } from './category.entity';
 import { CreateCategoryDTO } from './dtos/create-category.dto';
 import { UpdateCategoryDTO } from './dtos/update-category.dto';
-import { UpdateResult } from 'typeorm';
+import type { Response } from 'express';
 
 @Controller('category')
 @ApiTags('Category')
@@ -56,6 +59,7 @@ export class CategoryController {
   }
 
   @Post('create')
+  // @UseGuards(JwtAccessAuthGuard)
   @ApiOperation({ summary: 'Thêm mới category' })
   @ApiBody({
     type: CreateCategoryDTO,
@@ -67,6 +71,7 @@ export class CategoryController {
   }
 
   @Put('update/:id')
+  @UseGuards(JwtAccessAuthGuard)
   @ApiOperation({ summary: 'Cập nhật category' })
   @ApiBody({
     type: UpdateCategoryDTO,
@@ -76,5 +81,19 @@ export class CategoryController {
     @Body() updateCategoryDTO: UpdateCategoryDTO,
   ): Promise<Category> {
     return this.categoryService.update(id, updateCategoryDTO);
+  }
+
+  @Delete('delete/:id')
+  // @UseGuards(JwtAccessAuthGuard)
+  @ApiOperation({ summary: 'Xoá category' })
+  async deleteCategory(
+    @Param('id', ParseIntPipe) id: number,
+    @Res() res: Response,
+  ) {
+    await this.categoryService.delete(id);
+
+    res.status(HttpStatus.OK).json({
+      message: 'Xoá thành công!',
+    });
   }
 }
