@@ -56,11 +56,8 @@ export class CategoryService {
 
     if (!category) throw new NotFoundException('Không tìm thấy category!');
 
-    await this.categoryRepository.update(id, data);
-    const updatedCategory = this.categoryRepository.findOne({
-      where: { id: id },
-    });
+    Object.assign(category, data);
 
-    return updatedCategory;
+    return this.categoryRepository.save(category);
   }
 }

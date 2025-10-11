@@ -25,8 +25,10 @@ export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
   @Get()
-  @UseGuards(JwtAccessAuthGuard)
+  // @UseGuards(JwtAccessAuthGuard)
   @ApiOperation({ summary: 'Lấy danh sách category có phân trang' })
+  @ApiQuery({ name: 'page', required: true, type: Number, default: 1 })
+  @ApiQuery({ name: 'limit', required: true, type: Number, default: 10 })
   @ApiQuery({
     name: 'type',
     required: false,
