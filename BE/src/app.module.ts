@@ -10,6 +10,8 @@ import { User } from './user/user.entity';
 import { MailModule } from './mail/mail.module';
 import { CategoryModule } from './category/category.module';
 import { Category } from './category/category.entity';
+import { ProductModule } from './product/product.module';
+import { Product } from './product/product.entity';
 
 @Module({
   imports: [
@@ -25,12 +27,13 @@ import { Category } from './category/category.entity';
       username: 'postgres',
       password: '123456',
       database: 'TasteBite',
-      entities: [User, Category],
+      entities: [User, Category, Product],
       synchronize: true,
     }),
     AuthModule,
     MailModule,
     CategoryModule,
+    ProductModule,
   ],
   controllers: [AppController],
   providers: [AppService],

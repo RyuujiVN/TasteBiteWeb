@@ -1,5 +1,6 @@
 import { CategoryTypeEnum } from 'src/common/enums/category-type.enum';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Product } from 'src/product/product.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('category')
 export class Category {
@@ -14,4 +15,7 @@ export class Category {
 
   @Column({ nullable: true })
   type: CategoryTypeEnum;
+
+  @OneToMany(() => Product, (product) => product.category)
+  products: Product[];
 }
