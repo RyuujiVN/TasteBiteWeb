@@ -90,8 +90,8 @@ export class CategoryController {
   ) {
     await this.categoryService.delete(id);
 
-    res.status(HttpStatus.OK).json({
-      message: 'Xoá thành công!',
-    });
+    return {
+      message: 'Xoá category thành công!',
+    };
   }
 }

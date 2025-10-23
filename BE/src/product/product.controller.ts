@@ -3,6 +3,7 @@ import {
   Body,
   Controller,
   DefaultValuePipe,
+  Delete,
   FileTypeValidator,
   Get,
   MaxFileSizeValidator,
@@ -118,5 +119,15 @@ export class ProductController {
     @Body() data: UpdateProductDTO,
   ): Promise<Product> {
     return this.productService.update(id, data);
+  }
+
+  @Delete('delete/:id')
+  @ApiOperation({ summary: 'Xoá sản phẩm' })
+  async deleteProduct(@Param('id', ParseIntPipe) id: number) {
+    await this.productService.delete(id);
+
+    return {
+      message: 'Xoá sản phẩm thành công!',
+    };
   }
 }

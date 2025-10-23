@@ -58,12 +58,8 @@ export class CategoryService {
   }
 
   async delete(id: number) {
-    const category = await this.categoryRepository.findOne({
-      where: { id: id },
-    });
-
-    if (!category) throw new NotFoundException('Không tìm thấy category!');
-
-    await this.categoryRepository.delete({ id: id });
+    const result = await this.categoryRepository.delete({ id: id });
+    if (result.affected == 0)
+      throw new NotFoundException('Không tìm thấy category!');
   }
 }

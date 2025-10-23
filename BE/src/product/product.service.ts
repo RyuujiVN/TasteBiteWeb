@@ -74,4 +74,13 @@ export class ProductService {
 
     return this.productRepository.save(product);
   }
+
+  async delete(id: number) {
+    const result = await this.productRepository.delete({
+      id: id,
+    });
+
+    if (result.affected === 0)
+      throw new NotFoundException('Không tìm thấy sản phẩm!');
+  }
 }
