@@ -22,13 +22,13 @@ import { CreateCategoryDTO } from './dtos/create-category.dto';
 import { UpdateCategoryDTO } from './dtos/update-category.dto';
 import type { Response } from 'express';
 
+@UseGuards(JwtAccessAuthGuard)
 @Controller('category')
 @ApiTags('Category')
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
   @Get()
-  // @UseGuards(JwtAccessAuthGuard)
   @ApiOperation({ summary: 'Lấy danh sách category có phân trang' })
   @ApiQuery({ name: 'page', required: true, type: Number, default: 1 })
   @ApiQuery({ name: 'limit', required: true, type: Number, default: 10 })
@@ -59,7 +59,6 @@ export class CategoryController {
   }
 
   @Post('create')
-  // @UseGuards(JwtAccessAuthGuard)
   @ApiOperation({ summary: 'Thêm mới category' })
   @ApiBody({
     type: CreateCategoryDTO,
@@ -84,7 +83,6 @@ export class CategoryController {
   }
 
   @Delete('delete/:id')
-  // @UseGuards(JwtAccessAuthGuard)
   @ApiOperation({ summary: 'Xoá category' })
   async deleteCategory(
     @Param('id', ParseIntPipe) id: number,

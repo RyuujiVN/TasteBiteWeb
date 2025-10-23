@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsBoolean,
+  IsDecimal,
   IsNotEmpty,
   IsNumber,
   IsOptional,
@@ -44,6 +45,7 @@ export class CreateProductDTO {
 
   @IsNumber()
   @IsNotEmpty({ message: 'Giá không được để trống!' })
+  @IsDecimal()
   @Min(0)
   @Max(1000000000)
   @ApiProperty({

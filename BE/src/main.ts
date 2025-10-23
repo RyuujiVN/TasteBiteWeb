@@ -7,6 +7,8 @@ import { ValidationPipe } from '@nestjs/common';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  app.enableCors();
+
   const config = new DocumentBuilder()
     .setTitle('Food Delivery')
     .setDescription('Đây là api document cho web Food Delivery')

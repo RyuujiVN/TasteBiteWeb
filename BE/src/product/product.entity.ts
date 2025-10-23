@@ -12,7 +12,7 @@ export class Product {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ name: 'category_id' })
   category_id: number;
 
   @Column({ length: 50 })
@@ -39,7 +39,13 @@ export class Product {
   @Column('date', { default: () => 'CURRENT_DATE' })
   created_at: Date;
 
-  @ManyToOne(() => Category, (category) => category.products)
+  @Column('date', { nullable: true })
+  updated_at?: Date;
+
+  @ManyToOne(() => Category, (category) => category.products, {
+    onDelete: 'SET NULL',
+    nullable: true,
+  })
   @JoinColumn({ name: 'category_id' })
   category: Category;
 }

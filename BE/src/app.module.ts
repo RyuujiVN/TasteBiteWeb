@@ -12,6 +12,7 @@ import { CategoryModule } from './category/category.module';
 import { Category } from './category/category.entity';
 import { ProductModule } from './product/product.module';
 import { Product } from './product/product.entity';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { Product } from './product/product.entity';
     MailModule,
     CategoryModule,
     ProductModule,
+    CloudinaryModule,
   ],
   controllers: [AppController],
   providers: [AppService],
