@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './product.entity';
 import { Repository } from 'typeorm';
@@ -6,6 +6,7 @@ import { CreateProductDTO } from './dtos/create-product.dto';
 import slugify from 'slugify';
 import { PaginationQuery } from 'src/common/interfaces/pagination.interface';
 import { paginate, Pagination } from 'nestjs-typeorm-paginate';
+import { UpdateCategoryDTO } from 'src/category/dtos/update-category.dto';
 
 interface ProductPagination extends PaginationQuery {
   category_id?: number;
@@ -59,5 +60,18 @@ export class ProductService {
     newProduct.slug = this.generateSlug(newProduct.title);
 
     return await this.productRepository.save(newProduct);
+  }
+
+  async update(id: number, data: UpdateCategoryDTO): Promise<Product> {
+    const product = await this.productRepository.findOne({
+      where: { id: id },
+    });
+
+    if (!product) throw new NotFoundException('Không tìm thấy sản phẩm!');
+
+    Object.assign(product, data);
+    product.updated_at = new Date();
+
+    return this.productRepository.save(product);
   }
 }

@@ -39,7 +39,7 @@ export class Product {
   @Column('date', { default: () => 'CURRENT_DATE' })
   created_at: Date;
 
-  @Column('date', { nullable: true })
+  @Column('date', { nullable: true, onUpdate: 'CURRENT_DATE' })
   updated_at?: Date;
 
   @ManyToOne(() => Category, (category) => category.products, {

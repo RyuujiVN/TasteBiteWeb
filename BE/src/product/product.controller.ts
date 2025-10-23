@@ -6,9 +6,11 @@ import {
   FileTypeValidator,
   Get,
   MaxFileSizeValidator,
+  Param,
   ParseFilePipe,
   ParseIntPipe,
   Post,
+  Put,
   Query,
   UploadedFile,
   UseInterceptors,
@@ -26,6 +28,7 @@ import { Product } from './product.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { FileValidationPipe } from 'src/common/pipes/file-validation.pipe';
+import { UpdateProductDTO } from './dtos/update-product.dto';
 
 @Controller('product')
 @ApiTags('Product')
@@ -103,5 +106,17 @@ export class ProductController {
   })
   createProduct(@Body() data: CreateProductDTO): Promise<Product> {
     return this.productService.create(data);
+  }
+
+  @Put('update/:id')
+  @ApiOperation({ summary: 'Cập nhật sản phẩm' })
+  @ApiBody({
+    type: UpdateProductDTO,
+  })
+  updateProduct(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() data: UpdateProductDTO,
+  ): Promise<Product> {
+    return this.productService.update(id, data);
   }
 }
