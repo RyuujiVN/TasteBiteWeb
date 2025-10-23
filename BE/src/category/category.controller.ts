@@ -4,26 +4,30 @@ import {
   DefaultValuePipe,
   Delete,
   Get,
-  HttpStatus,
   Param,
   ParseIntPipe,
   Post,
   Put,
   Query,
-  Res,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBody, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiOperation,
+  ApiQuery,
+  ApiTags,
+} from '@nestjs/swagger';
 import { CategoryService } from './category.service';
 import { JwtAccessAuthGuard } from 'src/guards/jwt-access.guard';
 import { Pagination } from 'nestjs-typeorm-paginate';
 import { Category } from './category.entity';
 import { CreateCategoryDTO } from './dtos/create-category.dto';
 import { UpdateCategoryDTO } from './dtos/update-category.dto';
-import type { Response } from 'express';
 
-@UseGuards(JwtAccessAuthGuard)
 @Controller('category')
+@ApiBearerAuth('JWT-auth')
+@UseGuards(JwtAccessAuthGuard)
 @ApiTags('Category')
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
@@ -84,10 +88,7 @@ export class CategoryController {
 
   @Delete('delete/:id')
   @ApiOperation({ summary: 'Xoá category' })
-  async deleteCategory(
-    @Param('id', ParseIntPipe) id: number,
-    @Res() res: Response,
-  ) {
+  async deleteCategory(@Param('id', ParseIntPipe) id: number) {
     await this.categoryService.delete(id);
 
     return {

@@ -4,19 +4,18 @@ import {
   Controller,
   DefaultValuePipe,
   Delete,
-  FileTypeValidator,
   Get,
-  MaxFileSizeValidator,
   Param,
-  ParseFilePipe,
   ParseIntPipe,
   Post,
   Put,
   Query,
   UploadedFile,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import {
+  ApiBearerAuth,
   ApiBody,
   ApiConsumes,
   ApiOperation,
@@ -30,8 +29,11 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { FileValidationPipe } from 'src/common/pipes/file-validation.pipe';
 import { UpdateProductDTO } from './dtos/update-product.dto';
+import { JwtAccessAuthGuard } from 'src/guards/jwt-access.guard';
 
 @Controller('product')
+@ApiBearerAuth('JWT-auth')
+@UseGuards(JwtAccessAuthGuard)
 @ApiTags('Product')
 export class ProductController {
   constructor(

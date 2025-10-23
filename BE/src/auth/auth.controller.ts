@@ -1,6 +1,5 @@
-import { Body, Controller, HttpStatus, Post, Res } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import type { Response } from 'express';
 import { CreateUserDTO } from 'src/user/dtos/create-user.dto';
 import { UserService } from 'src/user/user.service';
 import { LoginDTO } from './dtos/login.dto';
@@ -33,15 +32,12 @@ export class AuthController {
       },
     },
   })
-  async register(
-    @Body() createUserDTO: CreateUserDTO,
-    @Res() res: Response,
-  ): Promise<void> {
+  async register(@Body() createUserDTO: CreateUserDTO) {
     await this.userService.register(createUserDTO);
 
-    res.status(HttpStatus.CREATED).json({
+    return {
       message: 'Đăng ký thành công!',
-    });
+    };
   }
 
   @Post('login')
@@ -57,10 +53,8 @@ export class AuthController {
       },
     },
   })
-  login(@Body() loginDTO: LoginDTO, @Res() res: Response) {
-    const response = this.authService.login(loginDTO);
-
-    res.status(HttpStatus.OK).json(response);
+  login(@Body() loginDTO: LoginDTO) {
+    return this.authService.login(loginDTO);
   }
 
   @Post('refresh-token')
