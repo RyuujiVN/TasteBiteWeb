@@ -13,6 +13,11 @@ export const instance = axios.create({
 // Add a request interceptor
 instance.interceptors.request.use(function (config) {
   // Do something before request is sent
+  const accessToken = localStorage.getItem("accessToken")
+
+  if (accessToken)
+    config.headers.Authorization = `Bearer ${accessToken}`
+
   return config;
 }, function (error) {
   // Do something with request error
@@ -41,7 +46,12 @@ instance.interceptors.response.use(function (response) {
 
     return adminService.refreshToken()
       .then(
-        () => {
+        (res) => {
+          const { accessToken } = res.data;
+
+
+          localStorage.setItem('accessToken', accessToken);
+          instance.defaults.headers.Authorization = `Bearer ${accessToken}`;
           return instance(originalRequest)
         }
       )

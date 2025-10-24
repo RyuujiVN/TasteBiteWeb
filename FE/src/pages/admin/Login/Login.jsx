@@ -11,7 +11,9 @@ const Login = () => {
   const handleLogin = async (data) => {
     const res = await adminService.login(data);
 
-    localStorage.setItem("admin", JSON.stringify(res.data));
+    localStorage.setItem("userInfo", JSON.stringify(res.data.userInfo));
+    localStorage.setItem("accessToken", res.data.accessToken);
+    localStorage.setItem("refreshToken", res.data.refreshToken);
     navigate("/admin/dashboard");
     toast.success("Đăng nhập thành công");
   };

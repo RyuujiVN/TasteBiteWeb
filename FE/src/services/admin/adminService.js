@@ -6,11 +6,16 @@ const login = async (data) => {
 }
 
 const logout = async () => {
-  // return await instance.post("/auth/logout")
+  localStorage.removeItem("userInfo");
+  localStorage.removeItem("accessToken");
+  localStorage.removeItem("refreshToken");
 }
 
 const refreshToken = async () => {
-  return await instance.put("/auth/refresh-token")
+  const refreshToken = localStorage.getItem("refreshToken")
+  return await instance.post("/auth/refresh-token", {
+    refreshToken: refreshToken
+  })
 }
 
 const adminService = {

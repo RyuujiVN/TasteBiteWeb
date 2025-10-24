@@ -10,7 +10,7 @@ const initialState = {
 export const fetchGetListCategory = createAsyncThunk(
   'category/fetchGetListCategory',
   async (keyword) => {
-    const response = await instance.get('/category/list', {
+    const response = await instance.get('/category', {
       params: {
         keyword: keyword
       }
