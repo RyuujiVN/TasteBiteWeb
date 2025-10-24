@@ -3,15 +3,15 @@ import { toast } from "react-toastify";
 import adminService from "~/services/admin/adminService";
 
 
-export const API_ADMIN = axios.create({
-  baseURL: "http://localhost:8017/admin/api/v1",
+export const instance = axios.create({
+  baseURL: "http://localhost:3000",
   withCredentials: true,
   timeout: 10 * 60 * 1000
 })
 
 
 // Add a request interceptor
-API_ADMIN.interceptors.request.use(function (config) {
+instance.interceptors.request.use(function (config) {
   // Do something before request is sent
   return config;
 }, function (error) {
@@ -20,7 +20,7 @@ API_ADMIN.interceptors.request.use(function (config) {
 });
 
 // Add a response interceptor
-API_ADMIN.interceptors.response.use(function (response) {
+instance.interceptors.response.use(function (response) {
   // Any status code that lie within the range of 2xx cause this function to trigger
   // Do something with response data
   return response;
@@ -42,7 +42,7 @@ API_ADMIN.interceptors.response.use(function (response) {
     return adminService.refreshToken()
       .then(
         () => {
-          return API_ADMIN(originalRequest)
+          return instance(originalRequest)
         }
       )
       .catch((err) => {

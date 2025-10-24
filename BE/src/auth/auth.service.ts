@@ -1,6 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { ConfigService } from '@nestjs/config';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/user/user.entity';
@@ -36,12 +40,12 @@ export class AuthService {
       where: { email: data.email },
     });
 
-    if (!user) throw new UnauthorizedException('Tài khoản hoặc mật khẩu sai!');
+    if (!user) throw new ForbiddenException('Tài khoản hoặc mật khẩu sai!');
 
     const passwordMatched = await bcrypt.compare(data.password, user.password);
 
     if (!passwordMatched)
-      throw new UnauthorizedException('Tài khoản hoặc mật khẩu sai!');
+      throw new ForbiddenException('Tài khoản hoặc mật khẩu sai!');
 
     const payload = {
       id: user.id,

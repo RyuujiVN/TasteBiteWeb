@@ -1,16 +1,16 @@
-import { API_ADMIN } from "~/api/adminApi";
+import { instance } from "~/api/adminApi";
 
 
 const login = async (data) => {
-  return await API_ADMIN.post("/authen/login", data);
+  return await instance.post("/auth/login", data);
 }
 
 const logout = async () => {
-  return await API_ADMIN.post("/authen/logout")
+  // return await instance.post("/auth/logout")
 }
 
 const refreshToken = async () => {
-  return await API_ADMIN.put("/authen/refresh-token")
+  return await instance.put("/auth/refresh-token")
 }
 
 const adminService = {

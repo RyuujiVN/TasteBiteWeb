@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { toast } from 'react-toastify'
-import { API_ADMIN } from '~/api/adminApi'
+import { instance } from '~/api/adminApi'
 
 const initialState = {
   currentCategory: []
@@ -10,7 +10,7 @@ const initialState = {
 export const fetchGetListCategory = createAsyncThunk(
   'category/fetchGetListCategory',
   async (keyword) => {
-    const response = await API_ADMIN.get('/category/list', {
+    const response = await instance.get('/category/list', {
       params: {
         keyword: keyword
       }
@@ -24,7 +24,7 @@ export const fetchGetListCategory = createAsyncThunk(
 export const fetchAddCategory = createAsyncThunk(
   'category/fetchAddCategory',
   async (data) => {
-    const response = await API_ADMIN.post('/category/create', data)
+    const response = await instance.post('/category/create', data)
     return response.data
   }
 )
@@ -33,7 +33,7 @@ export const fetchAddCategory = createAsyncThunk(
 export const fetchUpdateCategory = createAsyncThunk(
   'category/fetchUpdateCategory',
   async ({ id, data }) => {
-    const response = await API_ADMIN.patch(`/category/edit/${id}`, data)
+    const response = await instance.patch(`/category/edit/${id}`, data)
     return response.data
   }
 )
@@ -42,7 +42,7 @@ export const fetchUpdateCategory = createAsyncThunk(
 export const fectchDeleteCategory = createAsyncThunk(
   'categoryfectchDeleteCategory',
   async (id, { dispatch }) => {
-    const response = await API_ADMIN.delete(`/category/delete/${id}`)
+    const response = await instance.delete(`/category/delete/${id}`)
     dispatch(deleteCategory(id))
     return response.data
   }
