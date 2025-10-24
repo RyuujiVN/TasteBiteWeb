@@ -19,6 +19,10 @@ export class CategoryService {
     private readonly categoryRepository: Repository<Category>,
   ) {}
 
+  async findAll(): Promise<Category[]> {
+    return this.categoryRepository.find();
+  }
+
   async findAllPagination(
     options: CategoryPagination,
   ): Promise<Pagination<Category>> {

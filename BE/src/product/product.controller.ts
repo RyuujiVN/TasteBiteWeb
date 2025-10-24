@@ -33,7 +33,6 @@ import { JwtAccessAuthGuard } from 'src/guards/jwt-access.guard';
 
 @Controller('product')
 @ApiBearerAuth('JWT-auth')
-@UseGuards(JwtAccessAuthGuard)
 @ApiTags('Product')
 export class ProductController {
   constructor(
@@ -42,6 +41,7 @@ export class ProductController {
   ) {}
 
   @Post('upload')
+  @UseGuards(JwtAccessAuthGuard)
   @UseInterceptors(FileInterceptor('file'))
   @ApiOperation({ summary: 'Upload ảnh sản phẩm' })
   @ApiConsumes('multipart/form-data')
@@ -65,6 +65,7 @@ export class ProductController {
   }
 
   @Get('')
+  @UseGuards(JwtAccessAuthGuard)
   @ApiOperation({ summary: 'Lấy danh sách sản phẩm có phân trang' })
   @ApiQuery({ name: 'page', required: true, type: Number, default: 1 })
   @ApiQuery({ name: 'limit', required: true, type: Number, default: 10 })
@@ -83,14 +84,14 @@ export class ProductController {
   @ApiQuery({
     name: 'deleted',
     required: false,
-    type: String,
+    type: Boolean,
     description: 'Lọc theo xoá tạm thời',
   })
   findAllPagination(
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number = 1,
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number = 10,
     @Query('search') search?: string,
-    @Query('category_id', ParseIntPipe) category_id?: number,
+    @Query('category_id') category_id?: string,
     @Query('deleted') deleted?: boolean,
   ): Promise<Pagination<Product>> {
     return this.productService.findAllPagination({
@@ -103,6 +104,7 @@ export class ProductController {
   }
 
   @Post('create')
+  @UseGuards(JwtAccessAuthGuard)
   @ApiOperation({ summary: 'Tạo mới sản phẩm' })
   @ApiBody({
     type: CreateProductDTO,
@@ -112,6 +114,7 @@ export class ProductController {
   }
 
   @Put('update/:id')
+  @UseGuards(JwtAccessAuthGuard)
   @ApiOperation({ summary: 'Cập nhật sản phẩm' })
   @ApiBody({
     type: UpdateProductDTO,
@@ -124,6 +127,7 @@ export class ProductController {
   }
 
   @Delete('delete/:id')
+  @UseGuards(JwtAccessAuthGuard)
   @ApiOperation({ summary: 'Xoá sản phẩm' })
   async deleteProduct(@Param('id', ParseIntPipe) id: number) {
     await this.productService.delete(id);

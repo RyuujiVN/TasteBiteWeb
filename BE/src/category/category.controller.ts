@@ -27,12 +27,21 @@ import { UpdateCategoryDTO } from './dtos/update-category.dto';
 
 @Controller('category')
 @ApiBearerAuth('JWT-auth')
-@UseGuards(JwtAccessAuthGuard)
 @ApiTags('Category')
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
-  @Get()
+  @Get('get-all')
+  @ApiOperation({
+    summary:
+      'Lấy danh sách category không phân trang (dùng chung cả user và admin)',
+  })
+  findAll(): Promise<Category[]> {
+    return this.categoryService.findAll();
+  }
+
+  @Get('')
+  @UseGuards(JwtAccessAuthGuard)
   @ApiOperation({ summary: 'Lấy danh sách category có phân trang' })
   @ApiQuery({ name: 'page', required: true, type: Number, default: 1 })
   @ApiQuery({ name: 'limit', required: true, type: Number, default: 10 })
@@ -63,6 +72,7 @@ export class CategoryController {
   }
 
   @Post('create')
+  @UseGuards(JwtAccessAuthGuard)
   @ApiOperation({ summary: 'Thêm mới category' })
   @ApiBody({
     type: CreateCategoryDTO,
@@ -74,6 +84,7 @@ export class CategoryController {
   }
 
   @Put('update/:id')
+  @UseGuards(JwtAccessAuthGuard)
   @UseGuards(JwtAccessAuthGuard)
   @ApiOperation({ summary: 'Cập nhật category' })
   @ApiBody({
@@ -87,6 +98,7 @@ export class CategoryController {
   }
 
   @Delete('delete/:id')
+  @UseGuards(JwtAccessAuthGuard)
   @ApiOperation({ summary: 'Xoá category' })
   async deleteCategory(@Param('id', ParseIntPipe) id: number) {
     await this.categoryService.delete(id);

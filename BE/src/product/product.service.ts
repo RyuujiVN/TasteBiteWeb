@@ -9,7 +9,7 @@ import { paginate, Pagination } from 'nestjs-typeorm-paginate';
 import { UpdateCategoryDTO } from 'src/category/dtos/update-category.dto';
 
 interface ProductPagination extends PaginationQuery {
-  category_id?: number;
+  category_id?: string;
   deleted?: boolean;
 }
 
@@ -27,7 +27,11 @@ export class ProductService {
   async findAllPagination(
     options: ProductPagination,
   ): Promise<Pagination<Product>> {
-    const queryBuilder = this.productRepository.createQueryBuilder('product');
+    const queryBuilder = this.productRepository
+      .createQueryBuilder('product')
+      .leftJoin('product.category', 'category')
+      .addSelect(['category.id', 'category.title'])
+      .orderBy('product.created_at', 'DESC');
 
     if (options.search)
       queryBuilder.andWhere('product.title = :title', {
@@ -36,18 +40,13 @@ export class ProductService {
 
     if (options.category_id)
       queryBuilder.andWhere('product.category_id = :category_id', {
-        category_id: options.category_id,
+        category_id: Number(options.category_id),
       });
 
     if (options.deleted)
-      queryBuilder.andWhere('product.deleted :deleted', {
+      queryBuilder.andWhere('product.deleted = :deleted', {
         deleted: options.deleted,
       });
-
-    queryBuilder
-      .leftJoin('product.category', 'category')
-      .addSelect(['category.id', 'category.name'])
-      .orderBy('product.created_at', 'DESC');
 
     return paginate<Product>(queryBuilder, options);
   }
