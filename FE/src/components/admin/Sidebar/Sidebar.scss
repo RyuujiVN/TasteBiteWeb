@@ -1,0 +1,40 @@
+.sidebar {
+  border-right: 1px solid $bg-blue-white-two;
+
+  &__menu {
+    border: none !important;
+
+    .ant-menu-item {
+      // padding: ;
+      width: 100%;
+      border-radius: 0;
+      margin: 5px 0;
+
+      &:hover {
+        background-color: transparent !important;
+      }
+
+      &-selected::after {
+        content: "";
+        width: 4px;
+        height: 100%;
+        background-color: $color-red;
+        position: absolute;
+        top: 0;
+        right: 0;
+      }
+    }
+
+    &--item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.8rem;
+      position: relative;
+
+      &-icon {
+        font-size: 2.4rem;
+      }
+    }
+  }
+}

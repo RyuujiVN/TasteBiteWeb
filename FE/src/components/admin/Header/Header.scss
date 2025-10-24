@@ -1,0 +1,89 @@
+.header {
+  display: flex;
+  align-items: center;
+  background-color: $color-white;
+  border-bottom: 1px solid $bg-blue-white-two;
+
+  &--left {
+    width: 200px;
+    border-right: 1px solid $bg-blue-white-two;
+    padding: 2rem;
+  }
+
+  &__logo {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+
+    &--title {
+      font-size: 4rem;
+      font-weight: 700;
+    }
+
+  }
+
+  &__title {
+    font-size: 3rem;
+    font-weight: 700;
+
+    &--sub {
+      color: $color-gray-one;
+      font-size: 2rem;
+    }
+  }
+
+  &__notification {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    transition: all .3s ease;
+    cursor: pointer;
+  }
+
+  &__notification:hover {
+    background: $color-red;
+    color: #fff;
+  }
+
+  &__user {
+    padding: 5px;
+    border: 1px solid $color-gray-three;
+    transform: rotate(0deg);
+    border-radius: 5px;
+    cursor: pointer;
+
+    &--name {
+      font-size: 2rem;
+      font-weight: 700;
+    }
+
+    &--role {
+      color: $color-gray-one;
+    }
+  }
+
+  &--right {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem;
+  }
+
+  &__welcome {
+
+    &--title {
+      font-size: 2.4rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    &--sub {
+      font-size: 1.6rem;
+      color: $color-gray-one;
+    }
+  }
+}

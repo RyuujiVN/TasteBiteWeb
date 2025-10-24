@@ -1,0 +1,13 @@
+.table {
+  .ant-space-item {
+    cursor: pointer;
+  }
+
+  .ant-space-item:hover &__icon {
+    color: $color-red
+  }
+
+  &__icon {
+    font-size: 2.6rem;
+  }
+}
