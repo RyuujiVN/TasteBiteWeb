@@ -3,17 +3,16 @@ import { toast } from 'react-toastify'
 import { instance } from '~/api/adminApi'
 
 const initialState = {
-  currentCategory: []
+  listCategory: [],
+  pagination: {}
 }
 
 // Get List
 export const fetchGetListCategory = createAsyncThunk(
   'category/fetchGetListCategory',
-  async (keyword) => {
+  async (params) => {
     const response = await instance.get('/category', {
-      params: {
-        keyword: keyword
-      }
+      params: params
     })
 
     return response.data
@@ -53,29 +52,26 @@ export const categorySlice = createSlice({
   initialState,
   reducers: {
     deleteCategory: (state, action) => {
-      state.currentCategory = state.currentCategory.filter(item => item._id != action.payload)
+      state.listCategory = state.listCategory.filter(item => item._id != action.payload)
     }
   },
 
   extraReducers: (builder) => {
     builder.addCase(fetchGetListCategory.fulfilled, (state, action) => {
-      const categories = action.payload.map(item => {
-        item.updatedBy = item.updatedBy?.slice(-1)[0]
-        return item
-      })
-      state.currentCategory = categories
+      state.listCategory = action.payload.items
+      state.pagination = action.payload.meta
     }),
 
       builder.addCase(fetchAddCategory.fulfilled, (state, action) => {
-        state.currentCategory.push(action.payload)
+        state.listCategory.push(action.payload)
         toast.success('Thêm loại thành công')
       }),
 
       builder.addCase(fetchUpdateCategory.fulfilled, (state, action) => {
         const updatedCategory = action.payload
-        const index = state.currentCategory.findIndex(item => item._id == updatedCategory._id)
+        const index = state.listCategory.findIndex(item => item._id == updatedCategory._id)
 
-        state.currentCategory[index] = updatedCategory
+        state.listCategory[index] = updatedCategory
         toast.success("Chỉnh sửa thành công!")
       })
   }

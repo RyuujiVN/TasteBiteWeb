@@ -5,9 +5,11 @@ import {
   Flex,
   Form,
   Input,
+  Pagination,
   Popconfirm,
   Space,
   Table,
+  Tag,
   Tooltip,
 } from "antd";
 import { useEffect, useState } from "react";
@@ -26,23 +28,30 @@ import EditCategory from "./EditCategory";
 import { toast } from "react-toastify";
 import { useSearchParams } from "react-router-dom";
 import useDebounce from "~/hooks/useDebounce";
+import { FaPlus } from "react-icons/fa6";
+import { CiFilter } from "react-icons/ci";
 
 const columns = [
   {
-    key: "name",
+    key: "title",
     title: "Tên loại",
-    dataIndex: "name",
+    dataIndex: "title",
   },
 
   {
-    key: "updatedBy",
-    title: "Người cập nhật",
-    dataIndex: "updatedBy",
+    key: "description",
+    title: "Mô tả",
+    dataIndex: "description",
+  },
+
+  {
+    key: "type",
+    title: "Thuộc",
+    dataIndex: "type",
   },
 
   {
     key: "action",
-    title: "Hành động",
     dataIndex: "action",
   },
 ];
@@ -53,7 +62,8 @@ const Category = () => {
   const [editCategory, setEditCategory] = useState(false);
   const [category, setCategory] = useState(null);
   const dispatch = useDispatch();
-  const categories = useSelector((state) => state.category.currentCategory);
+  const categories = useSelector((state) => state.category.listCategory);
+  const pagination = useSelector((state) => state.category.pagination);
 
   const debounced = useDebounce(searchParams.get("keyword"), 500);
 
@@ -74,11 +84,29 @@ const Category = () => {
     });
   };
 
-  useEffect(() => {
-    dispatch(fetchGetListCategory(debounced?.trim()));
-  }, [debounced, dispatch]);
+  const handleChangePage = (page, size) => {
+    const searchObject = Object.fromEntries(searchParams.entries());
 
-  console.log(categories);
+    setSearchParams({
+      ...searchObject,
+      page: page,
+      size: size,
+    });
+  };
+
+  useEffect(() => {
+    const search = debounced?.trim() || "";
+    const page = parseInt(searchParams.get("page")) || 1;
+    const size = parseInt(searchParams.get("size")) || 10;
+
+    const params = {
+      search: search,
+      page: page,
+      limit: size,
+    };
+
+    dispatch(fetchGetListCategory(params));
+  }, [debounced, dispatch, searchParams]);
 
   return (
     <div className="category">
@@ -100,9 +128,18 @@ const Category = () => {
                   />
                 </Form.Item>
               </Form>
-              <Button type="primary" onClick={() => setAddCategory(true)}>
-                Thêm loại
-              </Button>
+
+              <div className="category__action">
+                <Space>
+                  <Button type="primary" onClick={() => setAddCategory(true)}>
+                    <FaPlus /> Thêm loại
+                  </Button>
+
+                  <Button>
+                    <CiFilter /> Bộ lọc
+                  </Button>
+                </Space>
+              </div>
             </Flex>
           </div>
 
@@ -113,40 +150,61 @@ const Category = () => {
               <Table
                 className="table"
                 columns={columns}
-                // dataSource={categories.map((category) => (
-                //   {
-                //   key: category?._id,
-                //   name: category?.name,
-                //   updatedBy: `${category.updatedBy.}`,
-                //   action: (
-                //     <Space size={20}>
-                //       <Tooltip title="Xem chi tiết">
-                //         <MdOutlineRemoveRedEye className="table__icon" />
-                //       </Tooltip>
+                pagination={false}
+                dataSource={categories.map((category) => ({
+                  key: category?._id,
+                  title: category?.title,
+                  description: category?.description,
+                  type:
+                    category?.type === "Đồ ăn" ? (
+                      <Tag bordered={false} color="error">
+                        Đồ ăn
+                      </Tag>
+                    ) : (
+                      <Tag bordered={false} color="cyan">
+                        Nước uống
+                      </Tag>
+                    ),
+                  action: (
+                    <Space size={20}>
+                      <Tooltip title="Xem chi tiết">
+                        <MdOutlineRemoveRedEye className="table__icon" />
+                      </Tooltip>
 
-                //       <Tooltip title="Chỉnh sửa">
-                //         <AiOutlineEdit
-                //           className="table__icon"
-                //           onClick={() => handleSet(category, setEditCategory)}
-                //         />
-                //       </Tooltip>
+                      <Tooltip title="Chỉnh sửa">
+                        <AiOutlineEdit
+                          className="table__icon"
+                          onClick={() => handleSet(category, setEditCategory)}
+                        />
+                      </Tooltip>
 
-                //       <Popconfirm
-                //         title="Xoá loại"
-                //         description="Bạn có chắc muốn xoá loại này"
-                //         onConfirm={() => handleDelete(category._id)}
-                //         okText="Xoá"
-                //         cancelText="Huỷ"
-                //       >
-                //         <Tooltip title="Xoá">
-                //           <AiOutlineDelete className="table__icon" />
-                //         </Tooltip>
-                //       </Popconfirm>
-                //     </Space>
-                //   ),
-                // }))}
+                      <Popconfirm
+                        title="Xoá loại"
+                        description="Bạn có chắc muốn xoá loại này"
+                        onConfirm={() => handleDelete(category._id)}
+                        okText="Xoá"
+                        cancelText="Huỷ"
+                      >
+                        <Tooltip title="Xoá">
+                          <AiOutlineDelete className="table__icon" />
+                        </Tooltip>
+                      </Popconfirm>
+                    </Space>
+                  ),
+                }))}
               />
             )}
+
+            <Pagination
+              current={parseInt(searchParams.get("page")) || 1}
+              total={pagination?.itemCount}
+              align="end"
+              showTotal={(total) => `Tổng: ${total} loại`}
+              showSizeChanger
+              onChange={handleChangePage}
+              pageSizeOptions={[1, 10, 20, 50]}
+              className="mt-20"
+            />
           </div>
         </Card>
       </div>

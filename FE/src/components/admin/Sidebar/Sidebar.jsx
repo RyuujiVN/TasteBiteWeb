@@ -1,46 +1,89 @@
 import Sider from "antd/es/layout/Sider";
 import { Menu } from "antd";
-import { MdOutlineDashboardCustomize, MdOutlineFastfood } from "react-icons/md";
-import { BiFoodMenu } from "react-icons/bi";
+import { IoFastFoodOutline } from "react-icons/io5";
+import {
+  DashboardOutlined,
+  AppstoreOutlined,
+  ShoppingCartOutlined,
+  UserOutlined,
+  FileTextOutlined,
+  CalendarOutlined,
+  MessageOutlined,
+  TagsOutlined,
+} from "@ant-design/icons";
 import "./Sidebar.scss";
 import { Link, useLocation } from "react-router-dom";
 
 const items = [
   {
-    key: "dashboard",
-    label: (
-      <Link to="/admin/dashboard" className="sidebar__menu--item">
-        <MdOutlineDashboardCustomize className="sidebar__menu--item-icon" />{" "}
-        Thống kê
-      </Link>
-    ),
+    type: "group",
+    label: "TỔNG QUAN",
+    children: [
+      {
+        key: "/dashboard",
+        icon: <DashboardOutlined />,
+        label: <Link to="/dashboard">Thống kê</Link>,
+      },
+    ],
   },
-
   {
-    key: "food",
-    label: (
-      <Link to="/admin/food" className="sidebar__menu--item">
-        <MdOutlineFastfood className="sidebar__menu--item-icon" /> Món ăn
-      </Link>
-    ),
+    type: "group",
+    label: "QUẢN LÝ SẢN PHẨM",
+    children: [
+      {
+        key: "/food",
+        icon: <IoFastFoodOutline />,
+        label: <Link to="/admin/food">Sản phẩm</Link>,
+      },
+      {
+        key: "/categories",
+        icon: <TagsOutlined />,
+        label: <Link to="/admin/categories">Danh mục</Link>,
+      },
+    ],
   },
-
   {
-    key: "category",
-    label: (
-      <Link to="/admin/category" className="sidebar__menu--item">
-        <BiFoodMenu className="sidebar__menu--item-icon" /> Loại món
-      </Link>
-    ),
+    type: "group",
+    label: "BÁN HÀNG",
+    children: [
+      {
+        key: "/orders",
+        icon: <ShoppingCartOutlined />,
+        label: <Link to="/admin/orders">Đơn hàng</Link>,
+      },
+      {
+        key: "/customers",
+        icon: <UserOutlined />,
+        label: <Link to="/admin/customers">Khách hàng</Link>,
+      },
+    ],
   },
-
   {
-    key: "orders",
-    label: (
-      <Link to="/admin/orders" className="sidebar__menu--item">
-        <MdOutlineFastfood className="sidebar__menu--item-icon" /> Đơn hàng
-      </Link>
-    ),
+    type: "group",
+    label: "NỘI DUNG & HỆ THỐNG",
+    children: [
+      {
+        key: "/posts",
+        icon: <FileTextOutlined />,
+        label: <Link to="/admin/posts">Bài viết</Link>,
+      },
+      {
+        key: "/events",
+        icon: <CalendarOutlined />,
+        label: <Link to="/admin/events">Sự kiện</Link>,
+      },
+    ],
+  },
+  {
+    type: "group",
+    label: "HỖ TRỢ KHÁCH HÀNG",
+    children: [
+      {
+        key: "/chat",
+        icon: <MessageOutlined />,
+        label: <Link to="/admin/chat">Chat khách hàng</Link>,
+      },
+    ],
   },
 ];
 

@@ -5,13 +5,18 @@
     border: none !important;
 
     .ant-menu-item {
-      // padding: ;
       width: 100%;
       border-radius: 0;
       margin: 5px 0;
 
       &:hover {
-        background-color: transparent !important;
+        background-color: #FFF2F0 !important;
+
+        .ant-menu-title-content,
+        .ant-menu-item-icon {
+          color: $color-red;
+          transition: all 0.3s ease;
+        }
       }
 
       &-selected::after {

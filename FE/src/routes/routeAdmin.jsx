@@ -31,7 +31,7 @@ const routes = [
       },
 
       {
-        path: "/admin/category",
+        path: "/admin/categories",
         element: <Category />,
       },
     ],

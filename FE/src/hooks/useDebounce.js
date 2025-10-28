@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 const useDebounce = (value, delay) => {
   const [debouncedValue, setDebouncedValue] = useState(value);
