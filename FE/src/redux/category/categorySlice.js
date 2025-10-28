@@ -53,7 +53,8 @@ export const categorySlice = createSlice({
   initialState,
   reducers: {
     deleteCategory: (state, action) => {
-      state.listCategory = state.listCategory.filter(item => item._id != action.payload)
+      state.listCategory = state.listCategory.filter(item => item.id != action.payload)
+      state.pagination.itemCount--
     }
   },
 
@@ -61,20 +62,25 @@ export const categorySlice = createSlice({
     builder.addCase(fetchGetListCategory.fulfilled, (state, action) => {
       state.listCategory = action.payload.items
       state.pagination = action.payload.meta
-    }),
+    })
 
-      builder.addCase(fetchAddCategory.fulfilled, (state, action) => {
-        state.listCategory.push(action.payload)
-        toast.success('Thêm loại thành công')
-      }),
+    builder.addCase(fetchAddCategory.fulfilled, (state, action) => {
+      state.listCategory.push(action.payload)
+      state.pagination.itemCount++
+      toast.success('Thêm loại thành công')
+    })
 
-      builder.addCase(fetchUpdateCategory.fulfilled, (state, action) => {
-        const updatedCategory = action.payload
-        const index = state.listCategory.findIndex(item => item.id == updatedCategory.id)
+    builder.addCase(fetchUpdateCategory.fulfilled, (state, action) => {
+      const updatedCategory = action.payload
+      const index = state.listCategory.findIndex(item => item.id == updatedCategory.id)
 
-        state.listCategory[index] = updatedCategory
-        toast.success("Chỉnh sửa thành công!")
-      })
+      state.listCategory[index] = updatedCategory
+      toast.success("Chỉnh sửa thành công!")
+    })
+
+    builder.addCase(fectchDeleteCategory.fulfilled, (state, action) => {
+      toast.success(action.payload.message)
+    })
   }
 })
 

@@ -32,6 +32,7 @@ import { useSearchParams } from "react-router-dom";
 import useDebounce from "~/hooks/useDebounce";
 import { FaPlus } from "react-icons/fa6";
 import { CiFilter } from "react-icons/ci";
+import DetailCategory from "./DetailCategory";
 
 const columns = [
   {
@@ -62,7 +63,9 @@ const Category = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [addCategory, setAddCategory] = useState(false);
   const [editCategory, setEditCategory] = useState(false);
+  const [detailCategory, setDetailCategory] = useState(false);
   const [category, setCategory] = useState(null);
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const categories = useSelector((state) => state.category.listCategory);
   const pagination = useSelector((state) => state.category.pagination);
@@ -75,9 +78,12 @@ const Category = () => {
   };
 
   const handleDelete = (id) => {
+    setLoading(true);
     toast.promise(dispatch(fectchDeleteCategory(id)), {
       pending: "Đang xoá...",
     });
+
+    setLoading(false);
   };
 
   const handleSearch = (e) => {
@@ -105,13 +111,12 @@ const Category = () => {
     });
   };
 
+  console.log(pagination);
   useEffect(() => {
     const searchObject = Object.fromEntries(searchParams.entries());
 
     dispatch(fetchGetListCategory(searchObject));
   }, [debounced, dispatch, searchParams]);
-
-  console.log(category);
 
   return (
     <div className="category">
@@ -210,7 +215,10 @@ const Category = () => {
                   action: (
                     <Space size={20}>
                       <Tooltip title="Xem chi tiết">
-                        <MdOutlineRemoveRedEye className="table__icon" />
+                        <MdOutlineRemoveRedEye
+                          className="table__icon"
+                          onClick={() => handleSet(category, setDetailCategory)}
+                        />
                       </Tooltip>
 
                       <Tooltip title="Chỉnh sửa">
@@ -223,9 +231,10 @@ const Category = () => {
                       <Popconfirm
                         title="Xoá loại"
                         description="Bạn có chắc muốn xoá loại này"
-                        onConfirm={() => handleDelete(category._id)}
+                        onConfirm={() => handleDelete(category.id)}
                         okText="Xoá"
                         cancelText="Huỷ"
+                        okButtonProps={{ loading: loading }}
                       >
                         <Tooltip title="Xoá">
                           <AiOutlineDelete className="table__icon" />
@@ -262,6 +271,14 @@ const Category = () => {
         <EditCategory
           editCategory={editCategory}
           setEditCategory={setEditCategory}
+          category={category}
+        />
+      )}
+
+      {detailCategory && (
+        <DetailCategory
+          open={detailCategory}
+          setOpen={setDetailCategory}
           category={category}
         />
       )}
