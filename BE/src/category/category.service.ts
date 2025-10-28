@@ -26,7 +26,9 @@ export class CategoryService {
   async findAllPagination(
     options: CategoryPagination,
   ): Promise<Pagination<Category>> {
-    const queryBuilder = this.categoryRepository.createQueryBuilder('category');
+    const queryBuilder = this.categoryRepository
+      .createQueryBuilder('category')
+      .orderBy('category.id', 'ASC');
 
     if (options?.type)
       queryBuilder.andWhere('category.type = :type', { type: options.type });

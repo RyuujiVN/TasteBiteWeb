@@ -2,11 +2,13 @@ import {
   Button,
   Card,
   Divider,
+  Dropdown,
   Flex,
   Form,
   Input,
   Pagination,
   Popconfirm,
+  Select,
   Space,
   Table,
   Tag,
@@ -84,29 +86,32 @@ const Category = () => {
     });
   };
 
+  const handleFilter = (value) => {
+    const searchObject = Object.fromEntries(searchParams.entries());
+
+    setSearchParams({
+      ...searchObject,
+      type: value,
+    });
+  };
+
   const handleChangePage = (page, size) => {
     const searchObject = Object.fromEntries(searchParams.entries());
 
     setSearchParams({
       ...searchObject,
       page: page,
-      size: size,
+      limit: size,
     });
   };
 
   useEffect(() => {
-    const search = debounced?.trim() || "";
-    const page = parseInt(searchParams.get("page")) || 1;
-    const size = parseInt(searchParams.get("size")) || 10;
+    const searchObject = Object.fromEntries(searchParams.entries());
 
-    const params = {
-      search: search,
-      page: page,
-      limit: size,
-    };
-
-    dispatch(fetchGetListCategory(params));
+    dispatch(fetchGetListCategory(searchObject));
   }, [debounced, dispatch, searchParams]);
+
+  console.log(category);
 
   return (
     <div className="category">
@@ -135,9 +140,46 @@ const Category = () => {
                     <FaPlus /> Thêm loại
                   </Button>
 
-                  <Button>
-                    <CiFilter /> Bộ lọc
-                  </Button>
+                  <Dropdown
+                    menu={{
+                      items: [
+                        {
+                          key: "filter",
+                          label: (
+                            <div
+                              className="filter-dropdown__content"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <Form layout="vertical">
+                                <Form.Item
+                                  label="Danh mục sản phẩm"
+                                  name="category"
+                                >
+                                  <Select
+                                    placeholder="Chọn danh mục"
+                                    onChange={handleFilter}
+                                  >
+                                    <Select.Option value="Đồ ăn">
+                                      Đồ ăn
+                                    </Select.Option>
+
+                                    <Select.Option value="Nước uống">
+                                      Nước uống
+                                    </Select.Option>
+                                  </Select>
+                                </Form.Item>
+                              </Form>
+                            </div>
+                          ),
+                        },
+                      ],
+                    }}
+                    trigger={["click"]}
+                  >
+                    <Button>
+                      <CiFilter /> Bộ lọc
+                    </Button>
+                  </Dropdown>
                 </Space>
               </div>
             </Flex>

@@ -66,6 +66,7 @@ instance.interceptors.response.use(function (response) {
       })
   }
 
+  console.log(error)
   if (error.response.status !== 401) {
     toast.error(error.response?.data?.message || error.message)
   }

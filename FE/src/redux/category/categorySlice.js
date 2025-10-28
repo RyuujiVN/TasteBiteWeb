@@ -32,7 +32,8 @@ export const fetchAddCategory = createAsyncThunk(
 export const fetchUpdateCategory = createAsyncThunk(
   'category/fetchUpdateCategory',
   async ({ id, data }) => {
-    const response = await instance.patch(`/category/edit/${id}`, data)
+    const response = await instance.put(`/category/update/${id}`, data)
+
     return response.data
   }
 )
@@ -69,7 +70,7 @@ export const categorySlice = createSlice({
 
       builder.addCase(fetchUpdateCategory.fulfilled, (state, action) => {
         const updatedCategory = action.payload
-        const index = state.listCategory.findIndex(item => item._id == updatedCategory._id)
+        const index = state.listCategory.findIndex(item => item.id == updatedCategory.id)
 
         state.listCategory[index] = updatedCategory
         toast.success("Chỉnh sửa thành công!")

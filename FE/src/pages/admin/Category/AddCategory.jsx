@@ -1,4 +1,5 @@
 import { Form, Input, Modal, Select } from "antd";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { fetchAddCategory } from "~/redux/category/categorySlice";
@@ -17,12 +18,15 @@ const optionsType = [
 
 const AddCategory = ({ addCategory, setAddCategory }) => {
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
 
   const hanldeSubmit = async (values) => {
-    await toast.promise(dispatch(fetchAddCategory(values)), {
+    setLoading(true);
+    toast.promise(dispatch(fetchAddCategory(values)), {
       pending: "Đang thêm...",
     });
+    setLoading(false);
   };
 
   return (
@@ -34,16 +38,24 @@ const AddCategory = ({ addCategory, setAddCategory }) => {
         okText="Thêm"
         cancelText="Hủy"
         onOk={() => form.submit()}
+        confirmLoading={loading}
       >
         <div className="modal__header">
           <h2 className="modal__header--title">Thêm loại</h2>
         </div>
 
         <div className="modal__body">
-          <Form form={form} layout="vertical" onFinish={hanldeSubmit}>
+          <Form
+            form={form}
+            layout="vertical"
+            onFinish={hanldeSubmit}
+            initialValues={{
+              type: "Đồ ăn",
+            }}
+          >
             <Form.Item
               label="Tên loại"
-              name="name"
+              name="title"
               rules={[
                 {
                   required: true,
@@ -60,7 +72,7 @@ const AddCategory = ({ addCategory, setAddCategory }) => {
             </Form.Item>
 
             <Form.Item label="Thuộc loại" name="type">
-              <Select options={optionsType} defaultValue="Đồ ăn" />
+              <Select options={optionsType} />
             </Form.Item>
 
             <Form.Item label="Mô tả" name="description">

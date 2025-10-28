@@ -1,21 +1,35 @@
-import { Form, Input, Modal } from "antd";
+import { Form, Input, Modal, Select } from "antd";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { fetchUpdateCategory } from "~/redux/category/categorySlice";
 
+const optionsType = [
+  {
+    value: "Đồ ăn",
+    label: "Đồ ăn",
+  },
+
+  {
+    value: "Nước uống",
+    label: "Nước uống",
+  },
+];
+
 const EditCategory = ({ editCategory, setEditCategory, category }) => {
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
 
   const hanldeSubmit = (value) => {
-    const data = {
-      id: category._id,
-      data: value,
-    };
-    
-    toast.promise(dispatch(fetchUpdateCategory(data)), {
-      pending: "Đang chỉnh sửa...",
-    });
+    setLoading(true);
+    toast.promise(
+      dispatch(fetchUpdateCategory({ id: category.id, data: value })),
+      {
+        pending: "Đang chỉnh sửa...",
+      }
+    );
+    setLoading(false);
   };
 
   return (
@@ -27,6 +41,7 @@ const EditCategory = ({ editCategory, setEditCategory, category }) => {
         okText="Sửa"
         cancelText="Hủy"
         onOk={() => form.submit()}
+        confirmLoading={loading}
       >
         <div className="modal__header">
           <h2 className="modal__header--title">Chỉnh sửa loại</h2>
@@ -41,7 +56,7 @@ const EditCategory = ({ editCategory, setEditCategory, category }) => {
           >
             <Form.Item
               label="Tên loại"
-              name="name"
+              name="title"
               rules={[
                 {
                   required: true,
@@ -55,6 +70,14 @@ const EditCategory = ({ editCategory, setEditCategory, category }) => {
               ]}
             >
               <Input />
+            </Form.Item>
+
+            <Form.Item label="Thuộc loại" name="type">
+              <Select options={optionsType} />
+            </Form.Item>
+
+            <Form.Item label="Mô tả" name="description">
+              <Input.TextArea rows={6} showCount maxLength={255} />
             </Form.Item>
           </Form>
         </div>
