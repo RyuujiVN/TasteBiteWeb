@@ -158,6 +158,10 @@ const Category = () => {
                                     placeholder="Chọn danh mục"
                                     onChange={handleFilter}
                                   >
+                                    <Select.Option value="">
+                                      Tất cả
+                                    </Select.Option>
+
                                     <Select.Option value="Đồ ăn">
                                       Đồ ăn
                                     </Select.Option>

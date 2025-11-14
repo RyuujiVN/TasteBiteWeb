@@ -84,11 +84,7 @@ const columns = [
 
 const Product = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [addCategory, setAddCategory] = useState(false);
-  const [editCategory, setEditCategory] = useState(false);
-  const [detailCategory, setDetailCategory] = useState(false);
   const [search, setSearch] = useState("");
-  const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -97,11 +93,6 @@ const Product = () => {
   const pagination = useSelector((state) => state.product.pagination);
 
   const debounced = useDebounce(search, 500, setSearchParams);
-
-  const handleSet = (value, setModal) => {
-    setProduct(value);
-    setModal(true);
-  };
 
   const handleDelete = (id) => {
     setLoading(true);
@@ -259,14 +250,14 @@ const Product = () => {
                       <Tooltip title="Xem chi tiết">
                         <MdOutlineRemoveRedEye
                           className="table__icon"
-                          onClick={() => handleSet(product, setDetailCategory)}
+                          // onClick={() => handleSet(product, setDetailCategory)}
                         />
                       </Tooltip>
 
                       <Tooltip title="Chỉnh sửa">
                         <AiOutlineEdit
                           className="table__icon"
-                          onClick={() => handleSet(product, setEditCategory)}
+                          // onClick={() => handleSet(product, setEditCategory)}
                         />
                       </Tooltip>
 
@@ -301,29 +292,6 @@ const Product = () => {
           </div>
         </Card>
       </div>
-
-      {/* {addCategory && (
-        <AddCategory
-          addCategory={addCategory}
-          setAddCategory={setAddCategory}
-        />
-      )}
-
-      {editCategory && (
-        <EditCategory
-          editCategory={editCategory}
-          setEditCategory={setEditCategory}
-          category={category}
-        />
-      )}
-
-      {detailCategory && (
-        <DetailCategory
-          open={detailCategory}
-          setOpen={setDetailCategory}
-          category={category}
-        />
-      )} */}
     </div>
   );
 };
