@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
-import { Image, message, Upload } from "antd";
-import axios from "axios";
+import { Image, Upload } from "antd";
 import { instance } from "~/api/adminApi";
 import { toast } from "react-toastify";
 
