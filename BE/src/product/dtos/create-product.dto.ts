@@ -52,6 +52,24 @@ export class CreateProductDTO {
   })
   price: number;
 
+  @IsNumber()
+  @Min(0)
+  @Max(100)
+  @ApiProperty({
+    example: 0,
+    description: 'Phần trăm giảm giá của sản phẩm',
+  })
+  discount: number;
+
+  @IsNumber()
+  @Min(0)
+  @Max(1000000000)
+  @ApiProperty({
+    example: 0,
+    description: 'Giá sau khi giảm',
+  })
+  new_price: number;
+
   @IsBoolean()
   @ApiProperty({
     example: false,

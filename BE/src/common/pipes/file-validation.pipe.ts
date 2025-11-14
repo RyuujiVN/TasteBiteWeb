@@ -11,7 +11,6 @@ export class FileValidationPipe implements PipeTransform {
 
   transform(value: any, metadata: ArgumentMetadata) {
     if (!value) throw new BadRequestException('Không có file nào được upload!');
-    // originalname: 'nam-dui-ga-chay-toi.jpeg',
     const fileName = extname(value.originalname);
 
     if (!this.allowedExtensions.includes(fileName))

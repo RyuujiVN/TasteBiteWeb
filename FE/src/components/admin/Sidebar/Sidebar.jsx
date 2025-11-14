@@ -31,9 +31,9 @@ const items = [
     label: "QUẢN LÝ SẢN PHẨM",
     children: [
       {
-        key: "/food",
+        key: "/product",
         icon: <IoFastFoodOutline />,
-        label: <Link to="/admin/food">Sản phẩm</Link>,
+        label: <Link to="/admin/product">Sản phẩm</Link>,
       },
       {
         key: "/categories",

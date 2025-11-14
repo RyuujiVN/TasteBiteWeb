@@ -19,6 +19,18 @@ export const fetchGetListCategory = createAsyncThunk(
   }
 )
 
+// Get All
+export const fetchGetAllCategory = createAsyncThunk(
+  'category/fetchGetAllCategory',
+  async (params) => {
+    const response = await instance.get('/category/get-all', {
+      params: params
+    })
+
+    return response.data
+  }
+)
+
 // Add
 export const fetchAddCategory = createAsyncThunk(
   'category/fetchAddCategory',
@@ -62,6 +74,10 @@ export const categorySlice = createSlice({
     builder.addCase(fetchGetListCategory.fulfilled, (state, action) => {
       state.listCategory = action.payload.items
       state.pagination = action.payload.meta
+    })
+
+    builder.addCase(fetchGetAllCategory.fulfilled, (state, action) => {
+      state.listCategory = action.payload
     })
 
     builder.addCase(fetchAddCategory.fulfilled, (state, action) => {
