@@ -30,12 +30,12 @@ export class ProductService {
     const queryBuilder = this.productRepository
       .createQueryBuilder('product')
       .leftJoin('product.category', 'category')
-      .addSelect(['category.id', 'category.title'])
+      .addSelect(['category.id', 'category.title', 'category.type'])
       .orderBy('product.created_at', 'DESC');
 
     if (options.search)
-      queryBuilder.andWhere('product.title = :title', {
-        title: options.search,
+      queryBuilder.andWhere('product.title ILIKE :title', {
+        title: `%${options.search}%`,
       });
 
     if (options.category_id)

@@ -36,7 +36,7 @@ export const fetchAddProduct = createAsyncThunk(
   'product/fetchAddProduct',
   async (data) => {
     const response = await instance.post('/product/create', data)
-    
+
     return response.data
   }
 )

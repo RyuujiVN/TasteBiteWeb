@@ -64,13 +64,14 @@ const Category = () => {
   const [addCategory, setAddCategory] = useState(false);
   const [editCategory, setEditCategory] = useState(false);
   const [detailCategory, setDetailCategory] = useState(false);
+  const [search, setSearch] = useState("");
   const [category, setCategory] = useState(null);
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const categories = useSelector((state) => state.category.listCategory);
   const pagination = useSelector((state) => state.category.pagination);
 
-  const debounced = useDebounce(searchParams.get("keyword"), 500);
+  const debounced = useDebounce(search, 500, setSearchParams);
 
   const handleSet = (value, setModal) => {
     setCategory(value);
@@ -84,12 +85,6 @@ const Category = () => {
     });
 
     setLoading(false);
-  };
-
-  const handleSearch = (e) => {
-    setSearchParams({
-      keyword: e.target.value,
-    });
   };
 
   const handleFilter = (value) => {
@@ -111,7 +106,6 @@ const Category = () => {
     });
   };
 
-  console.log(pagination);
   useEffect(() => {
     const searchObject = Object.fromEntries(searchParams.entries());
 
@@ -134,7 +128,7 @@ const Category = () => {
                     placeholder="Tìm kiếm..."
                     className="input__search"
                     suffix={<IoIosSearch className="form-search__icon" />}
-                    onChange={handleSearch}
+                    onChange={(e) => setSearch(e.target.value)}
                   />
                 </Form.Item>
               </Form>

@@ -16,7 +16,10 @@ import {
 } from "antd";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fectchDeleteCategory } from "~/redux/category/categorySlice";
+import {
+  fectchDeleteCategory,
+  fetchGetAllCategory,
+} from "~/redux/category/categorySlice";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { AiOutlineEdit } from "react-icons/ai";
 import { AiOutlineDelete } from "react-icons/ai";
@@ -28,11 +31,12 @@ import useDebounce from "~/hooks/useDebounce";
 import { FaPlus } from "react-icons/fa6";
 import { CiFilter } from "react-icons/ci";
 import { fetchGetListProduct } from "~/redux/product/productSlice";
+import { formatCurrency } from "~/utils/formatPrice";
 
 const columns = [
   {
     key: "image",
-    title: "Tên sản phẩm",
+    title: "Hình ảnh",
     dataIndex: "image",
   },
 
@@ -43,15 +47,33 @@ const columns = [
   },
 
   {
-    key: "description",
-    title: "Mô tả",
-    dataIndex: "description",
+    key: "price",
+    title: "Giá",
+    dataIndex: "price",
+  },
+
+  {
+    key: "created_at",
+    title: "Ngày tạo",
+    dataIndex: "created_at",
+  },
+
+  {
+    key: "updated_at",
+    title: "Ngày cập nhật",
+    dataIndex: "updated_at",
   },
 
   {
     key: "type",
     title: "Thuộc",
     dataIndex: "type",
+  },
+
+  {
+    key: "status",
+    title: "Trạng thái",
+    dataIndex: "status",
   },
 
   {
@@ -65,14 +87,16 @@ const Product = () => {
   const [addCategory, setAddCategory] = useState(false);
   const [editCategory, setEditCategory] = useState(false);
   const [detailCategory, setDetailCategory] = useState(false);
+  const [search, setSearch] = useState("");
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const products = useSelector((state) => state.product.listProduct);
+  const categories = useSelector((state) => state.category.listCategory);
   const pagination = useSelector((state) => state.product.pagination);
 
-  const debounced = useDebounce(searchParams.get("keyword"), 500);
+  const debounced = useDebounce(search, 500, setSearchParams);
 
   const handleSet = (value, setModal) => {
     setProduct(value);
@@ -88,18 +112,12 @@ const Product = () => {
     setLoading(false);
   };
 
-  const handleSearch = (e) => {
-    setSearchParams({
-      keyword: e.target.value,
-    });
-  };
-
   const handleFilter = (value) => {
     const searchObject = Object.fromEntries(searchParams.entries());
 
     setSearchParams({
       ...searchObject,
-      type: value,
+      category_id: value,
     });
   };
 
@@ -114,12 +132,17 @@ const Product = () => {
   };
 
   useEffect(() => {
-    const searchObject = Object.fromEntries(searchParams.entries());
+    const fetchData = async () => {
+      const searchObject = Object.fromEntries(searchParams.entries());
 
-    dispatch(fetchGetListProduct(searchObject));
+      await Promise.all([
+        dispatch(fetchGetListProduct(searchObject)),
+        dispatch(fetchGetAllCategory()),
+      ]);
+    };
+
+    fetchData();
   }, [debounced, dispatch, searchParams]);
-
-  console.log(products);
 
   return (
     <div className="product">
@@ -137,7 +160,7 @@ const Product = () => {
                     placeholder="Tìm kiếm..."
                     className="input__search"
                     suffix={<IoIosSearch className="form-search__icon" />}
-                    onChange={handleSearch}
+                    onChange={(e) => setSearch(e.target.value)}
                   />
                 </Form.Item>
               </Form>
@@ -170,13 +193,16 @@ const Product = () => {
                                     placeholder="Chọn danh mục"
                                     onChange={handleFilter}
                                   >
-                                    <Select.Option value="Đồ ăn">
-                                      Đồ ăn
+                                    <Select.Option value="">
+                                      Tất cả
                                     </Select.Option>
 
-                                    <Select.Option value="Nước uống">
-                                      Nước uống
-                                    </Select.Option>
+                                    {categories.length > 0 &&
+                                      categories.map((item) => (
+                                        <Select.Option value={item.id}>
+                                          {item.title}
+                                        </Select.Option>
+                                      ))}
                                   </Select>
                                 </Form.Item>
                               </Form>
@@ -206,18 +232,28 @@ const Product = () => {
                 pagination={false}
                 dataSource={products.map((product) => ({
                   key: product?._id,
+                  image: (
+                    <img src={product?.image_url} height={100} width={150} />
+                  ),
                   title: product?.title,
-                  description: product?.description,
+                  price: formatCurrency(product?.price),
+                  created_at: product?.created_at,
+                  updated_at: product?.updated_at,
                   type:
-                    product?.type === "Đồ ăn" ? (
-                      <Tag bordered={false} color="error">
-                        Đồ ăn
+                    product?.category?.type === "Đồ ăn" ? (
+                      <Tag bordered={false} color="orange">
+                        {product?.category?.title}
                       </Tag>
                     ) : (
                       <Tag bordered={false} color="cyan">
-                        Nước uống
+                        {product?.category?.title}
                       </Tag>
                     ),
+                  status: product?.deleted ? (
+                    <Tag color="error">Dừng hoạt động</Tag>
+                  ) : (
+                    <Tag color="green">Hoạt động</Tag>
+                  ),
                   action: (
                     <Space size={20}>
                       <Tooltip title="Xem chi tiết">
