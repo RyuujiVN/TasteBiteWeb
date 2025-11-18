@@ -64,6 +64,12 @@ export class ProductController {
     return { file: fileUrl.url };
   }
 
+  @Get('/:id')
+  @ApiOperation({ summary: 'Chi tiết sản phẩm' })
+  getDetail(@Param('id', ParseIntPipe) id: number): Promise<Product> {
+    return this.productService.getDetail(id);
+  }
+
   @Get('')
   @UseGuards(JwtAccessAuthGuard)
   @ApiOperation({ summary: 'Lấy danh sách sản phẩm có phân trang' })

@@ -8,10 +8,11 @@ import {
   Radio,
   Row,
   Select,
+  Space,
 } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 import TinyMCE from "~/components/admin/TinyMCE/TinyMCE";
 import UploadImage from "~/components/admin/UploadImage/UploadImage";
 import { fetchGetAllCategory } from "~/redux/category/categorySlice";
@@ -22,6 +23,7 @@ const AddProduct = () => {
   const [fileUrl, setFileUrl] = useState(null);
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
+  const navigate = useNavigate();
   const categories = useSelector((state) => state.category.listCategory);
   const dispatch = useDispatch();
   const descriptionRef = useRef(null);
@@ -202,20 +204,27 @@ const AddProduct = () => {
               </Form.Item>
             </Col>
 
-            <Col xl={24} lg={24} sm={24} xs={24}>
-              <Form.Item>
-                <Button
-                  className="w-100"
-                  size="large"
-                  type="primary"
-                  htmlType="submit"
-                  loading={loading}
-                >
-                  Thêm sản phẩm
-                </Button>
-              </Form.Item>
-            </Col>
+            <Col xl={12} lg={12} sm={24} xs={24}></Col>
           </Row>
+
+          <Space>
+            <Form.Item>
+              <Button size="large" onClick={() => navigate("/admin/product")}>
+                Quay lại
+              </Button>
+            </Form.Item>
+
+            <Form.Item>
+              <Button
+                size="large"
+                type="primary"
+                htmlType="submit"
+                loading={loading}
+              >
+                Thêm sản phẩm
+              </Button>
+            </Form.Item>
+          </Space>
         </Form>
       </div>
     </div>

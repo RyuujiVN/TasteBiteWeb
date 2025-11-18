@@ -51,6 +51,14 @@ export class ProductService {
     return paginate<Product>(queryBuilder, options);
   }
 
+  async getDetail(id: number): Promise<Product> {
+    const product = await this.productRepository.findOneBy({ id: id });
+
+    if (!product) throw new NotFoundException('Không tìm thấy sản phẩm!');
+
+    return product;
+  }
+
   async create(data: CreateProductDTO): Promise<Product> {
     const newProduct = this.productRepository.create({
       ...data,
