@@ -4,6 +4,7 @@ import Dashboard from "~/pages/admin/Dashboard/Dashboard";
 import Login from "~/pages/admin/Login/Login.jsx";
 import AddProduct from "~/pages/admin/Product/AddProduct";
 import Product from "~/pages/admin/Product/Product";
+import UpdateProduct from "~/pages/admin/Product/UpdateProduct";
 
 const routes = [
   {
@@ -28,6 +29,11 @@ const routes = [
       {
         path: "product/add",
         element: <AddProduct />,
+      },
+
+      {
+        path: "product/update/:id",
+        element: <UpdateProduct />,
       },
 
       {

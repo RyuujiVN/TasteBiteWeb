@@ -4,7 +4,8 @@ import { instance } from '~/api/adminApi'
 
 const initialState = {
   listProduct: [],
-  pagination: {}
+  pagination: {},
+  productDetail: null,
 }
 
 // Get List
@@ -14,6 +15,16 @@ export const fetchGetListProduct = createAsyncThunk(
     const response = await instance.get('/product', {
       params: params
     })
+
+    return response.data
+  }
+)
+
+// Get Detail
+export const fetchGetDetailProduct = createAsyncThunk(
+  'product/fetchGetDetailProduct',
+  async (id) => {
+    const response = await instance.get(`/product/${id}`)
 
     return response.data
   }
@@ -45,7 +56,9 @@ export const fetchAddProduct = createAsyncThunk(
 export const fetchUpdateProduct = createAsyncThunk(
   'product/fetchUpdateProduct',
   async ({ id, data }) => {
+    console.log(data)
     const response = await instance.put(`/product/update/${id}`, data)
+
 
     return response.data
   }
@@ -75,6 +88,10 @@ export const productSlice = createSlice({
     builder.addCase(fetchGetListProduct.fulfilled, (state, action) => {
       state.listProduct = action.payload.items
       state.pagination = action.payload.meta
+    })
+
+    builder.addCase(fetchGetDetailProduct.fulfilled, (state, action) => {
+      state.productDetail = action.payload
     })
 
     builder.addCase(fetchAddProduct.fulfilled, (state, action) => {

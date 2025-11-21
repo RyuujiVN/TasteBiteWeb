@@ -4,7 +4,7 @@ import { instance } from '~/api/adminApi'
 
 const initialState = {
   listCategory: [],
-  pagination: {}
+  pagination: {},
 }
 
 // Get List

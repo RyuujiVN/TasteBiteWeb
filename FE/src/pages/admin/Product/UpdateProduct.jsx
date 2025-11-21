@@ -12,38 +12,36 @@ import {
 } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import TinyMCE from "~/components/admin/TinyMCE/TinyMCE";
 import UploadImage from "~/components/admin/UploadImage/UploadImage";
 import { fetchGetAllCategory } from "~/redux/category/categorySlice";
-import { fetchUpdateProduct } from "~/redux/product/productSlice";
+import {
+  fetchGetDetailProduct,
+  fetchUpdateProduct,
+} from "~/redux/product/productSlice";
 import { formatCurrency, parseCurrency } from "~/utils/formatPrice";
+import ProductDetail from "./DetailProduct";
 
 const UpdateProduct = () => {
   const [fileUrl, setFileUrl] = useState(null);
   const [loading, setLoading] = useState(false);
+  const { id } = useParams();
   const [form] = Form.useForm();
   const navigate = useNavigate();
   const categories = useSelector((state) => state.category.listCategory);
+  const productDetail = useSelector((state) => state.product.productDetail);
   const dispatch = useDispatch();
   const descriptionRef = useRef(null);
 
-  // Xử lý checkbox
-  const handleCheck = (e) => {
-    form.setFieldsValue({
-      deleted: e.target.checked,
-    });
-  };
-
-  // Xử lý khi thêm
+  // Xử lý khi Chỉnh sửa
   const handleSubmit = (value) => {
     setLoading(true);
+    console.log(value);
     value.description = descriptionRef.current.getContent();
     value.image_url = fileUrl;
 
-    console.log(value);
-
-    dispatch(fetchUpdateProduct(value));
+    dispatch(fetchUpdateProduct({ id: id, data: value }));
     setLoading(false);
   };
 
@@ -66,8 +64,24 @@ const UpdateProduct = () => {
   }));
 
   useEffect(() => {
-    dispatch(fetchGetAllCategory());
+    Promise.all([
+      dispatch(fetchGetAllCategory()),
+      dispatch(fetchGetDetailProduct(id)),
+    ]);
   }, [dispatch]);
+
+  useEffect(() => {
+    if (productDetail) {
+      form.setFieldsValue({
+        ...productDetail,
+        price: Number(productDetail.price),
+        discount: Number(productDetail.discount),
+        new_price: Number(productDetail.new_price),
+      });
+      setFileUrl(productDetail.image_url);
+      descriptionRef.current?.setContent(productDetail.description);
+    }
+  }, [productDetail]);
 
   return (
     <div className="add-product">
@@ -84,17 +98,14 @@ const UpdateProduct = () => {
           form={form}
           onFinish={handleSubmit}
           onValuesChange={hanldeChangeValue}
-          initialValues={{
-            price: 1000,
-            discount: 0,
-            new_price: 1000,
-            is_featured: false,
-          }}
         >
           <Row gutter={[20, 20]}>
             <Col xl={24} lg={24} sm={24} xs={24}>
               <Form.Item label="Hình ảnh">
-                <UploadImage setFileUrl={setFileUrl} />
+                <UploadImage
+                  fileUrl={productDetail?.image_url}
+                  setFileUrl={setFileUrl}
+                />
               </Form.Item>
             </Col>
 
@@ -176,7 +187,10 @@ const UpdateProduct = () => {
 
             <Col xl={24} lg={24} sm={24} xs={24}>
               <Form.Item name="description" label="Mô tả:">
-                <TinyMCE descriptionRef={descriptionRef} />
+                <TinyMCE
+                  content={productDetail?.description}
+                  descriptionRef={descriptionRef}
+                />
               </Form.Item>
             </Col>
 
@@ -199,8 +213,8 @@ const UpdateProduct = () => {
             </Col>
 
             <Col xl={24} lg={24} sm={24} xs={24}>
-              <Form.Item name="deleted">
-                <Checkbox onChange={handleCheck}>Đang hoạt động</Checkbox>
+              <Form.Item name="deleted" valuePropName="checked">
+                <Checkbox>Đang hoạt động</Checkbox>
               </Form.Item>
             </Col>
 

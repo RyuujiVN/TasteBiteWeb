@@ -30,6 +30,7 @@ import { CiFilter } from "react-icons/ci";
 import { fetchGetListProduct } from "~/redux/product/productSlice";
 import { formatCurrency } from "~/utils/formatPrice";
 import ProductDetail from "./DetailProduct";
+import { FaSortAmountDown } from "react-icons/fa";
 
 const columns = [
   {
@@ -41,7 +42,6 @@ const columns = [
   {
     key: "title",
     title: "Tên sản phẩm",
-    dataIndex: "title",
   },
 
   {
@@ -86,6 +86,7 @@ const Product = () => {
   const [loading, setLoading] = useState(false);
   const [openDetail, setOpenDetail] = useState(false);
   const [productDetail, setProductDetail] = useState(null);
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const products = useSelector((state) => state.product.listProduct);
@@ -102,6 +103,10 @@ const Product = () => {
 
     setLoading(false);
   };
+
+  const hanldeUpdateMulti = (value) => {
+    
+  }
 
   const handleFilter = (value) => {
     const searchObject = Object.fromEntries(searchParams.entries());
@@ -127,6 +132,24 @@ const Product = () => {
     setOpenDetail(true);
   };
 
+  const onSelectChange = (newSelectedRowKeys) => {
+    console.log(newSelectedRowKeys);
+    setSelectedRowKeys(newSelectedRowKeys);
+  };
+
+  const handleSort = (value) => {
+    const searchObject = Object.fromEntries(searchParams.entries());
+    const [sortBy, order] = value.split("|");
+
+    console.log(sortBy, order);
+
+    setSearchParams({
+      ...searchObject,
+      sort_by: sortBy,
+      order: order,
+    });
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       const searchObject = Object.fromEntries(searchParams.entries());
@@ -139,8 +162,6 @@ const Product = () => {
 
     fetchData();
   }, [debounced, dispatch, searchParams]);
-
-  console.log(products);
 
   return (
     <div className="product">
@@ -172,6 +193,7 @@ const Product = () => {
                     <FaPlus /> Thêm sản phẩm
                   </Button>
 
+                  {/* Filter */}
                   <Dropdown
                     menu={{
                       items: [
@@ -215,6 +237,119 @@ const Product = () => {
                       <CiFilter /> Bộ lọc
                     </Button>
                   </Dropdown>
+
+                  {/* Sort */}
+                  <Dropdown
+                    menu={{
+                      items: [
+                        {
+                          key: "1",
+                          label: (
+                            <div
+                              className="sort-dropdown__content"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <Form layout="vertical">
+                                <Form.Item label="Sắp xếp theo" name="sort">
+                                  <Select
+                                    placeholder="Chọn kiểu sắp xếp"
+                                    onChange={handleSort}
+                                  >
+                                    <Select.Option value="title|asc">
+                                      Tên: A → Z
+                                    </Select.Option>
+
+                                    <Select.Option value="title|desc">
+                                      Tên: Z → A
+                                    </Select.Option>
+
+                                    <Select.Option value="price|asc">
+                                      Giá: Thấp → Cao
+                                    </Select.Option>
+
+                                    <Select.Option value="price|desc">
+                                      Giá: Cao → Thấp
+                                    </Select.Option>
+
+                                    <Select.Option value="created_at|desc">
+                                      Mới nhất
+                                    </Select.Option>
+
+                                    <Select.Option value="created_at|asc">
+                                      Cũ nhất
+                                    </Select.Option>
+                                  </Select>
+                                </Form.Item>
+                              </Form>
+                            </div>
+                          ),
+                        },
+                      ],
+                    }}
+                    trigger={["click"]}
+                  >
+                    <Button>
+                      <FaSortAmountDown />
+                      Sắp xếp
+                    </Button>
+                  </Dropdown>
+
+                  {/* Update Multi */}
+                  <Dropdown
+                    menu={{
+                      items: [
+                        {
+                          key: "update-multi",
+                          label: (
+                            <div
+                              onClick={(e) => e.stopPropagation()}
+                              style={{ padding: 10, width: 250 }}
+                            >
+                              <Form layout="vertical">
+                                <Form.Item name="type">
+                                  <Select placeholder="Chọn hành động">
+                                    <Select.Option value="active">
+                                      Hoạt động
+                                    </Select.Option>
+
+                                    <Select.Option value="inactive">
+                                      Dừng hoạt động
+                                    </Select.Option>
+
+                                    <Select.Option value="delete">
+                                      Xoá tất cả
+                                    </Select.Option>
+                                  </Select>
+                                </Form.Item>
+
+                                <Form.Item
+                                  name="data"
+                                  label="Trạng thái hoạt động"
+                                  style={{ display: "none" }}
+                                >
+                                  <Input />
+                                </Form.Item>
+
+                                <Button
+                                  type="primary"
+                                  block
+                                  // onClick={() => handleBulkUpdate()}
+                                  disabled={selectedRowKeys.length === 0}
+                                >
+                                  Áp dụng
+                                </Button>
+                              </Form>
+                            </div>
+                          ),
+                        },
+                      ],
+                    }}
+                    trigger={["click"]}
+                  >
+                    <Button disabled={selectedRowKeys.length === 0}>
+                      Cập nhật nhiều
+                    </Button>
+                  </Dropdown>
                 </Space>
               </div>
             </Flex>
@@ -228,8 +363,9 @@ const Product = () => {
                 className="table"
                 columns={columns}
                 pagination={false}
+                rowSelection={{ selectedRowKeys, onChange: onSelectChange }}
                 dataSource={products.map((product) => ({
-                  key: product?._id,
+                  key: product?.id,
                   image: (
                     <img src={product?.image_url} height={100} width={150} />
                   ),
@@ -264,7 +400,9 @@ const Product = () => {
                       <Tooltip title="Chỉnh sửa">
                         <AiOutlineEdit
                           className="table__icon"
-                          // onClick={() => handleSet(product, setEditCategory)}
+                          onClick={() =>
+                            navigate(`/admin/product/update/${product.id}`)
+                          }
                         />
                       </Tooltip>
 

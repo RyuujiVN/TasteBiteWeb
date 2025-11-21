@@ -1,11 +1,10 @@
 import { Editor } from "@tinymce/tinymce-react";
-import { useRef } from "react";
 
-const TinyMCE = ({ descriptionRef }) => {
-
+const TinyMCE = ({ content, descriptionRef }) => {
   return (
     <Editor
       apiKey={import.meta.env.VITE_TINYMCE}
+      initialValue={content}
       onInit={(_evt, editor) => (descriptionRef.current = editor)}
       init={{
         height: 500,

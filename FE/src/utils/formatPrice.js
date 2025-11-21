@@ -3,7 +3,7 @@ export const formatCurrency = (value) => {
 }
 
 export const parseCurrency = (value) => {
-  return value === null || value === void 0
-    ? void 0
-    : value.replace(/VND \s?|(,*)/g, "")
+  if (!value) return 0;
+  // Xóa "VND" và tất cả dấu phẩy
+  return Number(value.replace(/VND\s?|,/g, ""));
 }

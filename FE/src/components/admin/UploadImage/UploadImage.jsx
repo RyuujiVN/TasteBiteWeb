@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import { Image, Upload } from "antd";
 import { instance } from "~/api/adminApi";
@@ -12,7 +12,7 @@ const getBase64 = (file) =>
     reader.onerror = (error) => reject(error);
   });
 
-const UploadImage = ({ setFileUrl }) => {
+const UploadImage = ({ fileUrl, setFileUrl }) => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [filePreview, setFilePreview] = useState([]);
@@ -58,6 +58,19 @@ const UploadImage = ({ setFileUrl }) => {
       <div style={{ marginTop: 8 }}>Upload</div>
     </button>
   );
+
+  useEffect(() => {
+    if (fileUrl) {
+      setFilePreview([
+        {
+          uid: "-1",
+          name: "image.png",
+          status: "done",
+          url: fileUrl,
+        },
+      ]);
+    }
+  }, [fileUrl]);
 
   return (
     <>

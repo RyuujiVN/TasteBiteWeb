@@ -11,6 +11,8 @@ import { UpdateCategoryDTO } from 'src/category/dtos/update-category.dto';
 interface ProductPagination extends PaginationQuery {
   category_id?: string;
   deleted?: boolean;
+  sort_by?: string;
+  order?: string;
 }
 
 @Injectable()
@@ -30,8 +32,7 @@ export class ProductService {
     const queryBuilder = this.productRepository
       .createQueryBuilder('product')
       .leftJoin('product.category', 'category')
-      .addSelect(['category.id', 'category.title', 'category.type'])
-      .orderBy('product.created_at', 'DESC');
+      .addSelect(['category.id', 'category.title', 'category.type']);
 
     if (options.search)
       queryBuilder.andWhere('product.title ILIKE :title', {
@@ -47,6 +48,12 @@ export class ProductService {
       queryBuilder.andWhere('product.deleted = :deleted', {
         deleted: options.deleted,
       });
+
+    const order: any = options.order;
+
+    if (options.sort_by && order)
+      queryBuilder.orderBy(`product.${options.sort_by}`, order.toUpperCase());
+    else queryBuilder.orderBy('product.created_at', 'DESC');
 
     return paginate<Product>(queryBuilder, options);
   }

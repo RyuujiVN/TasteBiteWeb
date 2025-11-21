@@ -93,12 +93,26 @@ export class ProductController {
     type: Boolean,
     description: 'Lọc theo xoá tạm thời',
   })
+  @ApiQuery({
+    name: 'sort_by',
+    required: false,
+    type: String,
+    description: 'Sắp xếp theo tuỳ chọn',
+  })
+  @ApiQuery({
+    name: 'order',
+    required: false,
+    type: String,
+    description: 'Sắp xếp giảm hay tăng',
+  })
   findAllPagination(
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number = 1,
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number = 10,
     @Query('search') search?: string,
     @Query('category_id') category_id?: string,
     @Query('deleted') deleted?: boolean,
+    @Query('sort_by') sort_by?: string,
+    @Query('order') order?: string,
   ): Promise<Pagination<Product>> {
     return this.productService.findAllPagination({
       page,
@@ -106,6 +120,8 @@ export class ProductController {
       search,
       category_id,
       deleted,
+      sort_by,
+      order,
     });
   }
 

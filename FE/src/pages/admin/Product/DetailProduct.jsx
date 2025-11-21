@@ -11,7 +11,7 @@ const ProductDetail = ({ open, onClose, product }) => {
         <Image
           src={product.image_url}
           width={220}
-          style={{ borderRadius: 10 }}
+          style={{ borderRadius: 10, marginBottom: 20 }}
         />
       </Flex>
 
