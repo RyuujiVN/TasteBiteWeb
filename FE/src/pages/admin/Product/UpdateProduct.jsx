@@ -16,10 +16,10 @@ import { useNavigate } from "react-router-dom";
 import TinyMCE from "~/components/admin/TinyMCE/TinyMCE";
 import UploadImage from "~/components/admin/UploadImage/UploadImage";
 import { fetchGetAllCategory } from "~/redux/category/categorySlice";
-import { fetchAddProduct } from "~/redux/product/productSlice";
+import { fetchUpdateProduct } from "~/redux/product/productSlice";
 import { formatCurrency, parseCurrency } from "~/utils/formatPrice";
 
-const AddProduct = () => {
+const UpdateProduct = () => {
   const [fileUrl, setFileUrl] = useState(null);
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
@@ -41,7 +41,9 @@ const AddProduct = () => {
     value.description = descriptionRef.current.getContent();
     value.image_url = fileUrl;
 
-    dispatch(fetchAddProduct(value));
+    console.log(value);
+
+    dispatch(fetchUpdateProduct(value));
     setLoading(false);
   };
 
@@ -71,7 +73,7 @@ const AddProduct = () => {
     <div className="add-product">
       <div className="add-product__header box-head">
         <h2 className="add-product__header--title box-head__title">
-          Thêm sản phẩm
+          Chỉnh sửa sản phẩm
         </h2>
       </div>
 
@@ -219,7 +221,7 @@ const AddProduct = () => {
                 htmlType="submit"
                 loading={loading}
               >
-                Thêm sản phẩm
+                Chỉnh sửa sản phẩm
               </Button>
             </Form.Item>
           </Space>
@@ -229,4 +231,4 @@ const AddProduct = () => {
   );
 };
 
-export default AddProduct;
+export default UpdateProduct;

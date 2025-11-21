@@ -16,10 +16,7 @@ import {
 } from "antd";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  fectchDeleteCategory,
-  fetchGetAllCategory,
-} from "~/redux/category/categorySlice";
+import { fetchGetAllCategory } from "~/redux/category/categorySlice";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { AiOutlineEdit } from "react-icons/ai";
 import { AiOutlineDelete } from "react-icons/ai";
@@ -32,6 +29,7 @@ import { FaPlus } from "react-icons/fa6";
 import { CiFilter } from "react-icons/ci";
 import { fetchGetListProduct } from "~/redux/product/productSlice";
 import { formatCurrency } from "~/utils/formatPrice";
+import ProductDetail from "./DetailProduct";
 
 const columns = [
   {
@@ -86,6 +84,8 @@ const Product = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
+  const [openDetail, setOpenDetail] = useState(false);
+  const [productDetail, setProductDetail] = useState(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const products = useSelector((state) => state.product.listProduct);
@@ -96,9 +96,9 @@ const Product = () => {
 
   const handleDelete = (id) => {
     setLoading(true);
-    toast.promise(dispatch(fectchDeleteCategory(id)), {
-      pending: "Đang xoá...",
-    });
+    // toast.promise(dispatch(fectchDeleteCategory(id)), {
+    //   pending: "Đang xoá...",
+    // });
 
     setLoading(false);
   };
@@ -122,6 +122,11 @@ const Product = () => {
     });
   };
 
+  const handleSetProductDetail = (item) => {
+    setProductDetail(item);
+    setOpenDetail(true);
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       const searchObject = Object.fromEntries(searchParams.entries());
@@ -134,6 +139,8 @@ const Product = () => {
 
     fetchData();
   }, [debounced, dispatch, searchParams]);
+
+  console.log(products);
 
   return (
     <div className="product">
@@ -250,7 +257,7 @@ const Product = () => {
                       <Tooltip title="Xem chi tiết">
                         <MdOutlineRemoveRedEye
                           className="table__icon"
-                          // onClick={() => handleSet(product, setDetailCategory)}
+                          onClick={() => handleSetProductDetail(product)}
                         />
                       </Tooltip>
 
@@ -291,6 +298,12 @@ const Product = () => {
             />
           </div>
         </Card>
+
+        <ProductDetail
+          open={openDetail}
+          onClose={() => setOpenDetail(false)}
+          product={productDetail}
+        />
       </div>
     </div>
   );
