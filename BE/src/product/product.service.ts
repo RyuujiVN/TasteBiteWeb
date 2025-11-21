@@ -7,6 +7,8 @@ import slugify from 'slugify';
 import { PaginationQuery } from 'src/common/interfaces/pagination.interface';
 import { paginate, Pagination } from 'nestjs-typeorm-paginate';
 import { UpdateCategoryDTO } from 'src/category/dtos/update-category.dto';
+import { ChangeMultiProductDTO } from './dtos/change-multi-product.dto';
+import { ProductChangeMultiEnum } from 'src/common/enums/product.enum';
 
 interface ProductPagination extends PaginationQuery {
   category_id?: string;
@@ -87,6 +89,50 @@ export class ProductService {
     product.updated_at = new Date();
 
     return this.productRepository.save(product);
+  }
+
+  async updateMulti(data: ChangeMultiProductDTO) {
+    switch (data.type) {
+      case ProductChangeMultiEnum.INACTIVE:
+        await this.productRepository
+          .createQueryBuilder()
+          .update(Product)
+          .set({ deleted: true })
+          .whereInIds(data.ids)
+          .execute();
+        break;
+
+      case ProductChangeMultiEnum.ACTIVE:
+        await this.productRepository
+          .createQueryBuilder()
+          .update(Product)
+          .set({ deleted: false })
+          .whereInIds(data.ids)
+          .execute();
+        break;
+
+      case ProductChangeMultiEnum.SPECIAL:
+        await this.productRepository
+          .createQueryBuilder()
+          .update(Product)
+          .set({ is_featured: true })
+          .whereInIds(data.ids)
+          .execute();
+        break;
+
+      case ProductChangeMultiEnum.NOT_SPECIAL:
+        await this.productRepository
+          .createQueryBuilder()
+          .update(Product)
+          .set({ is_featured: false })
+          .whereInIds(data.ids)
+          .execute();
+        break;
+
+      case ProductChangeMultiEnum.DELETE:
+        await this.productRepository.delete(data.ids);
+        break;
+    }
   }
 
   async delete(id: number) {

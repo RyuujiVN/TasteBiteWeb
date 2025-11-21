@@ -56,8 +56,18 @@ export const fetchAddProduct = createAsyncThunk(
 export const fetchUpdateProduct = createAsyncThunk(
   'product/fetchUpdateProduct',
   async ({ id, data }) => {
-    console.log(data)
     const response = await instance.put(`/product/update/${id}`, data)
+
+
+    return response.data
+  }
+)
+
+// Update Multi
+export const fetchUpdateMultiProduct = createAsyncThunk(
+  'product/fetchUpdateProduct',
+  async (data) => {
+    const response = await instance.put('/product/update-multi', data)
 
 
     return response.data

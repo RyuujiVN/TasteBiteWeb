@@ -27,7 +27,10 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import useDebounce from "~/hooks/useDebounce";
 import { FaPlus } from "react-icons/fa6";
 import { CiFilter } from "react-icons/ci";
-import { fetchGetListProduct } from "~/redux/product/productSlice";
+import {
+  fetchGetListProduct,
+  fetchUpdateMultiProduct,
+} from "~/redux/product/productSlice";
 import { formatCurrency } from "~/utils/formatPrice";
 import ProductDetail from "./DetailProduct";
 import { FaSortAmountDown } from "react-icons/fa";
@@ -105,8 +108,18 @@ const Product = () => {
   };
 
   const hanldeUpdateMulti = (value) => {
-    
-  }
+    setLoading(true);
+
+    value.ids = selectedRowKeys;
+    toast.promise(dispatch(fetchUpdateMultiProduct(value)), {
+      pending: "Đang cập nhật...",
+    });
+
+    const searchObject = Object.fromEntries(searchParams.entries());
+
+    dispatch(fetchGetListProduct(searchObject));
+    setLoading(false);
+  };
 
   const handleFilter = (value) => {
     const searchObject = Object.fromEntries(searchParams.entries());
@@ -133,7 +146,6 @@ const Product = () => {
   };
 
   const onSelectChange = (newSelectedRowKeys) => {
-    console.log(newSelectedRowKeys);
     setSelectedRowKeys(newSelectedRowKeys);
   };
 
@@ -305,7 +317,10 @@ const Product = () => {
                               onClick={(e) => e.stopPropagation()}
                               style={{ padding: 10, width: 250 }}
                             >
-                              <Form layout="vertical">
+                              <Form
+                                layout="vertical"
+                                onFinish={hanldeUpdateMulti}
+                              >
                                 <Form.Item name="type">
                                   <Select placeholder="Chọn hành động">
                                     <Select.Option value="active">
@@ -316,26 +331,21 @@ const Product = () => {
                                       Dừng hoạt động
                                     </Select.Option>
 
+                                    <Select.Option value="special">
+                                      Là món đặc trưng
+                                    </Select.Option>
+
+                                    <Select.Option value="not_special">
+                                      Không phải là món đặc trưng
+                                    </Select.Option>
+
                                     <Select.Option value="delete">
                                       Xoá tất cả
                                     </Select.Option>
                                   </Select>
                                 </Form.Item>
 
-                                <Form.Item
-                                  name="data"
-                                  label="Trạng thái hoạt động"
-                                  style={{ display: "none" }}
-                                >
-                                  <Input />
-                                </Form.Item>
-
-                                <Button
-                                  type="primary"
-                                  block
-                                  // onClick={() => handleBulkUpdate()}
-                                  disabled={selectedRowKeys.length === 0}
-                                >
+                                <Button type="primary" block htmlType="submit">
                                   Áp dụng
                                 </Button>
                               </Form>

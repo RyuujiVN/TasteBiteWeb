@@ -5,7 +5,7 @@ import {
   IsString,
   MaxLength,
 } from 'class-validator';
-import { CategoryTypeEnum } from 'src/common/enums/category-type.enum';
+import { CategoryTypeEnum } from 'src/common/enums/category.enum';
 
 export class CreateCategoryDTO {
   @IsString()

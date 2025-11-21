@@ -30,6 +30,7 @@ import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { FileValidationPipe } from 'src/common/pipes/file-validation.pipe';
 import { UpdateProductDTO } from './dtos/update-product.dto';
 import { JwtAccessAuthGuard } from 'src/guards/jwt-access.guard';
+import { ChangeMultiProductDTO } from './dtos/change-multi-product.dto';
 
 @Controller('product')
 @ApiBearerAuth('JWT-auth')
@@ -146,6 +147,16 @@ export class ProductController {
     @Body() data: UpdateProductDTO,
   ): Promise<Product> {
     return this.productService.update(id, data);
+  }
+
+  @Put('update-multi')
+  @UseGuards(JwtAccessAuthGuard)
+  @ApiOperation({ summary: 'Cập nhật sản phẩm' })
+  @ApiBody({
+    type: ChangeMultiProductDTO,
+  })
+  updateMultiProduct(@Body() data: ChangeMultiProductDTO): Promise<void> {
+    return this.productService.updateMulti(data);
   }
 
   @Delete('delete/:id')
