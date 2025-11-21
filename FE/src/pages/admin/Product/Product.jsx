@@ -28,6 +28,7 @@ import useDebounce from "~/hooks/useDebounce";
 import { FaPlus } from "react-icons/fa6";
 import { CiFilter } from "react-icons/ci";
 import {
+  fetchDeleteProduct,
   fetchGetListProduct,
   fetchUpdateMultiProduct,
 } from "~/redux/product/productSlice";
@@ -100,9 +101,9 @@ const Product = () => {
 
   const handleDelete = (id) => {
     setLoading(true);
-    // toast.promise(dispatch(fectchDeleteCategory(id)), {
-    //   pending: "Đang xoá...",
-    // });
+    toast.promise(dispatch(fetchDeleteProduct(id)), {
+      pending: "Đang xoá...",
+    });
 
     setLoading(false);
   };
@@ -417,8 +418,8 @@ const Product = () => {
                       </Tooltip>
 
                       <Popconfirm
-                        title="Xoá loại"
-                        description="Bạn có chắc muốn xoá loại này"
+                        title="Xoá sản phẩm"
+                        description="Bạn có chắc muốn xoá sản phẩm này"
                         onConfirm={() => handleDelete(product.id)}
                         okText="Xoá"
                         cancelText="Huỷ"

@@ -75,8 +75,8 @@ export const fetchUpdateMultiProduct = createAsyncThunk(
 )
 
 // Delete
-export const fectchDeleteProduct = createAsyncThunk(
-  'fectchDeleteProduct',
+export const fetchDeleteProduct = createAsyncThunk(
+  'fetchDeleteProduct',
   async (id, { dispatch }) => {
     const response = await instance.delete(`/product/delete/${id}`)
     dispatch(deleteProduct(id))
@@ -118,7 +118,7 @@ export const productSlice = createSlice({
       toast.success("Chỉnh sửa thành công!")
     })
 
-    builder.addCase(fectchDeleteProduct.fulfilled, (state, action) => {
+    builder.addCase(fetchDeleteProduct.fulfilled, (state, action) => {
       toast.success(action.payload.message)
     })
   }
