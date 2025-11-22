@@ -15,7 +15,9 @@ export class RoleService {
   ) {}
 
   async findAllPagination(options: PaginationQuery): Promise<Pagination<Role>> {
-    const queryBuilder = this.roleRepository.createQueryBuilder('role');
+    const queryBuilder = this.roleRepository
+      .createQueryBuilder('role')
+      .select(['role.id', 'role.title', 'role.description']);
 
     if (options.search)
       queryBuilder.andWhere('role.title ILIKE :title', {
@@ -30,7 +32,6 @@ export class RoleService {
 
     role.title = data.title;
     role.description = data.description;
-    role.permissions = data.permissions;
 
     return await this.roleRepository.save(role);
   }

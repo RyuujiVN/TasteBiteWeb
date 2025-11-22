@@ -19,11 +19,4 @@ export class CreateRoleDTO {
     description: 'Mô tả ngắn gọn role',
   })
   description?: string;
-
-  @IsString()
-  @ApiProperty({
-    example: 'create_user, update_user',
-    description: 'Các quyền hạn của role',
-  })
-  permissions: string;
 }

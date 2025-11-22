@@ -52,7 +52,7 @@ export const fetchUpdateCategory = createAsyncThunk(
 
 // Delete
 export const fectchDeleteCategory = createAsyncThunk(
-  'categoryfectchDeleteCategory',
+  'category/fectchDeleteCategory',
   async (id, { dispatch }) => {
     const response = await instance.delete(`/category/delete/${id}`)
     dispatch(deleteCategory(id))

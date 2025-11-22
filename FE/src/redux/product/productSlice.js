@@ -76,7 +76,7 @@ export const fetchUpdateMultiProduct = createAsyncThunk(
 
 // Delete
 export const fetchDeleteProduct = createAsyncThunk(
-  'fetchDeleteProduct',
+  'product/fetchDeleteProduct',
   async (id, { dispatch }) => {
     const response = await instance.delete(`/product/delete/${id}`)
     dispatch(deleteProduct(id))

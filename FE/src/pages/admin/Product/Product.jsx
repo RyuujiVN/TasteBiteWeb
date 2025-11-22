@@ -448,11 +448,13 @@ const Product = () => {
           </div>
         </Card>
 
-        <ProductDetail
-          open={openDetail}
-          onClose={() => setOpenDetail(false)}
-          product={productDetail}
-        />
+        {openDetail && (
+          <ProductDetail
+            open={openDetail}
+            onClose={() => setOpenDetail(false)}
+            product={productDetail}
+          />
+        )}
       </div>
     </div>
   );

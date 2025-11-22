@@ -5,6 +5,7 @@ import Login from "~/pages/admin/Login/Login.jsx";
 import AddProduct from "~/pages/admin/Product/AddProduct";
 import Product from "~/pages/admin/Product/Product";
 import UpdateProduct from "~/pages/admin/Product/UpdateProduct";
+import Role from "~/pages/admin/Role/Role";
 
 const routes = [
   {
@@ -41,7 +42,10 @@ const routes = [
         element: <Category />,
       },
 
-      {},
+      {
+        path: "roles",
+        element: <Role />,
+      },
     ],
   },
 ];
