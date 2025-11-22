@@ -14,6 +14,8 @@ import {
 import "./Sidebar.scss";
 import { Link, useLocation } from "react-router-dom";
 
+import { RiShieldUserLine, RiLockPasswordLine } from "react-icons/ri";
+
 const items = [
   {
     type: "group",
@@ -74,6 +76,23 @@ const items = [
       },
     ],
   },
+  {
+    type: "group",
+    label: "QUYỀN",
+    children: [
+      {
+        key: "/roles",
+        icon: <RiShieldUserLine size={18} />,
+        label: <Link to="/admin/roles">Nhóm quyền</Link>,
+      },
+      {
+        key: "/permissions",
+        icon: <RiLockPasswordLine size={18} />,
+        label: <Link to="/admin/permissions">Phân quyền</Link>,
+      },
+    ],
+  },
+
   {
     type: "group",
     label: "HỖ TRỢ KHÁCH HÀNG",

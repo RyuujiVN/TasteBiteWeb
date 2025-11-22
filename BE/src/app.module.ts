@@ -13,6 +13,8 @@ import { Category } from './category/category.entity';
 import { ProductModule } from './product/product.module';
 import { Product } from './product/product.entity';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
+import { RoleModule } from './role/role.module';
+import { Role } from './role/role.entity';
 
 @Module({
   imports: [
@@ -28,7 +30,7 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
       username: 'postgres',
       password: '123456',
       database: 'TasteBite',
-      entities: [User, Category, Product],
+      entities: [User, Category, Product, Role],
       synchronize: true,
     }),
     AuthModule,
@@ -36,6 +38,7 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
     CategoryModule,
     ProductModule,
     CloudinaryModule,
+    RoleModule,
   ],
   controllers: [AppController],
   providers: [AppService],

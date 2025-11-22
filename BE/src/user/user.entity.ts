@@ -1,7 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
 import { MaxLength } from 'class-validator';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Role } from 'src/role/role.entity';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity('user')
 export class User {
@@ -66,4 +73,13 @@ export class User {
   })
   @Column({ default: false, type: 'bool' })
   is_active: boolean;
+
+  @Column({ name: 'role_id', nullable: true })
+  role_id: number;
+
+  @OneToOne(() => Role, (role) => role.user, {
+    nullable: true,
+  })
+  @JoinColumn({ name: 'role_id' })
+  role: Role;
 }
