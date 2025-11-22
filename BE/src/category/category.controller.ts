@@ -58,8 +58,8 @@ export class CategoryController {
     description: 'Tìm kiếm theo tên category',
   })
   findAllPagination(
-    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number = 1,
-    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number = 10,
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
     @Query('type') type?: string,
     @Query('search') search?: string,
   ): Promise<Pagination<Category>> {

@@ -107,8 +107,8 @@ export class ProductController {
     description: 'Sắp xếp giảm hay tăng',
   })
   findAllPagination(
-    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number = 1,
-    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number = 10,
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
     @Query('search') search?: string,
     @Query('category_id') category_id?: string,
     @Query('deleted') deleted?: boolean,
