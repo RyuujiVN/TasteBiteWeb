@@ -6,10 +6,12 @@ const useDebounce = (value, delay, setSearchParams) => {
 
   useEffect(() => {
     const handler = setTimeout(() => {
-      setDebouncedValue(value)
-      setSearchParams({
-        search: value
-      })
+      if (value != null) {
+        setDebouncedValue(value)
+        setSearchParams({
+          search: value
+        })
+      }
     }, delay)
 
     return () => clearTimeout(handler)

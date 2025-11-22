@@ -64,7 +64,7 @@ const Category = () => {
   const [addCategory, setAddCategory] = useState(false);
   const [editCategory, setEditCategory] = useState(false);
   const [detailCategory, setDetailCategory] = useState(false);
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState(null);
   const [category, setCategory] = useState(null);
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();

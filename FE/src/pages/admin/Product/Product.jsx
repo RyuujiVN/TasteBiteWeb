@@ -86,7 +86,7 @@ const columns = [
 
 const Product = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState(null);
   const [loading, setLoading] = useState(false);
   const [openDetail, setOpenDetail] = useState(false);
   const [productDetail, setProductDetail] = useState(null);

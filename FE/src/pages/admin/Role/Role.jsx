@@ -25,6 +25,7 @@ import { FaPlus } from "react-icons/fa6";
 import { fetchDeleteProduct } from "~/redux/product/productSlice";
 import { fetchGetListRole } from "~/redux/role/roleSlice";
 import AddRole from "./AddRole";
+import UpdateRole from "./UpdateRole";
 
 const columns = [
   {
@@ -47,11 +48,11 @@ const columns = [
 
 const Role = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [openDetail, setOpenDetail] = useState(false);
+  const [role, setRole] = useState(false);
   const [addRole, setAddRole] = useState(false);
-  const [productDetail, setProductDetail] = useState(null);
+  const [updateRole, setUpdateRole] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const roles = useSelector((state) => state.role.listRole);
@@ -80,9 +81,9 @@ const Role = () => {
     });
   };
 
-  const handleSetProductDetail = (item) => {
-    setProductDetail(item);
-    setOpenDetail(true);
+  const handleSetUpdateRole = (item) => {
+    setRole(item);
+    setUpdateRole(true);
   };
 
   useEffect(() => {
@@ -93,7 +94,7 @@ const Role = () => {
     };
 
     fetchData();
-  }, [debounced, dispatch, searchParams]);
+  }, [dispatch, searchParams]);
 
   return (
     <div className="product">
@@ -140,19 +141,10 @@ const Role = () => {
                   description: role?.description,
                   action: (
                     <Space size={20}>
-                      <Tooltip title="Xem chi tiết">
-                        <MdOutlineRemoveRedEye
-                          className="table__icon"
-                          // onClick={() => handleSetProductDetail(product)}
-                        />
-                      </Tooltip>
-
                       <Tooltip title="Chỉnh sửa">
                         <AiOutlineEdit
                           className="table__icon"
-                          // onClick={() =>
-                          //   // navigate(`/admin/product/update/${product.id}`)
-                          // }
+                          onClick={() => handleSetUpdateRole(role)}
                         />
                       </Tooltip>
 
@@ -187,13 +179,15 @@ const Role = () => {
           </div>
         </Card>
 
-        {/* <ProductDetail
-          open={openDetail}
-          onClose={() => setOpenDetail(false)}
-          product={productDetail}
-        /> */}
-
         {addRole && <AddRole addRole={addRole} setAddRole={setAddRole} />}
+
+        {updateRole && (
+          <UpdateRole
+            role={role}
+            updateRole={updateRole}
+            setUpdateRole={setUpdateRole}
+          />
+        )}
       </div>
     </div>
   );
