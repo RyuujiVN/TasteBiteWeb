@@ -13,7 +13,6 @@ import {
 } from "antd";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { AiOutlineEdit } from "react-icons/ai";
 import { AiOutlineDelete } from "react-icons/ai";
 import { IoIosSearch } from "react-icons/io";
@@ -22,8 +21,7 @@ import { toast } from "react-toastify";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import useDebounce from "~/hooks/useDebounce";
 import { FaPlus } from "react-icons/fa6";
-import { fetchDeleteProduct } from "~/redux/product/productSlice";
-import { fetchGetListRole } from "~/redux/role/roleSlice";
+import { fetchDeleteRole, fetchGetListRole } from "~/redux/role/roleSlice";
 import AddRole from "./AddRole";
 import UpdateRole from "./UpdateRole";
 
@@ -54,7 +52,6 @@ const Role = () => {
   const [addRole, setAddRole] = useState(false);
   const [updateRole, setUpdateRole] = useState(false);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const roles = useSelector((state) => state.role.listRole);
   const pagination = useSelector((state) => state.role.pagination);
 
@@ -62,14 +59,12 @@ const Role = () => {
 
   const handleDelete = (id) => {
     setLoading(true);
-    toast.promise(dispatch(fetchDeleteProduct(id)), {
+    toast.promise(dispatch(fetchDeleteRole(id)), {
       pending: "Đang xoá...",
     });
 
     setLoading(false);
   };
-
-  console.log(roles);
 
   const handleChangePage = (page, size) => {
     const searchObject = Object.fromEntries(searchParams.entries());
@@ -151,7 +146,7 @@ const Role = () => {
                       <Popconfirm
                         title="Xoá role"
                         description="Bạn có chắc muốn xoá role này"
-                        // onConfirm={() => handleDelete(product.id)}
+                        onConfirm={() => handleDelete(role.id)}
                         okText="Xoá"
                         cancelText="Huỷ"
                         okButtonProps={{ loading: loading }}
