@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   DefaultValuePipe,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -65,5 +66,15 @@ export class RoleController {
     @Body() data: UpdateRoleDTO,
   ): Promise<Role> {
     return this.roleService.update(id, data);
+  }
+
+  @Delete('delete/:id')
+  @ApiOperation({ summary: 'Xoá role' })
+  async deleteRole(@Param('id', ParseIntPipe) id: number) {
+    await this.roleService.delete(id);
+
+    return {
+      message: 'Xoá thành công!',
+    };
   }
 }

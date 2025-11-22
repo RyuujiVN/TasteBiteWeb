@@ -43,4 +43,11 @@ export class RoleService {
     Object.assign(role, data);
     return await this.roleRepository.save(role);
   }
+
+  async delete(id: number) {
+    const result = await this.roleRepository.delete({ id: id });
+
+    if (result.affected === 0)
+      throw new NotFoundException('Không tìm thấy role!');
+  }
 }
