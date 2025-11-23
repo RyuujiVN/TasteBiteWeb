@@ -179,7 +179,9 @@ const Product = () => {
   return (
     <div className="product">
       <div className="product__header box-head">
-        <h2 className="product__header--title box-head__title">Loại món</h2>
+        <h2 className="product__header--title box-head__title">
+          Danh sách món ăn
+        </h2>
       </div>
 
       <div className="product__body">

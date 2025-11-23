@@ -1,6 +1,8 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { paginate, Pagination } from 'nestjs-typeorm-paginate';
 import bcrypt from 'node_modules/bcryptjs';
+import { PaginationQuery } from 'src/common/interfaces/pagination.interface';
 import { MailService } from 'src/mail/mail.service';
 import { CreateUserDTO } from 'src/user/dtos/create-user.dto';
 import { User } from 'src/user/user.entity';
@@ -43,5 +45,21 @@ export class UserService {
         is_active: false,
       },
     });
+  }
+
+  async findAllAdminPagination(
+    options: PaginationQuery,
+  ): Promise<Pagination<User>> {
+    const queryBuilder = this.userRepository
+      .createQueryBuilder('user')
+      .innerJoin('user.role', 'role')
+      .addSelect(['role.id', 'role.title']);
+
+    if (options.search)
+      queryBuilder.andWhere('user.email ILIKE :email', {
+        email: `%${options.search}%`,
+      });
+
+    return paginate<User>(queryBuilder, options);
   }
 }

@@ -20,7 +20,7 @@ import { UpdateRoleDTO } from './dtos/update-role.dto';
 import { Pagination } from 'nestjs-typeorm-paginate';
 
 @Controller('role')
-// @UseGuards(JwtAccessAuthGuard)
+@UseGuards(JwtAccessAuthGuard)
 @ApiTags('Role')
 export class RoleController {
   constructor(private readonly roleService: RoleService) {}

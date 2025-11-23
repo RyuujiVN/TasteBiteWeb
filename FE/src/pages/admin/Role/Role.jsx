@@ -82,6 +82,7 @@ const Role = () => {
   };
 
   useEffect(() => {
+    setLoading(true);
     const fetchData = async () => {
       const searchObject = Object.fromEntries(searchParams.entries());
 
@@ -89,15 +90,18 @@ const Role = () => {
     };
 
     fetchData();
+    setLoading(false);
   }, [dispatch, searchParams]);
 
   return (
-    <div className="product">
-      <div className="product__header box-head">
-        <h2 className="product__header--title box-head__title">Loại món</h2>
+    <div className="role">
+      <div className="role__header box-head">
+        <h2 className="role__header--title box-head__title">
+          Danh sách nhóm quyền
+        </h2>
       </div>
 
-      <div className="product__body">
+      <div className="role__body">
         <Card className="card">
           <div className="card__header">
             <Flex justify="space-between" align="center">
@@ -112,7 +116,7 @@ const Role = () => {
                 </Form.Item>
               </Form>
 
-              <div className="product__action">
+              <div className="role__action">
                 <Space>
                   <Button type="primary" onClick={() => setAddRole(true)}>
                     <FaPlus /> Thêm role
@@ -129,6 +133,7 @@ const Role = () => {
               <Table
                 className="table"
                 columns={columns}
+                loading={loading}
                 pagination={false}
                 dataSource={roles.map((role) => ({
                   key: role?.id,
