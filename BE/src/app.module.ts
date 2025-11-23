@@ -15,6 +15,7 @@ import { Product } from './product/product.entity';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { RoleModule } from './role/role.module';
 import { Role } from './role/role.entity';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { Role } from './role/role.entity';
     ProductModule,
     CloudinaryModule,
     RoleModule,
+    AdminModule,
   ],
   controllers: [AppController],
   providers: [AppService],
