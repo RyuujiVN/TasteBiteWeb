@@ -32,7 +32,7 @@ import { useSearchParams } from "react-router-dom";
 import useDebounce from "~/hooks/useDebounce";
 import { FaPlus } from "react-icons/fa6";
 import { CiFilter } from "react-icons/ci";
-import { fetchGetListAdmin } from "~/redux/admin/adminSlice";
+import { fectchDeleteAdmin, fetchGetListAdmin } from "~/redux/admin/adminSlice";
 import AddAdmin from "./AddAdmin";
 import EditAdmin from "./EditAdmin";
 // import DetailCategory from "./DetailCategory";
@@ -80,8 +80,6 @@ const Admin = () => {
   const admins = useSelector((state) => state.admin.listAdmin);
   const pagination = useSelector((state) => state.admin.pagination);
 
-  console.log(admins);
-
   const debounced = useDebounce(search, 500, setSearchParams);
 
   const handleSet = (value, setModal) => {
@@ -91,20 +89,11 @@ const Admin = () => {
 
   const handleDelete = (id) => {
     setLoading(true);
-    toast.promise(dispatch(fectchDeleteCategory(id)), {
+    toast.promise(dispatch(fectchDeleteAdmin(id)), {
       pending: "Đang xoá...",
     });
 
     setLoading(false);
-  };
-
-  const handleFilter = (value) => {
-    const searchObject = Object.fromEntries(searchParams.entries());
-
-    setSearchParams({
-      ...searchObject,
-      type: value,
-    });
   };
 
   const handleChangePage = (page, size) => {
@@ -189,7 +178,7 @@ const Admin = () => {
                       <Popconfirm
                         title="Xoá admin"
                         description="Bạn có chắc muốn xoá admin này"
-                        // onConfirm={() => handleDelete(category.id)}
+                        onConfirm={() => handleDelete(admin.id)}
                         okText="Xoá"
                         cancelText="Huỷ"
                         okButtonProps={{ loading: loading }}

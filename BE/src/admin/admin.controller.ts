@@ -72,7 +72,11 @@ export class AdminController {
   @ApiBody({
     type: CreateAdminDTO,
   })
-  delete(@Param('id', ParseIntPipe) id: number) {
-    return this.adminService.delete(id);
+  async delete(@Param('id', ParseIntPipe) id: number) {
+    await this.adminService.delete(id);
+
+    return {
+      message: 'Xoá thành công!',
+    };
   }
 }
