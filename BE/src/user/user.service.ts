@@ -1,4 +1,8 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { paginate, Pagination } from 'nestjs-typeorm-paginate';
 import bcrypt from 'node_modules/bcryptjs';
@@ -9,6 +13,8 @@ import { User } from 'src/user/user.entity';
 import { Repository } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 import { CreateAdminDTO } from './dtos/create-admin.dto';
+import { UpdateAdminDTO } from './dtos/update-admin.dto';
+import { RoleService } from 'src/role/role.service';
 
 @Injectable()
 export class UserService {
@@ -16,6 +22,7 @@ export class UserService {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     private readonly mailService: MailService,
+    private readonly roleService: RoleService,
   ) {}
 
   async register(userDTO: CreateUserDTO): Promise<void> {
@@ -71,14 +78,29 @@ export class UserService {
 
     if (existedAdmin) throw new ConflictException('Email đã tồn tại!');
 
+    const role = await this.roleService.findOne(data.role_id);
+
     const admin = new User();
     admin.email = data.email;
     admin.full_name = data.full_name;
     admin.password = data.password;
     admin.user_name = data.email.split('@')[0];
     admin.role_id = data.role_id;
-
     admin.password = await bcrypt.hash(admin.password, 10);
+    admin.role = role;
+
+    return await this.userRepository.save(admin);
+  }
+
+  async updateAdmin(id: number, data: UpdateAdminDTO): Promise<User> {
+    const admin = await this.userRepository.findOne({ where: { id: id } });
+
+    if (!admin) throw new NotFoundException('Không tìm thấy admin!');
+
+    Object.assign(admin, data);
+
+    const role = await this.roleService.findOne(data.role_id);
+    admin.role = role;
 
     return await this.userRepository.save(admin);
   }

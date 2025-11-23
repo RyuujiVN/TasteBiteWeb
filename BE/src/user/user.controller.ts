@@ -4,6 +4,7 @@ import {
   Controller,
   DefaultValuePipe,
   Get,
+  Param,
   ParseIntPipe,
   Post,
   Query,
@@ -58,5 +59,17 @@ export class UserController {
   })
   createAdmin(@Body() data: CreateAdminDTO): Promise<User> {
     return this.userService.create(data);
+  }
+
+  @Post('update/:id')
+  @ApiOperation({ summary: 'Thêm mới admin' })
+  @ApiBody({
+    type: CreateAdminDTO,
+  })
+  updateAdmin(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() data: CreateAdminDTO,
+  ): Promise<User> {
+    return this.userService.updateAdmin(id, data);
   }
 }

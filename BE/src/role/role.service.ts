@@ -27,6 +27,16 @@ export class RoleService {
     return paginate<Role>(queryBuilder, options);
   }
 
+  async findOne(id: number | undefined): Promise<Role> {
+    const role = await this.roleRepository.findOne({
+      where: { id: id },
+      select: { id: true, title: true },
+    });
+
+    if (!role) throw new NotFoundException('Không tìm thấy role');
+    return role;
+  }
+
   async create(data: CreateRoleDTO): Promise<Role> {
     const role = new Role();
 
