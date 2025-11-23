@@ -26,7 +26,7 @@ import { AiOutlineEdit } from "react-icons/ai";
 import { AiOutlineDelete } from "react-icons/ai";
 import { IoIosSearch } from "react-icons/io";
 import "./Admin.scss";
-import EditCategory from "./EditCategory";
+import EditCategory from "./EditAdmin";
 import { toast } from "react-toastify";
 import { useSearchParams } from "react-router-dom";
 import useDebounce from "~/hooks/useDebounce";
@@ -34,6 +34,7 @@ import { FaPlus } from "react-icons/fa6";
 import { CiFilter } from "react-icons/ci";
 import { fetchGetListAdmin } from "~/redux/admin/adminSlice";
 import AddAdmin from "./AddAdmin";
+import EditAdmin from "./EditAdmin";
 // import DetailCategory from "./DetailCategory";
 
 const columns = [
@@ -70,10 +71,10 @@ const columns = [
 const Admin = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [addAdmin, setAddAdmin] = useState(false);
-  const [editCategory, setEditCategory] = useState(false);
+  const [editAdmin, setEditAdmin] = useState(false);
   const [detailCategory, setDetailCategory] = useState(false);
   const [search, setSearch] = useState(null);
-  const [category, setCategory] = useState(null);
+  const [admin, setAdmin] = useState(null);
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const admins = useSelector((state) => state.admin.listAdmin);
@@ -84,7 +85,7 @@ const Admin = () => {
   const debounced = useDebounce(search, 500, setSearchParams);
 
   const handleSet = (value, setModal) => {
-    setCategory(value);
+    setAdmin(value);
     setModal(true);
   };
 
@@ -181,7 +182,7 @@ const Admin = () => {
                       <Tooltip title="Chỉnh sửa">
                         <AiOutlineEdit
                           className="table__icon"
-                          // onClick={() => handleSet(category, setEditCategory)}
+                          onClick={() => handleSet(admin, setEditAdmin)}
                         />
                       </Tooltip>
 
@@ -219,11 +220,11 @@ const Admin = () => {
 
       {addAdmin && <AddAdmin addAdmin={addAdmin} setAddAdmin={setAddAdmin} />}
 
-      {editCategory && (
-        <EditCategory
-          editCategory={editCategory}
-          setEditCategory={setEditCategory}
-          category={category}
+      {editAdmin && (
+        <EditAdmin
+          editAdmin={editAdmin}
+          setEditAdmin={setEditAdmin}
+          admin={admin}
         />
       )}
 

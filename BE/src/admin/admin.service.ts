@@ -6,7 +6,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { RoleService } from 'src/role/role.service';
 import { User } from 'src/user/user.entity';
-import { Repository } from 'typeorm';
+import { Not, Repository } from 'typeorm';
 import { CreateAdminDTO } from './dtos/create-admin.dto';
 import bcrypt from 'node_modules/bcryptjs';
 import { UpdateAdminDTO } from './dtos/update-admin.dto';
@@ -60,6 +60,15 @@ export class AdminService {
     const admin = await this.userRepository.findOne({ where: { id: id } });
 
     if (!admin) throw new NotFoundException('Không tìm thấy admin!');
+
+    const existedEmail = await this.userRepository.findOne({
+      where: {
+        email: data.email,
+        id: Not(admin.id),
+      },
+    });
+
+    if (existedEmail) throw new ConflictException('Email đã được sử dụng!');
 
     Object.assign(admin, data);
 

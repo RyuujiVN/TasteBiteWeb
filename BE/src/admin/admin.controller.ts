@@ -17,6 +17,7 @@ import { Pagination } from 'nestjs-typeorm-paginate';
 import { User } from 'src/user/user.entity';
 import { CreateAdminDTO } from './dtos/create-admin.dto';
 import { AdminService } from './admin.service';
+import { UpdateAdminDTO } from './dtos/update-admin.dto';
 
 @Controller('admin')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -57,11 +58,11 @@ export class AdminController {
   @Put('update/:id')
   @ApiOperation({ summary: 'Cập nhật admin' })
   @ApiBody({
-    type: CreateAdminDTO,
+    type: UpdateAdminDTO,
   })
   updateAdmin(
     @Param('id', ParseIntPipe) id: number,
-    @Body() data: CreateAdminDTO,
+    @Body() data: UpdateAdminDTO,
   ): Promise<User> {
     return this.adminService.updateAdmin(id, data);
   }
