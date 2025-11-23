@@ -1,18 +1,21 @@
 import {
+  Body,
   ClassSerializerInterceptor,
   Controller,
   DefaultValuePipe,
   Get,
   ParseIntPipe,
+  Post,
   Query,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { User } from './user.entity';
 import { UserService } from './user.service';
 import { JwtAccessAuthGuard } from 'src/guards/jwt-access.guard';
 import { Pagination } from 'nestjs-typeorm-paginate';
+import { CreateAdminDTO } from './dtos/create-admin.dto';
 
 @Controller('user')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -46,5 +49,14 @@ export class UserController {
       limit,
       search,
     });
+  }
+
+  @Post('create')
+  @ApiOperation({ summary: 'Thêm mới admin' })
+  @ApiBody({
+    type: CreateAdminDTO,
+  })
+  createAdmin(@Body() data: CreateAdminDTO): Promise<User> {
+    return this.userService.create(data);
   }
 }

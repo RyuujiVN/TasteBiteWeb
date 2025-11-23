@@ -6,7 +6,7 @@ import {
   Column,
   Entity,
   JoinColumn,
-  OneToOne,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -65,6 +65,7 @@ export class User {
     description: 'Token để kích hoạt tài khoản',
   })
   @Column({ nullable: true, type: 'text' })
+  @Exclude()
   token_active: string;
 
   @ApiProperty({
@@ -75,9 +76,9 @@ export class User {
   is_active: boolean;
 
   @Column({ name: 'role_id', nullable: true })
-  role_id: number;
+  role_id?: number;
 
-  @OneToOne(() => Role, (role) => role.user, {
+  @ManyToOne(() => Role, (role) => role.user, {
     nullable: true,
   })
   @JoinColumn({ name: 'role_id' })

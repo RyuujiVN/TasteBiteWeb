@@ -8,6 +8,7 @@ import { CreateUserDTO } from 'src/user/dtos/create-user.dto';
 import { User } from 'src/user/user.entity';
 import { Repository } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
+import { CreateAdminDTO } from './dtos/create-admin.dto';
 
 @Injectable()
 export class UserService {
@@ -61,5 +62,24 @@ export class UserService {
       });
 
     return paginate<User>(queryBuilder, options);
+  }
+
+  async create(data: CreateAdminDTO): Promise<User> {
+    const existedAdmin = await this.userRepository.findOne({
+      where: { email: data.email },
+    });
+
+    if (existedAdmin) throw new ConflictException('Email đã tồn tại!');
+
+    const admin = new User();
+    admin.email = data.email;
+    admin.full_name = data.full_name;
+    admin.password = data.password;
+    admin.user_name = data.email.split('@')[0];
+    admin.role_id = data.role_id;
+
+    admin.password = await bcrypt.hash(admin.password, 10);
+
+    return await this.userRepository.save(admin);
   }
 }
