@@ -1,4 +1,5 @@
 import LayoutDefault from "~/components/admin/LayoutDefault/LayoutAdmin";
+import Admin from "~/pages/admin/Admin/Admin";
 import Category from "~/pages/admin/Category/Category";
 import Dashboard from "~/pages/admin/Dashboard/Dashboard";
 import Login from "~/pages/admin/Login/Login.jsx";
@@ -45,6 +46,11 @@ const routes = [
       {
         path: "roles",
         element: <Role />,
+      },
+
+      {
+        path: "admins",
+        element: <Admin />,
       },
     ],
   },

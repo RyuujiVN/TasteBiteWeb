@@ -14,6 +14,12 @@ export class RoleService {
     private readonly roleRepository: Repository<Role>,
   ) {}
 
+  async findAll(): Promise<Role[]> {
+    return await this.roleRepository.find({
+      select: { id: true, title: true },
+    });
+  }
+
   async findAllPagination(options: PaginationQuery): Promise<Pagination<Role>> {
     const queryBuilder = this.roleRepository
       .createQueryBuilder('role')

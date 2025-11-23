@@ -81,6 +81,11 @@ const items = [
     label: "QUYỀN",
     children: [
       {
+        key: "/admins",
+        icon: <RiShieldUserLine size={18} />,
+        label: <Link to="/admin/admins">Tài khoản admin</Link>,
+      },
+      {
         key: "/roles",
         icon: <RiShieldUserLine size={18} />,
         label: <Link to="/admin/roles">Nhóm quyền</Link>,

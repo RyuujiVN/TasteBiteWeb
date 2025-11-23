@@ -25,6 +25,12 @@ import { Pagination } from 'nestjs-typeorm-paginate';
 export class RoleController {
   constructor(private readonly roleService: RoleService) {}
 
+  @Get('get-all')
+  @ApiOperation({ summary: 'Lấy tất cả role' })
+  findAll(): Promise<Role[]> {
+    return this.roleService.findAll();
+  }
+
   @Get('')
   @ApiOperation({ summary: 'Lấy danh sách role có phân trang' })
   @ApiQuery({ name: 'page', required: true, type: Number, default: 1 })

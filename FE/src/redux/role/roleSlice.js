@@ -8,6 +8,16 @@ const initialState = {
   roleDetail: null,
 }
 
+// Get All
+export const fetchGetAllRole = createAsyncThunk(
+  'role/fetchGetAllRole',
+  async () => {
+    const response = await instance.get('/role/get-all')
+
+    return response.data
+  }
+)
+
 // Get List
 export const fetchGetListRole = createAsyncThunk(
   'role/fetchGetListRole',
@@ -75,6 +85,10 @@ export const roleSlice = createSlice({
     builder.addCase(fetchGetListRole.fulfilled, (state, action) => {
       state.listRole = action.payload.items
       state.pagination = action.payload.meta
+    })
+
+    builder.addCase(fetchGetAllRole.fulfilled, (state, action) => {
+      state.listRole = action.payload
     })
 
     builder.addCase(fetchGetDetailRole.fulfilled, (state, action) => {

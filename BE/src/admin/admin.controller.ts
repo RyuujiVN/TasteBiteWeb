@@ -1,5 +1,6 @@
 import {
   Body,
+  ClassSerializerInterceptor,
   Controller,
   DefaultValuePipe,
   Delete,
@@ -9,6 +10,7 @@ import {
   Post,
   Put,
   Query,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiQuery } from '@nestjs/swagger';
 import { Pagination } from 'nestjs-typeorm-paginate';
@@ -17,6 +19,7 @@ import { CreateAdminDTO } from './dtos/create-admin.dto';
 import { AdminService } from './admin.service';
 
 @Controller('admin')
+@UseInterceptors(ClassSerializerInterceptor)
 export class AdminController {
   constructor(private readonly adminService: AdminService) {}
 
