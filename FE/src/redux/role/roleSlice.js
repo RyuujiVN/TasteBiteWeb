@@ -50,6 +50,17 @@ export const fetchAddRole = createAsyncThunk(
   }
 )
 
+// Update Permission for role
+export const fetchUpdatePermissionRole = createAsyncThunk(
+  'role/fetchUpdatePermissionRole',
+  async (data) => {
+    const response = await instance.put("/role/update-role", data)
+
+
+    return response.data
+  }
+)
+
 // Update
 export const fetchUpdateRole = createAsyncThunk(
   'role/fetchUpdateRole',

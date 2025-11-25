@@ -18,6 +18,7 @@ import { Role } from './role.entity';
 import { RoleService } from './role.service';
 import { UpdateRoleDTO } from './dtos/update-role.dto';
 import { Pagination } from 'nestjs-typeorm-paginate';
+import { UpdatePermissionRoleDTO } from './dtos/update-permission-role.dto';
 
 @Controller('role')
 @UseGuards(JwtAccessAuthGuard)
@@ -60,6 +61,15 @@ export class RoleController {
   })
   createRole(@Body() data: CreateRoleDTO): Promise<Role> {
     return this.roleService.create(data);
+  }
+
+  @Put('update-role')
+  @ApiOperation({ summary: 'Cập nhật permission cho role' })
+  @ApiBody({
+    type: UpdatePermissionRoleDTO,
+  })
+  updatePermission(@Body() data: UpdatePermissionRoleDTO) {
+    return this.roleService.updatePermission(data);
   }
 
   @Put('update/:id')

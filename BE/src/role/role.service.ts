@@ -6,6 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UpdateRoleDTO } from './dtos/update-role.dto';
 import { PaginationQuery } from 'src/common/interfaces/pagination.interface';
 import { paginate, Pagination } from 'nestjs-typeorm-paginate';
+import { UpdatePermissionRoleDTO } from './dtos/update-permission-role.dto';
 
 @Injectable()
 export class RoleService {
@@ -15,9 +16,7 @@ export class RoleService {
   ) {}
 
   async findAll(): Promise<Role[]> {
-    return await this.roleRepository.find({
-      select: { id: true, title: true },
-    });
+    return await this.roleRepository.find();
   }
 
   async findAllPagination(options: PaginationQuery): Promise<Pagination<Role>> {
@@ -59,6 +58,17 @@ export class RoleService {
 
     Object.assign(role, data);
     return await this.roleRepository.save(role);
+  }
+
+  async updatePermission(data: UpdatePermissionRoleDTO) {
+    await Promise.all(
+      data.roles.map(async (item) =>
+        this.roleRepository.update(item.id, {
+          permissions: item.permissions.join(', '),
+        }),
+      ),
+    );
+    return data;
   }
 
   async delete(id: number) {

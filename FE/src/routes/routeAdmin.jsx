@@ -1,4 +1,5 @@
 import LayoutDefault from "~/components/admin/LayoutDefault/LayoutAdmin";
+import Permission from "~/pages/Permission/Permission";
 import Admin from "~/pages/admin/Admin/Admin";
 import Category from "~/pages/admin/Category/Category";
 import Dashboard from "~/pages/admin/Dashboard/Dashboard";
@@ -51,6 +52,11 @@ const routes = [
       {
         path: "admins",
         element: <Admin />,
+      },
+
+      {
+        path: "permissions",
+        element: <Permission />,
       },
     ],
   },

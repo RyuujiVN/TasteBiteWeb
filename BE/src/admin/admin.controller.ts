@@ -10,6 +10,7 @@ import {
   Post,
   Put,
   Query,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiQuery } from '@nestjs/swagger';
@@ -18,8 +19,10 @@ import { User } from 'src/user/user.entity';
 import { CreateAdminDTO } from './dtos/create-admin.dto';
 import { AdminService } from './admin.service';
 import { UpdateAdminDTO } from './dtos/update-admin.dto';
+import { JwtAccessAuthGuard } from 'src/guards/jwt-access.guard';
 
 @Controller('admin')
+@UseGuards(JwtAccessAuthGuard)
 @UseInterceptors(ClassSerializerInterceptor)
 export class AdminController {
   constructor(private readonly adminService: AdminService) {}

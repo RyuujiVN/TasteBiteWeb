@@ -1,0 +1,43 @@
+.permission {
+  padding: 20px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+  &__table {
+    width: 100%;
+    border-collapse: collapse;
+
+    td {
+      padding: 12px 10px;
+      border: 1px solid #f0f0f0;
+
+      span {
+        display: inline-block;
+      }
+
+      .ant-checkbox-wrapper,
+      span {
+        margin: 0;
+        display: flex;
+        justify-content: center;
+      }
+    }
+
+    &--head {
+      background-color: #f5f5f5;
+      font-weight: 600;
+      color: #333;
+    }
+
+    tr:hover {
+      background-color: #fafafa;
+    }
+  }
+
+  // Nếu muốn nhấn mạnh "Chọn tất cả"
+  .select-all {
+    font-weight: 500;
+    color: #1890ff;
+  }
+}
