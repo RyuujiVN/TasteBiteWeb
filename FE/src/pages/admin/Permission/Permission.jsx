@@ -368,6 +368,112 @@ const Permission = () => {
                 </td>
               ))}
           </tr>
+
+          <tr className="permission__table--head">
+            <td colSpan={roles.length + 1}>Admin</td>
+          </tr>
+
+          <tr>
+            <td>Xem</td>
+            {roles.length > 0 &&
+              roles.map((item) => (
+                <td key={item.title} className="permission__table--check">
+                  <Checkbox
+                    checked={isChecked(item.id, permissionEnum.VIEW_ADMIN)}
+                    onChange={(e) =>
+                      handleChange(
+                        item.id,
+                        permissionEnum.VIEW_ADMIN,
+                        e.target.checked
+                      )
+                    }
+                  />
+                </td>
+              ))}
+          </tr>
+
+          <tr>
+            <td>Thêm mới</td>
+            {roles.length > 0 &&
+              roles.map((item) => (
+                <td key={item.title} className="permission__table--check">
+                  <Checkbox
+                    checked={isChecked(item.id, permissionEnum.ADD_ADMIN)}
+                    onChange={(e) =>
+                      handleChange(
+                        item.id,
+                        permissionEnum.ADD_ADMIN,
+                        e.target.checked
+                      )
+                    }
+                  />
+                </td>
+              ))}
+          </tr>
+
+          <tr>
+            <td>Cập nhật</td>
+            {roles.length > 0 &&
+              roles.map((item) => (
+                <td key={item.title} className="permission__table--check">
+                  <Checkbox
+                    checked={isChecked(item.id, permissionEnum.UPDATE_ADMIN)}
+                    onChange={(e) =>
+                      handleChange(
+                        item.id,
+                        permissionEnum.UPDATE_ADMIN,
+                        e.target.checked
+                      )
+                    }
+                  />
+                </td>
+              ))}
+          </tr>
+
+          <tr>
+            <td>Xoá</td>
+            {roles.length > 0 &&
+              roles.map((item) => (
+                <td key={item.title} className="permission__table--check">
+                  <Checkbox
+                    checked={isChecked(item.id, permissionEnum.DELETE_ADMIN)}
+                    onChange={(e) =>
+                      handleChange(
+                        item.id,
+                        permissionEnum.DELETE_ADMIN,
+                        e.target.checked
+                      )
+                    }
+                  />
+                </td>
+              ))}
+          </tr>
+
+          <tr className="permission__table--head">
+            <td colSpan={roles.length + 1}>Quyền</td>
+          </tr>
+
+          <tr>
+            <td>Phân quyền</td>
+            {roles.length > 0 &&
+              roles.map((item) => (
+                <td key={item.title} className="permission__table--check">
+                  <Checkbox
+                    checked={isChecked(
+                      item.id,
+                      permissionEnum.UPDATE_PERMISSION_ROLE
+                    )}
+                    onChange={(e) =>
+                      handleChange(
+                        item.id,
+                        permissionEnum.UPDATE_PERMISSION_ROLE,
+                        e.target.checked
+                      )
+                    }
+                  />
+                </td>
+              ))}
+          </tr>
         </tbody>
       </table>
     </div>

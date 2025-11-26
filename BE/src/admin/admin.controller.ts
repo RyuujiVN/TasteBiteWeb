@@ -13,7 +13,12 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiBody, ApiOperation, ApiQuery } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiOperation,
+  ApiQuery,
+} from '@nestjs/swagger';
 import { Pagination } from 'nestjs-typeorm-paginate';
 import { User } from 'src/user/user.entity';
 import { CreateAdminDTO } from './dtos/create-admin.dto';

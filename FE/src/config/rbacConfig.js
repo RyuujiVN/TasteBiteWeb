@@ -30,4 +30,7 @@ export const permissionEnum = {
   ADD_ROLE: "add_role",
   UPDATE_ROLE: "update_role",
   DELETE_ROLE: "delete_role",
+
+  // Permission
+  UPDATE_PERMISSION_ROLE: 'update_permission_role',
 };

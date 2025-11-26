@@ -40,6 +40,8 @@ instance.interceptors.response.use(function (response) {
     )
   }
 
+  if (error.response.status === 403) location.href = '/access-denied'
+
   const originalRequest = error.config;
   if (error.response.status === 410 && !originalRequest._retry) {
     originalRequest._retry = true
