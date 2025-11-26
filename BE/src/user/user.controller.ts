@@ -5,12 +5,13 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { User } from './user.entity';
 import { UserService } from './user.service';
 import { JwtAccessAuthGuard } from 'src/guards/jwt-access.guard';
 
 @Controller('user')
+@ApiBearerAuth('JWT-auth')
 @UseInterceptors(ClassSerializerInterceptor)
 @ApiTags('user')
 export class UserController {

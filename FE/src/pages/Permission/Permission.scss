@@ -25,9 +25,12 @@
     }
 
     &--head {
+      width: 100%;
       background-color: #f5f5f5;
       font-weight: 600;
       color: #333;
+      padding: 12px 10px;
+      border: 1px solid #f0f0f0;
     }
 
     tr:hover {

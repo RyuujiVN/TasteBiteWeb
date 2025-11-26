@@ -23,7 +23,7 @@ export class AuthService {
   ) {}
 
   async generateToken(
-    payload: object,
+    payload: any,
     secretSignature: string,
     expire: string,
   ): Promise<string> {
@@ -35,9 +35,10 @@ export class AuthService {
 
   async login(
     data: LoginDTO,
-  ): Promise<{ userInfo: object; accessToken: string; refreshToken: string }> {
+  ): Promise<{ userInfo: any; accessToken: string; refreshToken: string }> {
     const user = await this.userRepository.findOne({
       where: { email: data.email },
+      relations: ['role'],
     });
 
     if (!user) throw new ForbiddenException('Tài khoản hoặc mật khẩu sai!');
@@ -47,12 +48,17 @@ export class AuthService {
     if (!passwordMatched)
       throw new ForbiddenException('Tài khoản hoặc mật khẩu sai!');
 
-    const payload = {
+    const payload: any = {
       id: user.id,
       email: user.email,
       user_name: user.user_name,
       avatar: user.avatar_url,
     };
+
+    if (user.role) {
+      payload.role = user.role.title;
+      payload.permissions = user.role.permissions.split(', ');
+    }
 
     const [accessToken, refreshToken] = await Promise.all([
       this.generateToken(
@@ -88,6 +94,8 @@ export class AuthService {
         email: refreshTokenDecoded.email,
         user_name: refreshTokenDecoded.user_name,
         avatar: refreshTokenDecoded.avatar_url,
+        role: refreshTokenDecoded?.role,
+        permissions: refreshTokenDecoded?.permissions,
       };
 
       const accessToken = await this.generateToken(

@@ -120,6 +120,10 @@ export const roleSlice = createSlice({
       toast.success("Chỉnh sửa thành công!")
     })
 
+    builder.addCase(fetchUpdatePermissionRole.fulfilled, (state, action) => {
+      toast.success("Cập nhật thành công!")
+    })
+
     builder.addCase(fetchDeleteRole.fulfilled, (state, action) => {
       toast.success(action.payload.message)
     })

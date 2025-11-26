@@ -79,7 +79,7 @@ export class User {
   role_id?: number;
 
   @ManyToOne(() => Role, (role) => role.user, {
-    nullable: true,
+    onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'role_id' })
   role: Role;

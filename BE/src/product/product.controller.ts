@@ -31,6 +31,9 @@ import { FileValidationPipe } from 'src/common/pipes/file-validation.pipe';
 import { UpdateProductDTO } from './dtos/update-product.dto';
 import { JwtAccessAuthGuard } from 'src/guards/jwt-access.guard';
 import { ChangeMultiProductDTO } from './dtos/change-multi-product.dto';
+import { Permission } from 'src/common/enums/permission.enum';
+import { Permissions } from 'src/common/decorators/permission.decorator';
+import { PermissionGuard } from 'src/guards/permission.guard';
 
 @Controller('product')
 @ApiBearerAuth('JWT-auth')
@@ -42,7 +45,8 @@ export class ProductController {
   ) {}
 
   @Post('upload')
-  @UseGuards(JwtAccessAuthGuard)
+  @Permissions(Permission.ADD_PRODUCT)
+  @UseGuards(JwtAccessAuthGuard, PermissionGuard)
   @UseInterceptors(FileInterceptor('file'))
   @ApiOperation({ summary: 'Upload ảnh sản phẩm' })
   @ApiConsumes('multipart/form-data')
@@ -72,7 +76,8 @@ export class ProductController {
   }
 
   @Get('')
-  @UseGuards(JwtAccessAuthGuard)
+  @Permissions(Permission.VIEW_PRODUCT)
+  @UseGuards(JwtAccessAuthGuard, PermissionGuard)
   @ApiOperation({ summary: 'Lấy danh sách sản phẩm có phân trang' })
   @ApiQuery({ name: 'page', required: true, type: Number, default: 1 })
   @ApiQuery({ name: 'limit', required: true, type: Number, default: 10 })
@@ -127,7 +132,8 @@ export class ProductController {
   }
 
   @Post('create')
-  @UseGuards(JwtAccessAuthGuard)
+  @Permissions(Permission.ADD_PRODUCT)
+  @UseGuards(JwtAccessAuthGuard, PermissionGuard)
   @ApiOperation({ summary: 'Tạo mới sản phẩm' })
   @ApiBody({
     type: CreateProductDTO,
@@ -137,7 +143,8 @@ export class ProductController {
   }
 
   @Put('update/:id')
-  @UseGuards(JwtAccessAuthGuard)
+  @Permissions(Permission.UPDATE_PRODUCT)
+  @UseGuards(JwtAccessAuthGuard, PermissionGuard)
   @ApiOperation({ summary: 'Cập nhật sản phẩm' })
   @ApiBody({
     type: UpdateProductDTO,
@@ -150,7 +157,8 @@ export class ProductController {
   }
 
   @Put('update-multi')
-  @UseGuards(JwtAccessAuthGuard)
+  @Permissions(Permission.UPDATE_PRODUCT)
+  @UseGuards(JwtAccessAuthGuard, PermissionGuard)
   @ApiOperation({ summary: 'Cập nhật sản phẩm' })
   @ApiBody({
     type: ChangeMultiProductDTO,
@@ -160,7 +168,8 @@ export class ProductController {
   }
 
   @Delete('delete/:id')
-  @UseGuards(JwtAccessAuthGuard)
+  @Permissions(Permission.DELETE_PRODUCT)
+  @UseGuards(JwtAccessAuthGuard, PermissionGuard)
   @ApiOperation({ summary: 'Xoá sản phẩm' })
   async deleteProduct(@Param('id', ParseIntPipe) id: number) {
     await this.productService.delete(id);

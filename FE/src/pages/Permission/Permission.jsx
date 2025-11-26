@@ -48,6 +48,8 @@ const Permission = () => {
     });
   };
 
+  console.log(roles.length);
+
   const isChecked = (roleId, permission) => {
     const role = permissions.find((r) => r.id === roleId);
     return role?.permissions.includes(permission) || false;
@@ -57,7 +59,7 @@ const Permission = () => {
     dispatch(fetchGetAllRole()).then((rolesFromApi) => {
       const initialPermissions = rolesFromApi.payload.map((r) => ({
         id: r.id,
-        permissions: r.permissions.split(", ") || [],
+        permissions: r?.permissions?.split(", ") || [],
       }));
 
       setPermissions(initialPermissions);
@@ -102,9 +104,7 @@ const Permission = () => {
           <tr></tr>
 
           <tr className="permission__table--head">
-            <td>Sản phẩm</td>
-            <td></td>
-            <td></td>
+            <td colSpan={roles.length + 1}>Sản phẩm</td>
           </tr>
 
           <tr>
@@ -208,9 +208,7 @@ const Permission = () => {
           <tr></tr>
 
           <tr className="permission__table--head">
-            <td>Danh mục</td>
-            <td></td>
-            <td></td>
+            <td colSpan={roles.length + 1}>Danh mục</td>
           </tr>
 
           <tr>
@@ -292,9 +290,7 @@ const Permission = () => {
           <tr></tr>
 
           <tr className="permission__table--head">
-            <td>Role</td>
-            <td></td>
-            <td></td>
+            <td colSpan={roles.length + 1}>Role</td>
           </tr>
 
           <tr>

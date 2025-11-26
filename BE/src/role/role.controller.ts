@@ -19,20 +19,25 @@ import { RoleService } from './role.service';
 import { UpdateRoleDTO } from './dtos/update-role.dto';
 import { Pagination } from 'nestjs-typeorm-paginate';
 import { UpdatePermissionRoleDTO } from './dtos/update-permission-role.dto';
+import { Permissions } from 'src/common/decorators/permission.decorator';
+import { Permission } from 'src/common/enums/permission.enum';
+import { PermissionGuard } from 'src/guards/permission.guard';
 
 @Controller('role')
-@UseGuards(JwtAccessAuthGuard)
+@UseGuards(JwtAccessAuthGuard, PermissionGuard)
 @ApiTags('Role')
 export class RoleController {
   constructor(private readonly roleService: RoleService) {}
 
   @Get('get-all')
+  @Permissions(Permission.VIEW_ROLE)
   @ApiOperation({ summary: 'Lấy tất cả role' })
   findAll(): Promise<Role[]> {
     return this.roleService.findAll();
   }
 
   @Get('')
+  @Permissions(Permission.VIEW_ROLE)
   @ApiOperation({ summary: 'Lấy danh sách role có phân trang' })
   @ApiQuery({ name: 'page', required: true, type: Number, default: 1 })
   @ApiQuery({ name: 'limit', required: true, type: Number, default: 10 })
@@ -55,6 +60,7 @@ export class RoleController {
   }
 
   @Post('create')
+  @Permissions(Permission.ADD_ROLE)
   @ApiOperation({ summary: 'Tạo mới role' })
   @ApiBody({
     type: CreateRoleDTO,
@@ -64,6 +70,7 @@ export class RoleController {
   }
 
   @Put('update-role')
+  @Permissions(Permission.UPDATE_PERMISSION_ROLE)
   @ApiOperation({ summary: 'Cập nhật permission cho role' })
   @ApiBody({
     type: UpdatePermissionRoleDTO,
@@ -73,6 +80,7 @@ export class RoleController {
   }
 
   @Put('update/:id')
+  @Permissions(Permission.UPDATE_ROLE)
   @ApiOperation({ summary: 'Cập nhật role' })
   @ApiBody({
     type: UpdateRoleDTO,
@@ -85,6 +93,7 @@ export class RoleController {
   }
 
   @Delete('delete/:id')
+  @Permissions(Permission.DELETE_ROLE)
   @ApiOperation({ summary: 'Xoá role' })
   async deleteRole(@Param('id', ParseIntPipe) id: number) {
     await this.roleService.delete(id);

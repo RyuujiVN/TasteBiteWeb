@@ -63,11 +63,16 @@ export class RoleService {
   async updatePermission(data: UpdatePermissionRoleDTO) {
     await Promise.all(
       data.roles.map(async (item) =>
-        this.roleRepository.update(item.id, {
-          permissions: item.permissions.join(', '),
-        }),
+        this.roleRepository.update(
+          { id: item.id },
+          {
+            permissions: item.permissions.join(', '),
+          },
+        ),
       ),
     );
+
+    console.dir(data, { depth: null });
     return data;
   }
 

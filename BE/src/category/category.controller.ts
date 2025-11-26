@@ -24,6 +24,9 @@ import { Pagination } from 'nestjs-typeorm-paginate';
 import { Category } from './category.entity';
 import { CreateCategoryDTO } from './dtos/create-category.dto';
 import { UpdateCategoryDTO } from './dtos/update-category.dto';
+import { Permissions } from 'src/common/decorators/permission.decorator';
+import { Permission } from 'src/common/enums/permission.enum';
+import { PermissionGuard } from 'src/guards/permission.guard';
 
 @Controller('category')
 @ApiBearerAuth('JWT-auth')
@@ -41,7 +44,8 @@ export class CategoryController {
   }
 
   @Get('')
-  @UseGuards(JwtAccessAuthGuard)
+  @Permissions(Permission.VIEW_CATEGORY)
+  @UseGuards(JwtAccessAuthGuard, PermissionGuard)
   @ApiOperation({ summary: 'Lấy danh sách category có phân trang' })
   @ApiQuery({ name: 'page', required: true, type: Number, default: 1 })
   @ApiQuery({ name: 'limit', required: true, type: Number, default: 10 })
@@ -72,7 +76,8 @@ export class CategoryController {
   }
 
   @Post('create')
-  @UseGuards(JwtAccessAuthGuard)
+  @Permissions(Permission.ADD_CATEGORY)
+  @UseGuards(JwtAccessAuthGuard, PermissionGuard)
   @ApiOperation({ summary: 'Thêm mới category' })
   @ApiBody({
     type: CreateCategoryDTO,
@@ -84,8 +89,8 @@ export class CategoryController {
   }
 
   @Put('update/:id')
-  @UseGuards(JwtAccessAuthGuard)
-  @UseGuards(JwtAccessAuthGuard)
+  @Permissions(Permission.UPDATE_CATEGORY)
+  @UseGuards(JwtAccessAuthGuard, PermissionGuard)
   @ApiOperation({ summary: 'Cập nhật category' })
   @ApiBody({
     type: UpdateCategoryDTO,
@@ -98,7 +103,8 @@ export class CategoryController {
   }
 
   @Delete('delete/:id')
-  @UseGuards(JwtAccessAuthGuard)
+  @Permissions(Permission.DELETE_CATEGORY)
+  @UseGuards(JwtAccessAuthGuard, PermissionGuard)
   @ApiOperation({ summary: 'Xoá category' })
   async deleteCategory(@Param('id', ParseIntPipe) id: number) {
     await this.categoryService.delete(id);

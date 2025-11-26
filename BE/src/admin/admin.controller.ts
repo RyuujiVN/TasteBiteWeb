@@ -13,21 +13,26 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { ApiBody, ApiOperation, ApiQuery } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiQuery } from '@nestjs/swagger';
 import { Pagination } from 'nestjs-typeorm-paginate';
 import { User } from 'src/user/user.entity';
 import { CreateAdminDTO } from './dtos/create-admin.dto';
 import { AdminService } from './admin.service';
 import { UpdateAdminDTO } from './dtos/update-admin.dto';
 import { JwtAccessAuthGuard } from 'src/guards/jwt-access.guard';
+import { PermissionGuard } from 'src/guards/permission.guard';
+import { Permission } from 'src/common/enums/permission.enum';
+import { Permissions } from 'src/common/decorators/permission.decorator';
 
 @Controller('admin')
-@UseGuards(JwtAccessAuthGuard)
+@ApiBearerAuth('JWT-auth')
+@UseGuards(JwtAccessAuthGuard, PermissionGuard)
 @UseInterceptors(ClassSerializerInterceptor)
 export class AdminController {
   constructor(private readonly adminService: AdminService) {}
 
   @Get('')
+  @Permissions(Permission.VIEW_ADMIN)
   @ApiOperation({ summary: 'Danh sách admin trang web' })
   @ApiQuery({ name: 'page', required: true, type: Number, default: 1 })
   @ApiQuery({ name: 'limit', required: true, type: Number, default: 10 })
@@ -50,6 +55,7 @@ export class AdminController {
   }
 
   @Post('create')
+  @Permissions(Permission.ADD_ADMIN)
   @ApiOperation({ summary: 'Thêm mới admin' })
   @ApiBody({
     type: CreateAdminDTO,
@@ -59,6 +65,7 @@ export class AdminController {
   }
 
   @Put('update/:id')
+  @Permissions(Permission.UPDATE_ADMIN)
   @ApiOperation({ summary: 'Cập nhật admin' })
   @ApiBody({
     type: UpdateAdminDTO,
@@ -71,6 +78,7 @@ export class AdminController {
   }
 
   @Delete('delete/:id')
+  @Permissions(Permission.DELETE_ADMIN)
   @ApiOperation({ summary: 'Xoá admin' })
   @ApiBody({
     type: CreateAdminDTO,

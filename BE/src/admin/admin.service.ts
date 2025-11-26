@@ -71,6 +71,7 @@ export class AdminService {
     if (existedEmail) throw new ConflictException('Email đã được sử dụng!');
 
     Object.assign(admin, data);
+    admin.password = await bcrypt.hash(admin.password, 10);
 
     const role = await this.roleService.findOne(data.role_id);
     admin.role = role;
