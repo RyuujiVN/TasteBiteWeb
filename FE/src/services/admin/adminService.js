@@ -5,6 +5,10 @@ const login = async (data) => {
   return await instance.post("/auth/login", data);
 }
 
+const register = async (data) => {
+  return await instance.post("/auth/register", data);
+}
+
 const logout = async () => {
   localStorage.removeItem("userInfo");
   localStorage.removeItem("accessToken");
@@ -21,7 +25,8 @@ const refreshToken = async () => {
 const adminService = {
   login,
   logout,
-  refreshToken
+  refreshToken,
+  register
 }
 
 export default adminService

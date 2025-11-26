@@ -25,8 +25,7 @@ const items = [
       <div
         onClick={async () => {
           await adminService.logout();
-          location.href = "/admin/login";
-          console("Hi");
+          location.href = "/login";
         }}
       >
         Đăng xuất
@@ -38,6 +37,7 @@ const items = [
 
 const Header = ({ collapse, setCollapse }) => {
   const { Text } = Typography;
+  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
   return (
     <>
@@ -53,7 +53,9 @@ const Header = ({ collapse, setCollapse }) => {
         {/* Header Right */}
         <div className="header--right">
           <div className="header__welcome">
-            <h2 className="header__welcome--title">Chào mừng Nguyễn Long</h2>
+            <h2 className="header__welcome--title">
+              Chào mừng {userInfo?.user_name}
+            </h2>
             <p className="header__welcome--sub">
               Hãy khám phá những gì bạn muốn
             </p>
@@ -72,8 +74,8 @@ const Header = ({ collapse, setCollapse }) => {
                   src="https://lh5.googleusercontent.com/proxy/o55mBVHW_uXiYhlyFBT7RS-2nbzUyrboSI-GULlVrp72yF2E57fiafhvyIiul9bTI_KBrsgZnO14z4g2eZx_oWNGWHE9yfRvIg"
                 ></Avatar>
                 <Flex vertical gap={5}>
-                  <div className="header__user--name">Nguyễn Long</div>
-                  <div className="header__user--role">Admin</div>
+                  <div className="header__user--name">{userInfo?.user_name}</div>
+                  <div className="header__user--role">{userInfo?.role}</div>
                 </Flex>
                 <DownOutlined className="header__user--icon" />
               </Flex>

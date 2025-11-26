@@ -3,7 +3,7 @@ import Permission from "~/pages/admin/Permission/Permission";
 import Admin from "~/pages/admin/Admin/Admin";
 import Category from "~/pages/admin/Category/Category";
 import Dashboard from "~/pages/admin/Dashboard/Dashboard";
-import Login from "~/pages/admin/Login/Login.jsx";
+import Login from "~/pages/admin/Auth/Login.jsx";
 import AddProduct from "~/pages/admin/Product/AddProduct";
 import Product from "~/pages/admin/Product/Product";
 import UpdateProduct from "~/pages/admin/Product/UpdateProduct";
@@ -12,11 +12,24 @@ import RbacRoute from "~/components/admin/Core/RbacRoute";
 import { permissionEnum } from "~/config/rbacConfig";
 import AccessDenied from "~/pages/AccessDenied/AccessDenied";
 import NotFound from "~/pages/NotFound/NotFound";
+import Auth from "~/pages/admin/Auth/Auth";
+import Register from "~/pages/admin/Auth/Register";
 
 const routes = [
   {
-    path: "/admin/login",
-    element: <Login />,
+    path: "",
+    element: <Auth />,
+    children: [
+      {
+        path: "login",
+        element: <Login />,
+      },
+
+      {
+        path: "register",
+        element: <Register />,
+      },
+    ],
   },
 
   {
@@ -98,24 +111,19 @@ const routes = [
         ],
       },
 
-      // {
-      //   path: "",
-      //   element: (
-      //     <RbacRoute
-      //       requiredPermission={permissionEnum.UPDATE_PERMISSION_ROLE}
-      //     />
-      //   ),
-      //   children: [
-      //     {
-      //       path: "permissions",
-      //       element: <Permission />,
-      //     },
-      //   ],
-      // },
-
       {
-        path: "permissions",
-        element: <Permission />,
+        path: "",
+        element: (
+          <RbacRoute
+            requiredPermission={permissionEnum.UPDATE_PERMISSION_ROLE}
+          />
+        ),
+        children: [
+          {
+            path: "permissions",
+            element: <Permission />,
+          },
+        ],
       },
     ],
   },
