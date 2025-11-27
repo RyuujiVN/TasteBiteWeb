@@ -6,12 +6,16 @@ import { User } from 'src/user/user.entity';
 import { UserModule } from 'src/user/user.module';
 import { JwtModule } from '@nestjs/jwt';
 import { AccessTokenStrategy } from './strategies/access-token.strategy';
+import { MailModule } from 'src/mail/mail.module';
+import { OtpModule } from 'src/otp/otp.module';
 
 @Module({
   imports: [
     JwtModule.register({}),
     TypeOrmModule.forFeature([User]),
     UserModule,
+    MailModule,
+    OtpModule,
   ],
   controllers: [AuthController],
   providers: [AuthService, AccessTokenStrategy],

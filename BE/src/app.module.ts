@@ -17,6 +17,7 @@ import { RoleModule } from './role/role.module';
 import { Role } from './role/role.entity';
 import { AdminModule } from './admin/admin.module';
 import { dataSourceOptions } from 'db/data-source';
+import { OtpModule } from './otp/otp.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { dataSourceOptions } from 'db/data-source';
     CloudinaryModule,
     RoleModule,
     AdminModule,
+    OtpModule,
   ],
   controllers: [AppController],
   providers: [AppService],

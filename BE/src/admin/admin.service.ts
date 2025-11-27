@@ -8,7 +8,7 @@ import { RoleService } from 'src/role/role.service';
 import { User } from 'src/user/user.entity';
 import { Not, Repository } from 'typeorm';
 import { CreateAdminDTO } from './dtos/create-admin.dto';
-import bcrypt from 'node_modules/bcryptjs';
+import bcrypt from 'bcryptjs';
 import { UpdateAdminDTO } from './dtos/update-admin.dto';
 import { paginate, Pagination } from 'nestjs-typeorm-paginate';
 import { PaginationQuery } from 'src/common/interfaces/pagination.interface';

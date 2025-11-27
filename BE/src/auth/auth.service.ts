@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import {
   ForbiddenException,
   Injectable,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -10,8 +11,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/user/user.entity';
 import { Repository } from 'typeorm';
 import { LoginDTO } from './dtos/login.dto';
-import bcrypt from 'node_modules/bcryptjs';
+import bcrypt from 'bcryptjs';
 import { RefreshTokenDTO } from './dtos/refresh-token.dto';
+import { ForgotPasswordDTO } from './dtos/forgot-password.dto';
+import { MailService } from 'src/mail/mail.service';
+import { OtpService } from 'src/otp/otp.service';
 
 @Injectable()
 export class AuthService {
@@ -20,6 +24,8 @@ export class AuthService {
     private readonly userRepository: Repository<User>,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
+    private readonly mailService: MailService,
+    private readonly otpService: OtpService,
   ) {}
 
   async generateToken(
@@ -111,5 +117,20 @@ export class AuthService {
       console.log('Refresh token failed: ', error);
       throw new UnauthorizedException('Invalid refresh token!');
     }
+  }
+
+  async sendOtpToEmail(data: ForgotPasswordDTO) {
+    const user = await this.userRepository.findOne({
+      where: { email: data.email },
+    });
+
+    if (!user) throw new NotFoundException('Không tìm thấy người dùng');
+
+    const otp: string = this.otpService.generateOtp(6);
+
+    await Promise.all([
+      this.mailService.sendOtpMail(data.email, otp),
+      this.otpService.create(data.email, otp),
+    ]);
   }
 }

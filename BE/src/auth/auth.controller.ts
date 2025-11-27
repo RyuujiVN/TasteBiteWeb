@@ -5,6 +5,7 @@ import { UserService } from 'src/user/user.service';
 import { LoginDTO } from './dtos/login.dto';
 import { AuthService } from './auth.service';
 import { RefreshTokenDTO } from './dtos/refresh-token.dto';
+import { ForgotPasswordDTO } from './dtos/forgot-password.dto';
 
 @Controller('auth')
 @ApiTags('auth')
@@ -64,5 +65,18 @@ export class AuthController {
   })
   refresh(@Body() tokenDTO: RefreshTokenDTO): Promise<{ accessToken: string }> {
     return this.authService.refresh(tokenDTO);
+  }
+
+  @Post('forgot-password')
+  @ApiOperation({ summary: 'Gửi otp cho email' })
+  @ApiBody({
+    type: ForgotPasswordDTO,
+  })
+  async forgotPassword(@Body() data: ForgotPasswordDTO) {
+    await this.authService.sendOtpToEmail(data);
+
+    return {
+      message: 'Gửi OTP về email thành công',
+    };
   }
 }
