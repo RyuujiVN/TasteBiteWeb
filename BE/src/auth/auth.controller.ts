@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Put } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateUserDTO } from 'src/user/dtos/create-user.dto';
 import { UserService } from 'src/user/user.service';
@@ -7,6 +7,7 @@ import { AuthService } from './auth.service';
 import { RefreshTokenDTO } from './dtos/refresh-token.dto';
 import { ForgotPasswordDTO } from './dtos/forgot-password.dto';
 import { VerifyOtpDto } from './dtos/verify-otp.dto';
+import { ChangePasswordDTO } from './dtos/change-password.dto';
 
 @Controller('auth')
 @ApiTags('auth')
@@ -86,11 +87,24 @@ export class AuthController {
   @ApiBody({
     type: VerifyOtpDto,
   })
-  async verifyOtp(@Body() data: { email: string; otp: string }) {
+  async verifyOtp(@Body() data: VerifyOtpDto) {
     await this.authService.verifyOtp(data);
 
     return {
       message: 'Xác minh OTP thành công',
+    };
+  }
+
+  @Put('change-password')
+  @ApiOperation({ summary: 'Xác minh otp' })
+  @ApiBody({
+    type: ChangePasswordDTO,
+  })
+  async changePassword(@Body() data: ChangePasswordDTO) {
+    await this.authService.changePassword(data);
+
+    return {
+      message: 'Thay đổi mật khẩu thành công',
     };
   }
 }

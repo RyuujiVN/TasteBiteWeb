@@ -10,6 +10,8 @@ const Login = () => {
   const handleLogin = async (data) => {
     const res = await adminService.login(data);
 
+    console.log(res.data);
+
     localStorage.setItem("userInfo", JSON.stringify(res.data.userInfo));
     localStorage.setItem("accessToken", res.data.accessToken);
     localStorage.setItem("refreshToken", res.data.refreshToken);

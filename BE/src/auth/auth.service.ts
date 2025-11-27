@@ -18,6 +18,7 @@ import { ForgotPasswordDTO } from './dtos/forgot-password.dto';
 import { MailService } from 'src/mail/mail.service';
 import { OtpService } from 'src/otp/otp.service';
 import { VerifyOtpDto } from './dtos/verify-otp.dto';
+import { ChangePasswordDTO } from './dtos/change-password.dto';
 
 @Injectable()
 export class AuthService {
@@ -143,5 +144,21 @@ export class AuthService {
       throw new UnprocessableEntityException('OTP không hợp lệ');
     else if (otpRecord.expiredAt < new Date())
       throw new UnprocessableEntityException('OTP đã hết hạn');
+  }
+
+  async changePassword(data: ChangePasswordDTO) {
+    if (data.password !== data.confirm_password)
+      throw new UnprocessableEntityException('Xác nhận mật khẩu không khớp');
+
+    await this.verifyOtp({ email: data.email, otp: data.otp });
+
+    const passwordEncrypt = await bcrypt.hash(data.password, 10);
+
+    await this.userRepository.update(
+      {
+        email: data.email,
+      },
+      { password: passwordEncrypt },
+    );
   }
 }
