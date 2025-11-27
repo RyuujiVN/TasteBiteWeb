@@ -23,7 +23,7 @@ const AddCategory = ({ addCategory, setAddCategory }) => {
 
   const hanldeSubmit = async (values) => {
     setLoading(true);
-    toast.promise(dispatch(fetchAddCategory(values)), {
+    await toast.promise(dispatch(fetchAddCategory(values)), {
       pending: "Đang thêm...",
     });
     setLoading(false);

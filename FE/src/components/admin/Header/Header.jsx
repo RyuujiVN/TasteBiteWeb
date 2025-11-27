@@ -10,7 +10,7 @@ import {
 import { NotificationIcon } from "~/components/CustomeIcon/CustomeIcon";
 import "~/components/admin/Header/Header.scss";
 import logo from "~/assets/images/logo.png";
-import adminService from "~/services/admin/adminService";
+import adminService from "~/services/admin/accountService";
 
 const items = [
   {
@@ -74,7 +74,9 @@ const Header = ({ collapse, setCollapse }) => {
                   src="https://lh5.googleusercontent.com/proxy/o55mBVHW_uXiYhlyFBT7RS-2nbzUyrboSI-GULlVrp72yF2E57fiafhvyIiul9bTI_KBrsgZnO14z4g2eZx_oWNGWHE9yfRvIg"
                 ></Avatar>
                 <Flex vertical gap={5}>
-                  <div className="header__user--name">{userInfo?.user_name}</div>
+                  <div className="header__user--name">
+                    {userInfo?.user_name}
+                  </div>
                   <div className="header__user--role">{userInfo?.role}</div>
                 </Flex>
                 <DownOutlined className="header__user--icon" />

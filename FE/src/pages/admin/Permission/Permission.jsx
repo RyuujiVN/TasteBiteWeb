@@ -15,13 +15,13 @@ const Permission = () => {
   const roles = useSelector((state) => state.role.listRole);
   const dispatch = useDispatch();
 
-  const hanldeSubmit = () => {
+  const hanldeSubmit = async () => {
     setLoading(true);
     const payload = {
       roles: permissions,
     };
 
-    toast.promise(dispatch(fetchUpdatePermissionRole(payload)), {
+    await toast.promise(dispatch(fetchUpdatePermissionRole(payload)), {
       pending: "Đang cập nhật...",
     });
     setLoading(false);

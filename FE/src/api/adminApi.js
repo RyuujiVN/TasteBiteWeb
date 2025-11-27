@@ -1,6 +1,6 @@
 import axios from "axios"
 import { toast } from "react-toastify";
-import adminService from "~/services/admin/adminService";
+import adminService from "~/services/admin/accountService";
 
 
 export const instance = axios.create({

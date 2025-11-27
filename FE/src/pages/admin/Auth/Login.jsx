@@ -1,16 +1,14 @@
 import { Button, Form, Input, Typography } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import adminService from "~/services/admin/adminService";
+import accountService from "~/services/admin/accountService";
 
 const Login = () => {
   const navigate = useNavigate();
   const { Text } = Typography;
 
   const handleLogin = async (data) => {
-    const res = await adminService.login(data);
-
-    console.log(res.data);
+    const res = await accountService.login(data);
 
     localStorage.setItem("userInfo", JSON.stringify(res.data.userInfo));
     localStorage.setItem("accessToken", res.data.accessToken);

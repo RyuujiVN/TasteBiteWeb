@@ -1,9 +1,9 @@
 import { Form, Input, Button, Flex } from "antd";
-import Logo from "~/assets/images/logo.png";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { emailRegex } from "~/constants/regex";
 import { useState } from "react";
+import accountService from "~/services/admin/accountService";
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
@@ -12,12 +12,11 @@ const ForgotPassword = () => {
   const handleForgotPassword = async (values) => {
     try {
       setLoading(true);
-      // const response = await accountService.forgotPassword(values);
+      const response = await accountService.forgotPassword(values);
 
-      // toast.success(response);
+      toast.success(response.message);
 
-      console.log(values);
-      // if (response) navigate(`/send-otp/${values.email}`);
+      navigate(`/send-otp/${values.email}`);
     } finally {
       setLoading(false);
     }

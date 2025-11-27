@@ -22,11 +22,32 @@ const refreshToken = async () => {
   })
 }
 
-const adminService = {
+const forgotPassword = async (data) => {
+  const response = await instance.post("/auth/forgot-password", data);
+
+  return response.data;
+}
+
+const verifyOtp = async (data) => {
+  const response = await instance.post("/auth/verify-otp", data);
+
+  return response.data;
+}
+
+const resetPassword = async (data) => {
+  const response = await instance.put("/auth/change-password", data);
+
+  return response.data;
+}
+
+const accountService = {
   login,
   logout,
   refreshToken,
-  register
+  register,
+  forgotPassword,
+  verifyOtp,
+  resetPassword
 }
 
-export default adminService
+export default accountService

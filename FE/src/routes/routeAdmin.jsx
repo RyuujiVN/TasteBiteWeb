@@ -15,6 +15,8 @@ import NotFound from "~/pages/NotFound/NotFound";
 import Auth from "~/pages/admin/Auth/Auth";
 import Register from "~/pages/admin/Auth/Register";
 import ForgotPassword from "~/pages/admin/Auth/ForgotPassword";
+import SendOtp from "~/pages/admin/Auth/SendOtp";
+import ResetPassword from "~/pages/admin/Auth/ResetPassword";
 
 const routes = [
   {
@@ -34,6 +36,16 @@ const routes = [
       {
         path: "forgot-password",
         element: <ForgotPassword />,
+      },
+
+      {
+        path: "send-otp/:email",
+        element: <SendOtp />,
+      },
+
+      {
+        path: "reset-password",
+        element: <ResetPassword />,
       },
     ],
   },

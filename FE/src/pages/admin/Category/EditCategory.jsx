@@ -21,9 +21,9 @@ const EditCategory = ({ editCategory, setEditCategory, category }) => {
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
 
-  const hanldeSubmit = (value) => {
+  const hanldeSubmit = async (value) => {
     setLoading(true);
-    toast.promise(
+    await toast.promise(
       dispatch(fetchUpdateCategory({ id: category.id, data: value })),
       {
         pending: "Đang chỉnh sửa...",

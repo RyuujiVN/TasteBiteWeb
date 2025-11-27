@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { emailRegex, passwordRegex } from "~/constants/regex";
-import adminService from "~/services/admin/adminService";
+import accountService from "~/services/admin/accountService";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -14,7 +14,7 @@ const Register = () => {
     try {
       delete data.confirm_password;
 
-      await adminService.register(data);
+      await accountService.register(data);
 
       toast.success("Đăng ký thành công");
       navigate("/login");
