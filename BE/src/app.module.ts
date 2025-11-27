@@ -16,6 +16,7 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { RoleModule } from './role/role.module';
 import { Role } from './role/role.entity';
 import { AdminModule } from './admin/admin.module';
+import { dataSourceOptions } from 'db/data-source';
 
 @Module({
   imports: [
@@ -24,16 +25,7 @@ import { AdminModule } from './admin/admin.module';
       load: [configurationConfig],
     }),
     UserModule,
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: '123456',
-      database: 'TasteBite',
-      entities: [User, Category, Product, Role],
-      synchronize: true,
-    }),
+    TypeOrmModule.forRoot(dataSourceOptions),
     AuthModule,
     MailModule,
     CategoryModule,

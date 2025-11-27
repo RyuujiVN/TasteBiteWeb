@@ -1,26 +1,15 @@
-import {
-  ConflictException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { paginate, Pagination } from 'nestjs-typeorm-paginate';
 import bcrypt from 'node_modules/bcryptjs';
-import { PaginationQuery } from 'src/common/interfaces/pagination.interface';
-import { MailService } from 'src/mail/mail.service';
 import { CreateUserDTO } from 'src/user/dtos/create-user.dto';
 import { User } from 'src/user/user.entity';
 import { Repository } from 'typeorm';
-import { v4 as uuidv4 } from 'uuid';
-import { RoleService } from 'src/role/role.service';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-    private readonly mailService: MailService,
-    private readonly roleService: RoleService,
   ) {}
 
   async register(userDTO: CreateUserDTO): Promise<void> {
@@ -39,18 +28,11 @@ export class UserService {
     user.user_name = userDTO.email.split('@')[0];
 
     user.password = await bcrypt.hash(user.password, 10);
-    user.token_active = uuidv4();
 
     await this.userRepository.save(user);
-    await this.mailService.sendVerificationMail(user.email, user.token_active);
   }
 
   async findAll(): Promise<User[]> {
-    return await this.userRepository.find({
-      where: {
-        is_active: false,
-      },
-    });
+    return await this.userRepository.find();
   }
-
 }

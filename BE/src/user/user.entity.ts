@@ -60,21 +60,6 @@ export class User {
   @Exclude()
   password: string;
 
-  @ApiProperty({
-    example: 'klwernihasodfpwp',
-    description: 'Token để kích hoạt tài khoản',
-  })
-  @Column({ nullable: true, type: 'text' })
-  @Exclude()
-  token_active: string;
-
-  @ApiProperty({
-    example: true,
-    description: 'Tài khoản đã kích hoạt hay chưa',
-  })
-  @Column({ default: false, type: 'bool' })
-  is_active: boolean;
-
   @Column({ name: 'role_id', nullable: true })
   role_id?: number;
 
