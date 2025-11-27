@@ -49,6 +49,13 @@
       font-weight: 600;
     }
 
+    &--description {
+      text-align: center;
+      color: $color-gray-one;
+      margin-bottom: 20px;
+      font-size: 1.6rem;
+    }
+
     &--button {
       margin-top: 2rem;
       text-align: center;

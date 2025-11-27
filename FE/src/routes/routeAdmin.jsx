@@ -14,6 +14,7 @@ import AccessDenied from "~/pages/AccessDenied/AccessDenied";
 import NotFound from "~/pages/NotFound/NotFound";
 import Auth from "~/pages/admin/Auth/Auth";
 import Register from "~/pages/admin/Auth/Register";
+import ForgotPassword from "~/pages/admin/Auth/ForgotPassword";
 
 const routes = [
   {
@@ -28,6 +29,11 @@ const routes = [
       {
         path: "register",
         element: <Register />,
+      },
+
+      {
+        path: "forgot-password",
+        element: <ForgotPassword />,
       },
     ],
   },
