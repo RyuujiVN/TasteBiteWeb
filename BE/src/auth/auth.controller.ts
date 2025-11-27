@@ -6,6 +6,7 @@ import { LoginDTO } from './dtos/login.dto';
 import { AuthService } from './auth.service';
 import { RefreshTokenDTO } from './dtos/refresh-token.dto';
 import { ForgotPasswordDTO } from './dtos/forgot-password.dto';
+import { VerifyOtpDto } from './dtos/verify-otp.dto';
 
 @Controller('auth')
 @ApiTags('auth')
@@ -77,6 +78,19 @@ export class AuthController {
 
     return {
       message: 'Gửi OTP về email thành công',
+    };
+  }
+
+  @Post('verify-otp')
+  @ApiOperation({ summary: 'Xác minh otp' })
+  @ApiBody({
+    type: VerifyOtpDto,
+  })
+  async verifyOtp(@Body() data: { email: string; otp: string }) {
+    await this.authService.verifyOtp(data);
+
+    return {
+      message: 'Xác minh OTP thành công',
     };
   }
 }

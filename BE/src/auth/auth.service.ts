@@ -5,6 +5,7 @@ import {
   Injectable,
   NotFoundException,
   UnauthorizedException,
+  UnprocessableEntityException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -16,6 +17,7 @@ import { RefreshTokenDTO } from './dtos/refresh-token.dto';
 import { ForgotPasswordDTO } from './dtos/forgot-password.dto';
 import { MailService } from 'src/mail/mail.service';
 import { OtpService } from 'src/otp/otp.service';
+import { VerifyOtpDto } from './dtos/verify-otp.dto';
 
 @Injectable()
 export class AuthService {
@@ -132,5 +134,14 @@ export class AuthService {
       this.mailService.sendOtpMail(data.email, otp),
       this.otpService.create(data.email, otp),
     ]);
+  }
+
+  async verifyOtp(data: VerifyOtpDto) {
+    const otpRecord = await this.otpService.findOneByEmail(data.email);
+
+    if (data.otp !== otpRecord.otp)
+      throw new UnprocessableEntityException('OTP không hợp lệ');
+    else if (otpRecord.expiredAt < new Date())
+      throw new UnprocessableEntityException('OTP đã hết hạn');
   }
 }

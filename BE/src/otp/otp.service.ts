@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { OTP } from './otp.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -29,5 +33,20 @@ export class OtpService {
     otpRecord.expiredAt = expire;
 
     await this.otpRepository.save(otpRecord);
+  }
+
+  async findOneByEmail(email: string): Promise<OTP> {
+    const otpRecord = await this.otpRepository.findOne({
+      where: {
+        email: email,
+      },
+      order: {
+        id: 'DESC',
+      },
+    });
+
+    if (!otpRecord) throw new NotFoundException('Không tìm thấy otp');
+
+    return otpRecord;
   }
 }
