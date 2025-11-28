@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { toast } from 'react-toastify'
-import { instance } from '~/api/adminApi'
+import { instance } from '~/api/index'
 
 const initialState = {
   listAdmin: [],

@@ -1,4 +1,4 @@
-import { instance } from "~/api/adminApi";
+import { instance } from "~/api";
 
 
 const login = async (data) => {

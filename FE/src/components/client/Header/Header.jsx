@@ -10,6 +10,7 @@ import { LuPackageCheck } from "react-icons/lu";
 import { RiLogoutCircleRLine } from "react-icons/ri";
 import "./Header.scss";
 import accountService from "~/services/accountService";
+import { useSelector } from "react-redux";
 
 const menuLogin = [
   {
@@ -63,7 +64,7 @@ const menuUser = [
 ];
 
 const Header = () => {
-  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+  const profile = useSelector((state) => state.user.currentUser);
 
   return (
     <>
@@ -87,16 +88,16 @@ const Header = () => {
 
             <div className="header__nav">
               <div className="header__auth">
-                {userInfo ? (
+                {profile ? (
                   <Dropdown menu={{ items: menuUser }}>
                     <div className="header__auth--dropdown">
-                      <Avatar size={40} src={userInfo.avatar}></Avatar>
+                      <Avatar size={40} src={profile.avatar_url}></Avatar>
                       <Flex vertical gap={5}>
                         <div className="header__user--name">
-                          {userInfo?.user_name}
+                          {profile?.user_name}
                         </div>
                         <div className="header__user--role">
-                          {userInfo?.role}
+                          {profile?.role}
                         </div>
                       </Flex>
                     </div>

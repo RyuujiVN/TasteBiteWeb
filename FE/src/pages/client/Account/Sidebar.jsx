@@ -7,14 +7,15 @@ import { IoBagHandleOutline } from "react-icons/io5";
 import { LogoutOutlined } from "@ant-design/icons";
 import { Avatar } from "antd";
 import { NavLink } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Sidebar = () => {
-  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+  const profile = useSelector((state) => state.user.currentUser);
 
   return (
     <div className="account__sidebar">
       <div className="account__sidebar-user">
-        <Avatar size={60} src={userInfo.avatar}></Avatar>
+        <Avatar size={60} src={profile.avatar_url}></Avatar>
         <span className="account__sidebar-name">Nguyễn Long</span>
       </div>
 

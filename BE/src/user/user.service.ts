@@ -1,9 +1,16 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import bcrypt from 'bcryptjs';
+import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { CreateUserDTO } from 'src/user/dtos/create-user.dto';
 import { User } from 'src/user/user.entity';
-import { Repository } from 'typeorm';
+import { Not, Repository } from 'typeorm';
+import { UpdateUserDTO } from './dtos/update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -34,5 +41,35 @@ export class UserService {
 
   async findAll(): Promise<User[]> {
     return await this.userRepository.find();
+  }
+
+  async getProfile(id: number): Promise<User> {
+    const user = await this.userRepository.findOne({
+      where: { id: id },
+    });
+
+    if (!user) throw new UnauthorizedException(user);
+
+    return user;
+  }
+
+  async updateProfile(id: number, data: UpdateUserDTO): Promise<User> {
+    const [user, existedEmail] = await Promise.all([
+      this.userRepository.findOne({ where: { id: id } }),
+      this.userRepository.findOne({
+        where: {
+          email: data.email,
+          id: Not(id),
+        },
+      }),
+    ]);
+
+    if (!user) throw new UnauthorizedException();
+
+    if (existedEmail) throw new ConflictException('Email đã được sử dụng');
+
+    Object.assign(user, data);
+
+    return await this.userRepository.save(user);
   }
 }

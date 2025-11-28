@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import { Image, Upload } from "antd";
-import { instance } from "~/api/adminApi";
+import { instance } from "~/api";
 import { toast } from "react-toastify";
 
 const getBase64 = (file) =>
