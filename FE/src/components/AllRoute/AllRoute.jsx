@@ -1,9 +1,10 @@
 import React from "react";
 import { useRoutes } from "react-router-dom";
-import routes from "~/routes/routeAdmin";
+import routesAdmin from "~/routes/routeAdmin";
+import routesClient from "~/routes/routeClient";
 
 const AllRoute = () => {
-  const children = useRoutes(routes);
+  const children = useRoutes([...routesAdmin, ...routesClient]);
 
   return <>{children}</>;
 };

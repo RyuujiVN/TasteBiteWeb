@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { emailRegex } from "~/constants/regex";
 import { useState } from "react";
-import accountService from "~/services/admin/accountService";
+import accountService from "~/services/accountService";
 
 const ForgotPassword = () => {
   const navigate = useNavigate();

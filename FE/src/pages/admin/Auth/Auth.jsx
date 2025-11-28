@@ -9,7 +9,7 @@ const Auth = () => {
         <div className="auth__introduce">
           <div className="auth__introduce--content">
             <h2 className="auth__introduce--title">
-              Chào mừng đến với trang admin Food Delivery
+              Chào mừng đến với trang Vy Food
             </h2>
           </div>
         </div>

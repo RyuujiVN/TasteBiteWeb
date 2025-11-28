@@ -18,9 +18,8 @@ import ForgotPassword from "~/pages/admin/Auth/ForgotPassword";
 import SendOtp from "~/pages/admin/Auth/SendOtp";
 import ResetPassword from "~/pages/admin/Auth/ResetPassword";
 
-const routes = [
+const routesAdmin = [
   {
-    path: "",
     element: <Auth />,
     children: [
       {
@@ -157,4 +156,4 @@ const routes = [
   },
 ];
 
-export default routes;
+export default routesAdmin;

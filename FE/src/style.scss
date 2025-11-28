@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Lexend:wght@100..900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
 
 $color-red: #EB5757;
+$color-red-heavy: #B5292F;
 $color-gradient: linear-gradient(to right, #ff416c, #EB5757);
 $color-white: #FFFFFF;
 $color-gray-one: #A2A1A8;
@@ -22,6 +23,21 @@ html {
 body {
   font-size: 1.6rem;
   font-family: "Rubik", sans-serif;
+}
+
+a {
+  color: #333;
+  text-decoration: none;
+
+  &:hover {
+    color: $color-red;
+  }
+}
+
+.container {
+  width: 1200px;
+  margin: 0 auto;
+  max-width: calc(100% - 40px);
 }
 
 .input {

@@ -3,14 +3,12 @@ import { Avatar, Dropdown, Flex, Tooltip, Typography } from "antd";
 import {
   DownOutlined,
   LogoutOutlined,
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
   SettingOutlined,
 } from "@ant-design/icons";
 import { NotificationIcon } from "~/components/CustomeIcon/CustomeIcon";
 import "~/components/admin/Header/Header.scss";
 import logo from "~/assets/images/logo.png";
-import adminService from "~/services/admin/accountService";
+import accountService from "~/services/accountService";
 
 const items = [
   {
@@ -23,8 +21,8 @@ const items = [
     key: "logout",
     label: (
       <div
-        onClick={async () => {
-          await adminService.logout();
+        onClick={() => {
+          accountService.logout();
           location.href = "/login";
         }}
       >

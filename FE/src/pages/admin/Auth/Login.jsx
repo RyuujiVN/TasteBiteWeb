@@ -1,7 +1,7 @@
 import { Button, Form, Input, Typography } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import accountService from "~/services/admin/accountService";
+import accountService from "~/services/accountService";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -14,8 +14,10 @@ const Login = () => {
     localStorage.setItem("accessToken", res.data.accessToken);
     localStorage.setItem("refreshToken", res.data.refreshToken);
 
+    if (data.role) navigate("/admin/dashboard");
+    else navigate("/");
+
     toast.success("Đăng nhập thành công");
-    navigate("/admin/dashboard");
   };
 
   return (

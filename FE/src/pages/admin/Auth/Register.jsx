@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { emailRegex, passwordRegex } from "~/constants/regex";
-import accountService from "~/services/admin/accountService";
+import accountService from "~/services/accountService";
 
 const Register = () => {
   const navigate = useNavigate();

@@ -2,7 +2,7 @@ import { Form, Input, Button } from "antd";
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import accountService from "~/services/admin/accountService";
+import accountService from "~/services/accountService";
 
 const ResetPassword = () => {
   const [searchParams] = useSearchParams();

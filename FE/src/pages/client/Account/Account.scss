@@ -1,0 +1,70 @@
+.account {
+  background: #f5f5f5;
+  padding: 20px 0;
+
+  &__container {
+    width: 90%;
+    margin: auto;
+    display: flex;
+    gap: 20px;
+  }
+
+  // SIDEBAR
+  &__sidebar {
+    width: 280px;
+    background: #fff;
+    border-radius: 6px;
+    padding-bottom: 20px;
+
+    &-user {
+      padding: 20px;
+      border-bottom: 1px solid #eee;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    &-name {
+      font-size: 2.2rem;
+      font-weight: 600;
+    }
+
+    &-menu {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    &-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 20px;
+      cursor: pointer;
+      transition: 0.2s;
+
+      &:hover {
+        background: #f8f8f8;
+      }
+
+      &--active {
+        color: #e53935;
+        font-weight: 600;
+      }
+
+      svg {
+        font-size: 1.8rem;
+      }
+    }
+  }
+
+  // CONTENT
+  &__content {
+    flex: 1;
+    background: #fff;
+    border-radius: 6px;
+    padding: 25px;
+  }
+}
