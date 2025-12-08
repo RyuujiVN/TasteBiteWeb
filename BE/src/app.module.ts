@@ -14,6 +14,7 @@ import { RoleModule } from './role/role.module';
 import { AdminModule } from './admin/admin.module';
 import { dataSourceOptions } from 'db/data-source';
 import { OtpModule } from './otp/otp.module';
+import { AddressModule } from './address/address.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { OtpModule } from './otp/otp.module';
     RoleModule,
     AdminModule,
     OtpModule,
+    AddressModule,
   ],
   controllers: [AppController],
   providers: [AppService],

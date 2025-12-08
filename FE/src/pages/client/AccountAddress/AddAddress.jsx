@@ -3,10 +3,12 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "./AccountAddress.scss";
 import {
+  fetchAddAddress,
   fetchGetProvince,
   fetchGetWard,
   resetWard,
 } from "~/redux/address/addressSlice";
+import { toast } from "react-toastify";
 
 const AddAddress = ({ addAddress, setAddAddress }) => {
   const dispatch = useDispatch();
@@ -17,9 +19,9 @@ const AddAddress = ({ addAddress, setAddAddress }) => {
 
   const hanldeSubmit = async (values) => {
     setLoading(true);
-    // await toast.promise(dispatch(fetchAddAddress(values)), {
-    //   pending: "Đang thêm...",
-    // });
+    await toast.promise(dispatch(fetchAddAddress(values)), {
+      pending: "Đang thêm...",
+    });
     setLoading(false);
   };
 
@@ -36,8 +38,6 @@ const AddAddress = ({ addAddress, setAddAddress }) => {
   useEffect(() => {
     dispatch(fetchGetProvince());
   }, []);
-
-  console.log(wards);
 
   return (
     <div className="address__add">
@@ -152,10 +152,6 @@ const AddAddress = ({ addAddress, setAddAddress }) => {
                 </Form.Item>
               </Col>
             </Row>
-
-            <Form.Item label="Mô tả" name="description">
-              <Input.TextArea rows={6} showCount maxLength={255} />
-            </Form.Item>
           </Form>
         </div>
       </Modal>
