@@ -1,26 +1,43 @@
-import { Button, Flex, Tag } from "antd";
+import { Button, Flex, Popconfirm, Tag } from "antd";
 import { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa6";
 import AddAddress from "./AddAddress";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  fectchDeleteAddress,
   fetchChangeDefaultAddress,
   fetchGetAllAddress,
 } from "~/redux/address/addressSlice";
+import UpdateAddress from "./UpdateAddress";
+import { toast } from "react-toastify";
 
 const AccountAddress = () => {
   const [addAddress, setAddAddress] = useState();
+  const [updateAddress, setUpdateAddress] = useState();
+  const [address, setAddress] = useState();
   const [loading, setLoading] = useState(false);
   const listAddress = useSelector((state) => state.address.listAddress);
   const dispatch = useDispatch();
 
-  const hanldeChangeDefault = (id) => {
+  const hanldeChangeDefault = async (id) => {
     setLoading(true);
-    dispatch(fetchChangeDefaultAddress(id));
+    await dispatch(fetchChangeDefaultAddress(id));
     setLoading(false);
   };
 
-  console.log(listAddress);
+  const handleSetModal = (address) => {
+    setAddress(address);
+    setUpdateAddress(true);
+  };
+
+  const handleDelete = async (id) => {
+    setLoading(true);
+    await toast.promise(dispatch(fectchDeleteAddress(id)), {
+      pending: "Đang xoá...",
+    });
+
+    setLoading(false);
+  };
 
   useEffect(() => {
     dispatch(fetchGetAllAddress());
@@ -61,13 +78,27 @@ const AccountAddress = () => {
                     </div>
 
                     <div className="address__user--button">
-                      <Button type="link" size="middle">
+                      <Button
+                        type="link"
+                        size="middle"
+                        onClick={() => handleSetModal(item)}
+                      >
                         Cập nhật
                       </Button>
+
                       {!item?.is_default && (
-                        <Button type="link" size="middle">
-                          Xoá
-                        </Button>
+                        <Popconfirm
+                          title="Xoá địa chỉ"
+                          description="Bạn có chắc muốn xoá địa chỉ này"
+                          onConfirm={() => handleDelete(item?.id)}
+                          okText="Xoá"
+                          cancelText="Huỷ"
+                          okButtonProps={{ loading: loading }}
+                        >
+                          <Button type="link" size="middle">
+                            Xoá
+                          </Button>
+                        </Popconfirm>
                       )}
                     </div>
                   </Flex>
@@ -85,6 +116,7 @@ const AccountAddress = () => {
                       variant="outlined"
                       size="middle"
                       onClick={() => hanldeChangeDefault(item?.id)}
+                      loading={loading}
                     >
                       Thiết lập mặc định
                     </Button>
@@ -103,6 +135,14 @@ const AccountAddress = () => {
 
       {addAddress && (
         <AddAddress addAddress={addAddress} setAddAddress={setAddAddress} />
+      )}
+
+      {updateAddress && (
+        <UpdateAddress
+          updateAddress={updateAddress}
+          setUpdateAddress={setUpdateAddress}
+          address={address}
+        />
       )}
     </>
   );

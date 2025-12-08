@@ -18,6 +18,9 @@ export class AddressService {
   async findAll(user_id: number) {
     const addresses = await this.addressRepository.find({
       where: { user_id: user_id },
+      order: {
+        id: 'ASC',
+      },
     });
 
     const result = await Promise.all(
@@ -96,5 +99,15 @@ export class AddressService {
     Object.assign(address, data);
 
     return await this.addressRepository.save(address);
+  }
+
+  async delete(id: number) {
+    const result = await this.addressRepository.delete({
+      id: id,
+      is_default: false,
+    });
+
+    if (result.affected == 0)
+      throw new NotFoundException('Không tìm thấy địa chỉ');
   }
 }

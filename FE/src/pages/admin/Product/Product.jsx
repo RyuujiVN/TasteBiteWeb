@@ -99,9 +99,9 @@ const Product = () => {
 
   const debounced = useDebounce(search, 500, setSearchParams);
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     setLoading(true);
-    toast.promise(dispatch(fetchDeleteProduct(id)), {
+    await toast.promise(dispatch(fetchDeleteProduct(id)), {
       pending: "Đang xoá...",
     });
 
@@ -153,8 +153,6 @@ const Product = () => {
   const handleSort = (value) => {
     const searchObject = Object.fromEntries(searchParams.entries());
     const [sortBy, order] = value.split("|");
-
-    console.log(sortBy, order);
 
     setSearchParams({
       ...searchObject,

@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -64,5 +65,15 @@ export class AddressController {
     @Body() data: UpdateAddressDTO,
   ): Promise<Address> {
     return await this.addressService.update(id, data);
+  }
+
+  @Delete('delete/:id')
+  @ApiOperation({ summary: 'Chỉnh sửa địa chỉ' })
+  async deleteAddress(@Param('id', ParseIntPipe) id: number) {
+    await this.addressService.delete(id);
+
+    return {
+      message: 'Xoá thành công',
+    };
   }
 }
