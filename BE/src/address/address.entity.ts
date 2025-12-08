@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from 'src/user/user.entity';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity('address')
 export class Address {
@@ -20,6 +27,15 @@ export class Address {
   @Column()
   street: string;
 
+  @Column({ name: 'user_id' })
+  user_id: number;
+
   @Column({ type: 'boolean', default: false })
   is_default: boolean;
+
+  @ManyToOne(() => User, (user) => user.address, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'user_id' })
+  user: User;
 }

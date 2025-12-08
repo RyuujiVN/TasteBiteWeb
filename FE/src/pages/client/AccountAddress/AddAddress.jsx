@@ -19,7 +19,7 @@ const AddAddress = ({ addAddress, setAddAddress }) => {
 
   const hanldeSubmit = async (values) => {
     setLoading(true);
-    await toast.promise(dispatch(fetchAddAddress(values)), {
+    values.user_id = await toast.promise(dispatch(fetchAddAddress(values)), {
       pending: "Đang thêm...",
     });
     setLoading(false);

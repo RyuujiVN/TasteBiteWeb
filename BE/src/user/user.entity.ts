@@ -1,12 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
 import { MaxLength } from 'class-validator';
+import { Address } from 'src/address/address.entity';
 import { Role } from 'src/role/role.entity';
 import {
   Column,
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -68,4 +70,7 @@ export class User {
   })
   @JoinColumn({ name: 'role_id' })
   role: Role;
+
+  @OneToMany(() => Address, (address) => address.user)
+  address: Address[];
 }
