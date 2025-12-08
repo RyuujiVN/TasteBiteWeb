@@ -1,3 +1,39 @@
-.ant-form-item {
-  margin: 0;
+.address {
+
+  &__head {
+    font-size: 3rem;
+    margin-bottom: 20px;
+  }
+
+  &__item {
+    border-top: 1px solid #ddd;
+    padding: 20px 0;
+  }
+
+  &__user {
+    display: flex;
+    gap: 8px;
+    font-size: 1.8rem;
+
+    &--phone {
+      color: $color-gray-four;
+    }
+  }
+
+  .split {
+    border-left: .5px solid rgba(0, 0, 0, .26);
+    margin: 0 8px;
+  }
+
+  &__info {
+    p {
+      font-size: 1.8rem;
+      color: $color-gray-four;  
+      line-height: 1.4;
+    }
+  }
+
+  .ant-form-item {
+    margin: 0;
+  }
 }

@@ -35,8 +35,6 @@ export const fetchGetWard = createAsyncThunk(
   async (provinceId) => {
     const response = await axios.get(`https://provinces.open-api.vn/api/v2/w?province=${provinceId}`)
 
-    console.log(response)
-
     return response.data
   }
 )
@@ -57,6 +55,19 @@ export const fetchUpdateAddress = createAsyncThunk(
     const response = await instance.put(`/address/update/${id}`, data)
 
     return response.data
+  }
+)
+
+// Change default address
+export const fetchChangeDefaultAddress = createAsyncThunk(
+  'address/fetchChangeDefaultAddress',
+  async (id) => {
+    const response = await instance.patch(`/address/change-default/${id}`)
+
+    return {
+      addressDefaultId: id,
+      ...response.data
+    }
   }
 )
 
@@ -108,6 +119,17 @@ export const addressSlice = createSlice({
 
       state.listAddress[index] = updatedAdrress
       toast.success("Chỉnh sửa thành công!")
+    })
+
+    builder.addCase(fetchChangeDefaultAddress.fulfilled, (state, action) => {
+      state.listAddress = state.listAddress.map((item) => {
+        if (item.id !== action.payload.addressDefaultId) item.is_default = false
+        else
+          item.is_default = true
+        return item
+      })
+
+      toast.success(action.payload.message)
     })
 
     builder.addCase(fectchDeleteAddress.fulfilled, (state, action) => {
