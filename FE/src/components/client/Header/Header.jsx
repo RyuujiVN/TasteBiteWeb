@@ -10,7 +10,9 @@ import { LuPackageCheck } from "react-icons/lu";
 import { RiLogoutCircleRLine } from "react-icons/ri";
 import "./Header.scss";
 import accountService from "~/services/accountService";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { fetchGetProfile } from "~/redux/user/userSlice";
 
 const menuLogin = [
   {
@@ -65,6 +67,11 @@ const menuUser = [
 
 const Header = () => {
   const profile = useSelector((state) => state.user.currentUser);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchGetProfile());
+  }, []);
 
   return (
     <>
@@ -95,9 +102,6 @@ const Header = () => {
                       <Flex vertical gap={5}>
                         <div className="header__user--name">
                           {profile?.user_name}
-                        </div>
-                        <div className="header__user--role">
-                          {profile?.role}
                         </div>
                       </Flex>
                     </div>

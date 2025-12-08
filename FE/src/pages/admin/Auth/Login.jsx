@@ -1,21 +1,22 @@
 import { Button, Form, Input, Typography } from "antd";
+import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { login } from "~/redux/user/userSlice";
 import accountService from "~/services/accountService";
 
 const Login = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { Text } = Typography;
 
   const handleLogin = async (data) => {
     const res = await accountService.login(data);
-
-    localStorage.setItem("userInfo", JSON.stringify(res.data.userInfo));
-    localStorage.setItem("accessToken", res.data.accessToken);
-    localStorage.setItem("refreshToken", res.data.refreshToken);
+    dispatch(login(res.data));
 
     if (data.role) navigate("/admin/dashboard");
     else navigate("/");
+
 
     toast.success("Đăng nhập thành công");
   };

@@ -16,13 +16,12 @@ export const fetchGetProfile = createAsyncThunk(
   }
 )
 
+
 // Update profile
 export const fetchUpdateProfile = createAsyncThunk(
   'user/fetchUpdateProfile',
   async (data) => {
     const response = await instance.patch(`/user/update`, data)
-    console.log(response)
-
 
     return response.data
   }
@@ -32,6 +31,14 @@ export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
+    login: (state, action) => {
+      localStorage.setItem("userInfo", JSON.stringify(action.payload.userInfo));
+      localStorage.setItem("accessToken", action.payload.accessToken);
+      localStorage.setItem("refreshToken", action.payload.refreshToken);
+
+      state.currentUser = action.payload.userInfo;
+
+    }
   },
 
   extraReducers: (builder) => {
@@ -48,6 +55,6 @@ export const userSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { deleteuser } = userSlice.actions
+export const { login } = userSlice.actions
 
 export default userSlice.reducer

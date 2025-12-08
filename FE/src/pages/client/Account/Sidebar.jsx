@@ -1,8 +1,4 @@
-import {
-  UserOutlined,
-  EnvironmentOutlined,
-  EyeOutlined,
-} from "@ant-design/icons";
+import { UserOutlined, EnvironmentOutlined } from "@ant-design/icons";
 import { IoBagHandleOutline } from "react-icons/io5";
 import { LogoutOutlined } from "@ant-design/icons";
 import { Avatar } from "antd";
@@ -16,7 +12,7 @@ const Sidebar = () => {
     <div className="account__sidebar">
       <div className="account__sidebar-user">
         <Avatar size={60} src={profile.avatar_url}></Avatar>
-        <span className="account__sidebar-name">Nguyễn Long</span>
+        <span className="account__sidebar-name">{profile?.full_name}</span>
       </div>
 
       <ul className="account__sidebar-menu">
@@ -54,18 +50,6 @@ const Sidebar = () => {
         >
           <IoBagHandleOutline />
           <span>Quản lý đơn hàng</span>
-        </NavLink>
-
-        <NavLink
-          to="/account/viewed"
-          className={({ isActive }) =>
-            `account__sidebar-item ${
-              isActive ? "account__sidebar-item--active" : ""
-            }`
-          }
-        >
-          <EyeOutlined />
-          <span>Sản phẩm đã xem</span>
         </NavLink>
 
         <div

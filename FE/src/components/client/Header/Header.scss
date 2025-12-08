@@ -76,3 +76,23 @@
     }
   }
 }
+
+@media (max-width: 768px) {
+  .header {
+
+    &__auth &__user--name,
+    &__cart span {
+      display: none;
+    }
+  }
+}
+
+@media (max-width: 578px) {
+  .header {
+
+    &__auth &__user--name,
+    &__cart span {
+      display: none;
+    }
+  }
+}

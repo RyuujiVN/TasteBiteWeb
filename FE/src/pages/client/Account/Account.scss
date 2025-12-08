@@ -28,6 +28,7 @@
     &-name {
       font-size: 2.2rem;
       font-weight: 600;
+      text-align: left;
     }
 
     &-menu {
@@ -78,6 +79,10 @@
     // SIDEBAR
     &__sidebar {
       width: 100%;
+
+      &-user {
+        justify-content: left;
+      }
     }
   }
 }

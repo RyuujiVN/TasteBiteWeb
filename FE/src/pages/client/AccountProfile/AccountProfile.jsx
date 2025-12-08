@@ -37,6 +37,7 @@ const AccountProfile = () => {
     }
   }, [profile, form]);
 
+  // Upload Avatar
   const handleAvatarUpload = async (file) => {
     setLoading(true);
     try {
@@ -57,6 +58,7 @@ const AccountProfile = () => {
     }
   };
 
+  // Validate Image
   const handleAvatarChange = (info) => {
     const file = info.fileList[0]?.originFileObj;
     if (!file) return;
@@ -67,7 +69,7 @@ const AccountProfile = () => {
       return;
     }
 
-    const isLt1M = file.size / 1024 / 1024 < 1;
+    const isLt1M = file.size / 1024 / 1024 < 2;
     if (!isLt1M) {
       message.error("Kích thước file không được vượt quá 1MB!");
       return;
@@ -77,6 +79,7 @@ const AccountProfile = () => {
     handleAvatarUpload(file);
   };
 
+  // Update Profile
   const onFinish = async (values) => {
     setLoading(true);
     const profileData = { ...values, avatar_url: avatarUrl };
@@ -104,7 +107,7 @@ const AccountProfile = () => {
       <h2 className="profile__title">Thông tin tài khoản</h2>
 
       <Row gutter={[40, 24]} justify="start" align="top">
-        <Col xs={24} md={16}>
+        <Col xs={{ span: 24, order: 2 }} md={{ span: 16, order: 1 }}>
           <Form form={form} layout="vertical" onFinish={onFinish}>
             <Form.Item
               name="user_name"
@@ -161,7 +164,7 @@ const AccountProfile = () => {
           </Form>
         </Col>
 
-        <Col xs={24} md={8}>
+        <Col xs={{ span: 24, order: 1 }} md={{ span: 8, order: 2 }}>
           <div className="profile__avatar-upload">
             <div className="profile__avatar-preview">
               {loading ? (
@@ -186,7 +189,7 @@ const AccountProfile = () => {
                 <strong>Chọn Ảnh</strong>
               </p>
               <p className="profile__upload-note">
-                Dung lượng file tối đa 1 MB
+                Dung lượng file tối đa 2 MB
               </p>
               <p className="profile__upload-note">Định dạng: JPEG, PNG</p>
             </div>

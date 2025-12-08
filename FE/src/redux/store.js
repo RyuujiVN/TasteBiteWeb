@@ -4,6 +4,7 @@ import productReducer from './product/productSlice'
 import roleReducer from './role/roleSlice'
 import adminReducer from './admin/adminSlice'
 import userReducer from './user/userSlice'
+import addressReducer from './address/addressSlice'
 
 export const store = configureStore({
   reducer: {
@@ -11,6 +12,7 @@ export const store = configureStore({
     product: productReducer,
     role: roleReducer,
     admin: adminReducer,
-    user: userReducer
+    user: userReducer,
+    address: addressReducer
   },
 })
