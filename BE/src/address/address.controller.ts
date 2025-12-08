@@ -6,6 +6,7 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Put,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -14,6 +15,7 @@ import { CreateAddressDTO } from './dtos/create-address.dto';
 import { AddressService } from './address.service';
 import { Address } from './address.entity';
 import { JwtAccessAuthGuard } from 'src/guards/jwt-access.guard';
+import { UpdateAddressDTO } from './dtos/update-address.dto';
 
 @Controller('address')
 @ApiTags('address')
@@ -50,5 +52,17 @@ export class AddressController {
     return {
       message: 'Thay đổi thành công',
     };
+  }
+
+  @Put('update/:id')
+  @ApiOperation({ summary: 'Chỉnh sửa địa chỉ' })
+  @ApiBody({
+    type: UpdateAddressDTO,
+  })
+  async updateAddress(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() data: UpdateAddressDTO,
+  ): Promise<Address> {
+    return await this.addressService.update(id, data);
   }
 }

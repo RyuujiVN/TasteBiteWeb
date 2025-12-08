@@ -1,10 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateAddressDTO } from './dtos/create-address.dto';
 import { Address } from './address.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Not, Repository } from 'typeorm';
 import { HttpService } from '@nestjs/axios';
 import { lastValueFrom } from 'rxjs';
+import { UpdateAddressDTO } from './dtos/update-address.dto';
 
 @Injectable()
 export class AddressService {
@@ -85,5 +86,15 @@ export class AddressService {
         },
       ),
     ]);
+  }
+
+  async update(id: number, data: UpdateAddressDTO): Promise<Address> {
+    const address = await this.addressRepository.findOne({ where: { id: id } });
+
+    if (!address) throw new NotFoundException('Không tìm thấy địa chỉ');
+
+    Object.assign(address, data);
+
+    return await this.addressRepository.save(address);
   }
 }
