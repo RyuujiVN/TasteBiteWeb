@@ -16,6 +16,8 @@ import { dataSourceOptions } from 'db/data-source';
 import { OtpModule } from './otp/otp.module';
 import { AddressModule } from './address/address.module';
 import { HttpModule } from '@nestjs/axios';
+import { APP_FILTER } from '@nestjs/core';
+import { GlobalExceptionFilter } from './common/filters/global-exception.filter';
 
 @Module({
   imports: [
@@ -36,6 +38,12 @@ import { HttpModule } from '@nestjs/axios';
     AddressModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_FILTER,
+      useClass: GlobalExceptionFilter,
+    },
+  ],
 })
 export class AppModule {}
