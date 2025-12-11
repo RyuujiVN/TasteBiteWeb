@@ -3,6 +3,10 @@
   align-items: center;
   background-color: $color-white;
   border-bottom: 1px solid $bg-blue-white-two;
+  margin-bottom: 20px;
+  position: sticky;
+  top: 0;
+  left: 0;
 
   &--left {
     width: 200px;

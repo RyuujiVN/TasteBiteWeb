@@ -36,12 +36,12 @@ const AddProduct = () => {
   };
 
   // Xử lý khi thêm
-  const handleSubmit = (value) => {
+  const handleSubmit = async (value) => {
     setLoading(true);
     value.description = descriptionRef.current.getContent();
     value.image_url = fileUrl;
 
-    dispatch(fetchAddProduct(value));
+    await dispatch(fetchAddProduct(value));
     setLoading(false);
   };
 
@@ -87,6 +87,7 @@ const AddProduct = () => {
             discount: 0,
             new_price: 1000,
             is_featured: false,
+            deleted: false,
           }}
         >
           <Row gutter={[20, 20]}>
@@ -198,7 +199,7 @@ const AddProduct = () => {
 
             <Col xl={24} lg={24} sm={24} xs={24}>
               <Form.Item name="deleted">
-                <Checkbox onChange={handleCheck}>Đang hoạt động</Checkbox>
+                <Checkbox onChange={handleCheck}>Dừng hoạt động</Checkbox>
               </Form.Item>
             </Col>
 

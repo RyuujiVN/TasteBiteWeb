@@ -69,7 +69,73 @@ export class ProductController {
     return { file: fileUrl.url };
   }
 
-  @Get('/:id')
+  @Get('filter')
+  @ApiOperation({ summary: 'Lấy danh sách sản phẩm có phân trang cho client' })
+  @ApiQuery({ name: 'limit', required: true, type: Number, default: 10 })
+  @ApiQuery({
+    name: 'search',
+    required: false,
+    type: String,
+    description: 'Tìm kiếm theo tên sản phẩm',
+  })
+  @ApiQuery({
+    name: 'category_id',
+    required: false,
+    type: String,
+    description: 'Lọc theo category',
+  })
+  @ApiQuery({
+    name: 'last_id',
+    required: false,
+    type: String,
+  })
+  @ApiQuery({
+    name: 'sort_by',
+    required: false,
+    type: String,
+    description: 'Sắp xếp theo tuỳ chọn',
+  })
+  @ApiQuery({
+    name: 'order',
+    required: false,
+    type: String,
+    description: 'Sắp xếp giảm hay tăng',
+  })
+  @ApiQuery({
+    name: 'min_price',
+    required: false,
+    type: String,
+    description: 'Giá tối thiểu',
+  })
+  @ApiQuery({
+    name: 'max_price',
+    required: false,
+    type: String,
+    description: 'Giá tối đa',
+  })
+  getClient(
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
+    @Query('search') search?: string,
+    @Query('category_id') category_id?: string,
+    @Query('last_id') last_id?: string,
+    @Query('sort_by') sort_by?: string,
+    @Query('order') order?: string,
+    @Query('min_price') min_price?: string,
+    @Query('max_price') max_price?: string,
+  ): Promise<Product[]> {
+    return this.productService.findAllPaginationClient({
+      limit,
+      search,
+      category_id,
+      last_id,
+      sort_by,
+      order,
+      min_price,
+      max_price,
+    });
+  }
+
+  @Get(':id')
   @ApiOperation({ summary: 'Chi tiết sản phẩm' })
   getDetail(@Param('id', ParseIntPipe) id: number): Promise<Product> {
     return this.productService.getDetail(id);

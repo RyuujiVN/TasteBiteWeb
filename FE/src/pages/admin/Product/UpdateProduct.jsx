@@ -35,13 +35,12 @@ const UpdateProduct = () => {
   const descriptionRef = useRef(null);
 
   // Xử lý khi Chỉnh sửa
-  const handleSubmit = (value) => {
+  const handleSubmit = async (value) => {
     setLoading(true);
-    console.log(value);
     value.description = descriptionRef.current.getContent();
     value.image_url = fileUrl;
 
-    dispatch(fetchUpdateProduct({ id: id, data: value }));
+    await dispatch(fetchUpdateProduct({ id: id, data: value }));
     setLoading(false);
   };
 
@@ -214,7 +213,7 @@ const UpdateProduct = () => {
 
             <Col xl={24} lg={24} sm={24} xs={24}>
               <Form.Item name="deleted" valuePropName="checked">
-                <Checkbox>Đang hoạt động</Checkbox>
+                <Checkbox>Dừng hoạt động</Checkbox>
               </Form.Item>
             </Col>
 

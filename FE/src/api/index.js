@@ -35,7 +35,7 @@ instance.interceptors.response.use(function (response) {
   if (error.response.status === 401) {
     adminService.logout().then(
       () => {
-        location.href = '/admin/login'
+        location.href = '/login'
       }
     )
   }
@@ -58,12 +58,13 @@ instance.interceptors.response.use(function (response) {
         }
       )
       .catch((err) => {
-        adminService.logout().then(
-          () => {
-            location.href = '/admin/login'
-          }
-        )
+        // adminService.logout().then(
+        //   () => {
+        //     location.href = '/login'
+        //   }
+        // )
 
+        console.log(err)
         return Promise.reject(err)
       })
   }

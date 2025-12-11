@@ -13,6 +13,7 @@ import accountService from "~/services/accountService";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { fetchGetProfile } from "~/redux/user/userSlice";
+import { useNavigate } from "react-router-dom";
 
 const menuLogin = [
   {
@@ -67,6 +68,7 @@ const menuUser = [
 
 const Header = () => {
   const profile = useSelector((state) => state.user.currentUser);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -78,7 +80,7 @@ const Header = () => {
       <header className="header">
         <div className="header__container container">
           <div className="header__body">
-            <div className="header__logo">
+            <div className="header__logo" onClick={() => navigate("/")}>
               <img src={Logo} alt="Logo" height={50} />
             </div>
 

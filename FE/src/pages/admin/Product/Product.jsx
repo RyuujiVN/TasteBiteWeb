@@ -5,6 +5,7 @@ import {
   Dropdown,
   Flex,
   Form,
+  Image,
   Input,
   Pagination,
   Popconfirm,
@@ -46,6 +47,7 @@ const columns = [
   {
     key: "title",
     title: "Tên sản phẩm",
+    dataIndex: "title",
   },
 
   {
@@ -131,6 +133,15 @@ const Product = () => {
     });
   };
 
+  const handleFilterStatus = (value) => {
+    const searchObject = Object.fromEntries(searchParams.entries());
+
+    setSearchParams({
+      ...searchObject,
+      deleted: value,
+    });
+  };
+
   const handleChangePage = (page, size) => {
     const searchObject = Object.fromEntries(searchParams.entries());
 
@@ -173,6 +184,8 @@ const Product = () => {
 
     fetchData();
   }, [debounced, dispatch, searchParams]);
+
+  console.log(pagination);
 
   return (
     <div className="product">
@@ -248,6 +261,52 @@ const Product = () => {
                   >
                     <Button>
                       <CiFilter /> Bộ lọc
+                    </Button>
+                  </Dropdown>
+
+                  {/* Filter Status */}
+                  <Dropdown
+                    menu={{
+                      items: [
+                        {
+                          key: "filter",
+                          label: (
+                            <div
+                              className="filter-dropdown__content"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <Form layout="vertical">
+                                <Form.Item
+                                  label="Trạng thái sản phẩm"
+                                  name="category"
+                                >
+                                  <Select
+                                    placeholder="Chọn danh mục"
+                                    onChange={handleFilterStatus}
+                                  >
+                                    <Select.Option value="">
+                                      Tất cả
+                                    </Select.Option>
+
+                                    <Select.Option value={true}>
+                                      Dừng hoạt động
+                                    </Select.Option>
+
+                                    <Select.Option value={false}>
+                                      Đang hoạt động
+                                    </Select.Option>
+                                  </Select>
+                                </Form.Item>
+                              </Form>
+                            </div>
+                          ),
+                        },
+                      ],
+                    }}
+                    trigger={["click"]}
+                  >
+                    <Button>
+                      <CiFilter /> Trạng thái
                     </Button>
                   </Dropdown>
 
@@ -378,7 +437,7 @@ const Product = () => {
                 dataSource={products.map((product) => ({
                   key: product?.id,
                   image: (
-                    <img src={product?.image_url} height={100} width={150} />
+                    <Image src={product?.image_url} height={150} width={200} />
                   ),
                   title: product?.title,
                   price: formatCurrency(product?.price),
@@ -437,7 +496,7 @@ const Product = () => {
 
             <Pagination
               current={parseInt(searchParams.get("page")) || 1}
-              total={pagination?.itemCount}
+              total={pagination?.totalItems}
               align="end"
               showTotal={(total) => `Tổng: ${total} sản phẩm`}
               showSizeChanger

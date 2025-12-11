@@ -4,18 +4,14 @@ import { Product } from './product.entity';
 import { Repository } from 'typeorm';
 import { CreateProductDTO } from './dtos/create-product.dto';
 import slugify from 'slugify';
-import { PaginationQuery } from 'src/common/interfaces/pagination.interface';
 import { paginate, Pagination } from 'nestjs-typeorm-paginate';
 import { UpdateCategoryDTO } from 'src/category/dtos/update-category.dto';
 import { ChangeMultiProductDTO } from './dtos/change-multi-product.dto';
 import { ProductChangeMultiEnum } from 'src/common/enums/product.enum';
-
-interface ProductPagination extends PaginationQuery {
-  category_id?: string;
-  deleted?: boolean;
-  sort_by?: string;
-  order?: string;
-}
+import {
+  FilterProductAdmin,
+  FilterProductClient,
+} from './filter-product.interface';
 
 @Injectable()
 export class ProductService {
@@ -28,8 +24,51 @@ export class ProductService {
     return slugify(title, { lower: true, strict: true });
   }
 
+  async findAllPaginationClient(
+    options: FilterProductClient,
+  ): Promise<Product[]> {
+    const queryBuilder = this.productRepository
+      .createQueryBuilder('product')
+      .leftJoin('product.category', 'category')
+      .addSelect(['category.id', 'category.title', 'category.type'])
+      .limit(options.limit);
+
+    if (options.search)
+      queryBuilder.andWhere('product.title ILIKE :title', {
+        title: `%${options.search}%`,
+      });
+
+    if (options.category_id)
+      queryBuilder.andWhere('product.category_id = :category_id', {
+        category_id: Number(options.category_id),
+      });
+
+    if (options.last_id)
+      queryBuilder.andWhere('product.id > :id', {
+        id: Number(options.last_id),
+      });
+
+    const order: any = options.order;
+
+    if (options.sort_by && order)
+      queryBuilder.orderBy('product.price', order.toUpperCase());
+    else queryBuilder.orderBy('product.id', 'DESC');
+
+    if (options.min_price)
+      queryBuilder.andWhere('product.price >= :price', {
+        price: Number(options.min_price),
+      });
+
+    if (options.max_price)
+      queryBuilder.andWhere('product.price <= :price', {
+        price: Number(options.max_price),
+      });
+
+    return await queryBuilder.getMany();
+  }
+
   async findAllPagination(
-    options: ProductPagination,
+    options: FilterProductAdmin,
   ): Promise<Pagination<Product>> {
     const queryBuilder = this.productRepository
       .createQueryBuilder('product')
@@ -55,7 +94,7 @@ export class ProductService {
 
     if (options.sort_by && order)
       queryBuilder.orderBy(`product.${options.sort_by}`, order.toUpperCase());
-    else queryBuilder.orderBy('product.created_at', 'DESC');
+    else queryBuilder.orderBy('product.id', 'DESC');
 
     return paginate<Product>(queryBuilder, options);
   }
