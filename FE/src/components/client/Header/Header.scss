@@ -1,6 +1,11 @@
 .header {
   padding: 10px 0;
   box-shadow: inset 0px -0.5px 0px #e6e6e6;
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+
 
   &__body {
     display: flex;

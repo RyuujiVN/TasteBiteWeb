@@ -31,6 +31,9 @@ export class ProductService {
       .createQueryBuilder('product')
       .leftJoin('product.category', 'category')
       .addSelect(['category.id', 'category.title', 'category.type'])
+      .andWhere('product.deleted = :deleted', {
+        deleted: false,
+      })
       .limit(options.limit);
 
     if (options.search)

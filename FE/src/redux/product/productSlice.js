@@ -8,11 +8,23 @@ const initialState = {
   productDetail: null,
 }
 
-// Get List
+// Get List For Admin
 export const fetchGetListProduct = createAsyncThunk(
   'product/fetchGetListProduct',
   async (params) => {
     const response = await instance.get('/product', {
+      params: params
+    })
+
+    return response.data
+  }
+)
+
+// Get List For Client
+export const fetchGetListProductClient = createAsyncThunk(
+  'product/fetchGetListProductClient',
+  async (params) => {
+    const response = await instance.get('/product/filter', {
       params: params
     })
 
@@ -99,6 +111,11 @@ export const productSlice = createSlice({
       state.listProduct = action.payload.items
       state.pagination = action.payload.meta
     })
+
+    builder.addCase(fetchGetListProductClient.fulfilled, (state, action) => {
+      state.listProduct = action.payload
+    })
+
 
     builder.addCase(fetchGetDetailProduct.fulfilled, (state, action) => {
       state.productDetail = action.payload

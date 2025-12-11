@@ -24,13 +24,13 @@ export class Product {
   @Column({ nullable: true })
   image_url?: string;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
+  @Column({ type: 'decimal', precision: 10, scale: 0, default: 0 })
   price: number;
 
   @Column({ type: 'int', default: 0 })
   discount: number;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
+  @Column({ type: 'decimal', precision: 10, scale: 0, default: 0 })
   new_price: number;
 
   @Column({ length: 50 })

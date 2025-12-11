@@ -185,8 +185,6 @@ const Product = () => {
     fetchData();
   }, [debounced, dispatch, searchParams]);
 
-  console.log(pagination);
-
   return (
     <div className="product">
       <div className="product__header box-head">

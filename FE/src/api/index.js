@@ -50,8 +50,6 @@ instance.interceptors.response.use(function (response) {
       .then(
         (res) => {
           const { accessToken } = res.data;
-
-
           localStorage.setItem('accessToken', accessToken);
           instance.defaults.headers.Authorization = `Bearer ${accessToken}`;
           return instance(originalRequest)
@@ -69,7 +67,6 @@ instance.interceptors.response.use(function (response) {
       })
   }
 
-  console.log(error)
   if (error.response.status !== 401) {
     toast.error(error.response?.data?.message || error.message)
   }
