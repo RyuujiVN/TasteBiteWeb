@@ -3,6 +3,7 @@ import Account from "~/pages/client/Account/Account";
 import AccountAddress from "~/pages/client/AccountAddress/AccountAddress";
 import AccountProfile from "~/pages/client/AccountProfile/AccountProfile";
 import Home from "~/pages/client/Home/Home";
+import ProductDetail from "~/pages/client/ProductDetail/ProductDetail";
 
 const routesClient = [
   {
@@ -12,6 +13,11 @@ const routesClient = [
       {
         path: "",
         element: <Home />,
+      },
+
+      {
+        path: "product/:slug",
+        element: <ProductDetail />,
       },
 
       {

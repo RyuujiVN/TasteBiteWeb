@@ -2,40 +2,29 @@ import {
   Button,
   Card,
   Divider,
-  Dropdown,
   Flex,
   Form,
   Input,
   Pagination,
   Popconfirm,
-  Select,
   Space,
   Table,
-  Tag,
   Tooltip,
 } from "antd";
 import { useEffect, useState } from "react";
-import AddCategory from "./AddAdmin";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  fectchDeleteCategory,
-  fetchGetListCategory,
-} from "~/redux/category/categorySlice";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { AiOutlineEdit } from "react-icons/ai";
 import { AiOutlineDelete } from "react-icons/ai";
 import { IoIosSearch } from "react-icons/io";
 import "./Admin.scss";
-import EditCategory from "./EditAdmin";
 import { toast } from "react-toastify";
 import { useSearchParams } from "react-router-dom";
 import useDebounce from "~/hooks/useDebounce";
 import { FaPlus } from "react-icons/fa6";
-import { CiFilter } from "react-icons/ci";
 import { fectchDeleteAdmin, fetchGetListAdmin } from "~/redux/admin/adminSlice";
 import AddAdmin from "./AddAdmin";
 import EditAdmin from "./EditAdmin";
-// import DetailCategory from "./DetailCategory";
 
 const columns = [
   {
@@ -72,7 +61,6 @@ const Admin = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [addAdmin, setAddAdmin] = useState(false);
   const [editAdmin, setEditAdmin] = useState(false);
-  const [detailCategory, setDetailCategory] = useState(false);
   const [search, setSearch] = useState(null);
   const [admin, setAdmin] = useState(null);
   const [loading, setLoading] = useState(false);

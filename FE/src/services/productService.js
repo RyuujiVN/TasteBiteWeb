@@ -7,8 +7,13 @@ const filter = async (params) => {
   });
 }
 
+const getDetail = async (slug) => {
+  return await instance.get(`/product/detail/${slug}`);
+}
+
 const productService = {
-  filter
+  filter,
+  getDetail
 }
 
 export default productService

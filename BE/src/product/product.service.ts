@@ -24,6 +24,16 @@ export class ProductService {
     return slugify(title, { lower: true, strict: true });
   }
 
+  async findOneBySlug(slug: string): Promise<Product> {
+    const product = await this.productRepository.findOne({
+      where: { slug: slug },
+    });
+
+    if (!product) throw new NotFoundException('Không tìm thấy sản phẩm');
+
+    return product;
+  }
+
   async findAllPaginationClient(
     options: FilterProductClient,
   ): Promise<Product[]> {

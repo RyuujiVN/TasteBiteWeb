@@ -8,34 +8,34 @@ const TinyMCE = ({ content, descriptionRef }) => {
       onInit={(_evt, editor) => (descriptionRef.current = editor)}
       init={{
         height: 500,
-        menubar: false,
+        // menubar: false,
+        resize: false,
         plugins: [
           "advlist",
+          "anchor",
           "autolink",
+          "codesample",
+          "fullscreen",
+          "help",
+          "image",
+          "imagetools",
           "lists",
           "link",
-          "image",
-          "charmap",
-          "preview",
-          "anchor",
-          "searchreplace",
-          "visualblocks",
-          "code",
-          "fullscreen",
-          "insertdatetime",
           "media",
+          "preview",
+          "searchreplace",
           "table",
-          "code",
-          "help",
+          "visualblocks",
           "wordcount",
         ],
         toolbar:
-          "undo redo | blocks | " +
-          "bold italic forecolor | alignleft aligncenter " +
-          "alignright alignjustify | bullist numlist outdent indent | " +
-          "removeformat | help",
+          "undo redo | styles | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
+        spellchecker_dialog: true,
+        automatic_uploads: true,
+        images_reuse_filename: true,
+        // images_upload_handler: handleImageUpload,
         content_style:
-          "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+          "body { font-family:Helvetica,Arial,sans-serif; font-size:16px }",
       }}
     />
   );

@@ -1,7 +1,7 @@
 import { Card, Col, Row } from "antd";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { fetchGetListProductClient } from "~/redux/product/productSlice";
 import { formatCurrency } from "~/utils/formatPrice";
 import { IoIosArrowForward } from "react-icons/io";
@@ -9,6 +9,7 @@ import { IoIosArrowForward } from "react-icons/io";
 const ProductSection = () => {
   const products = useSelector((state) => state.product.listProduct);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(fetchGetListProductClient({ limit: 10 }));
@@ -26,7 +27,10 @@ const ProductSection = () => {
                 {products.length > 0 &&
                   products.map((item) => (
                     <Col xl={6} lg={8} md={12} sm={12} xs={24} key={item?.id}>
-                      <div className="product__item">
+                      <div
+                        className="product__item"
+                        onClick={() => navigate(`/product/${item?.slug}`)}
+                      >
                         <div className="product__img">
                           <img
                             loading="lazy"

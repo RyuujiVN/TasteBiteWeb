@@ -135,6 +135,12 @@ export class ProductController {
     });
   }
 
+  @Get('detail/:slug')
+  @ApiOperation({ summary: 'Chi tiết sản phẩm theo slug' })
+  getDetailSlug(@Param('slug') slug: string): Promise<Product> {
+    return this.productService.findOneBySlug(slug);
+  }
+
   @Get(':id')
   @ApiOperation({ summary: 'Chi tiết sản phẩm' })
   getDetail(@Param('id', ParseIntPipe) id: number): Promise<Product> {

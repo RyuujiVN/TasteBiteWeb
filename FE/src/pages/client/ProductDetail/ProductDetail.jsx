@@ -1,0 +1,165 @@
+import { Button, Col, InputNumber, Rate, Row, Divider } from "antd";
+import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { useParams } from "react-router-dom";
+import FoodLoading from "~/components/Loading/FoodLoading";
+import productService from "~/services/productService";
+import { formatCurrency } from "~/utils/formatPrice";
+import { BsCartPlus } from "react-icons/bs";
+import { MdOutlineDeliveryDining } from "react-icons/md";
+import { BiShieldQuarter } from "react-icons/bi";
+import "./ProductDetail.scss";
+
+const ProductDetail = () => {
+  const { slug } = useParams();
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState();
+  const [quantity, setQuantity] = useState(1);
+
+  useEffect(() => {
+    const fetchProductDetail = async () => {
+      setLoading(true);
+      try {
+        const res = await productService.getDetail(slug);
+
+        setProduct(res.data);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProductDetail();
+  }, []);
+
+  const hanldeUpdateQuantity = (value, type) => {
+    switch (type) {
+      case "increase":
+        if (quantity < 9999) setQuantity(quantity + 1);
+        console.log(quantity);
+        break;
+      case "decrease":
+        if (quantity > 1) setQuantity(quantity - 1);
+        break;
+      default: {
+        const num = Number(value);
+
+        if (isNaN(num) || num < 1) setQuantity(1);
+        else if (num > 9999) setQuantity(9999);
+        else setQuantity(num);
+      }
+    }
+  };
+
+  if (loading) return <FoodLoading />;
+
+  return (
+    <>
+      <div className="product-detail">
+        <div className="container">
+          <div className="product-detail__inner">
+            <div className="product-detail__content">
+              {/* Left */}
+              <div className="product-detail__img">
+                <img src={product?.image_url} alt={product?.title} />
+              </div>
+
+              {/* Right */}
+              <div className="product-detail--right">
+                <h3 className="product-detail__title">{product?.title}</h3>
+                <div className="product-detail__price">
+                  <span className="product-detail__price--new">
+                    {formatCurrency(product?.new_price)}
+                  </span>
+
+                  {product?.discount > 0 && (
+                    <>
+                      <span className="product-detail__price--old">
+                        {formatCurrency(product?.price)}
+                      </span>
+                      <span className="product-detail__price--discount">
+                        {product?.discount}%
+                      </span>
+                    </>
+                  )}
+                </div>
+
+                <Divider />
+
+                {/* Thông tin vận chuyển */}
+                <div className="product-detail__shipping">
+                  <div className="product-detail__feature">
+                    <MdOutlineDeliveryDining className="feature-icon" />
+                    <div>
+                      <div className="feature-title">Giao hàng nhanh</div>
+                      <div className="feature-desc">
+                        Giao trong vòng 30-45 phút
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="product-detail__feature">
+                    <BiShieldQuarter className="feature-icon" />
+                    <div>
+                      <div className="feature-title">Đảm bảo chất lượng</div>
+                      <div className="feature-desc">
+                        Hoàn tiền 100% nếu không hài lòng
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <Divider />
+
+                <div className="product-detail__quantity">
+                  <Button
+                    onClick={() => hanldeUpdateQuantity(null, "increase")}
+                  >
+                    +
+                  </Button>
+                  <InputNumber
+                    min={1}
+                    max={9999}
+                    controls={false}
+                    value={quantity}
+                    onChange={(value) => hanldeUpdateQuantity(value, "change")}
+                  />
+                  <Button
+                    onClick={() => hanldeUpdateQuantity(null, "decrease")}
+                  >
+                    -
+                  </Button>
+                </div>
+
+                <div className="product-detail__order">
+                  <Button className="product-detail__cart">
+                    <BsCartPlus /> Thêm vào giỏ hàng
+                  </Button>
+
+                  <Button className="product-detail__payment" type="primary">
+                    Mua ngay
+                  </Button>
+                </div>
+              </div>
+            </div>
+
+            {/* Mô tả sản phẩm */}
+            {product?.description && (
+              <div className="product-detail__description-section">
+                <h3 className="section-title">Mô tả món ăn</h3>
+                <div className="section-content">
+                  <div
+                    dangerouslySetInnerHTML={{ __html: product?.description }}
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default ProductDetail;

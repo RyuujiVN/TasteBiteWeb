@@ -87,6 +87,7 @@
       border: 1px solid #ddd;
       overflow: hidden;
       height: 100%;
+      cursor: pointer;
     }
 
     &__img {
@@ -109,8 +110,11 @@
       text-align: center;
       font-size: 2rem;
       font-weight: 500;
-      line-height: 1.25rem;
-
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
 
     &__price {
