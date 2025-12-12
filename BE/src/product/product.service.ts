@@ -33,8 +33,7 @@ export class ProductService {
       .addSelect(['category.id', 'category.title', 'category.type'])
       .andWhere('product.deleted = :deleted', {
         deleted: false,
-      })
-      .limit(options.limit);
+      });
 
     if (options.search)
       queryBuilder.andWhere('product.title ILIKE :title', {
@@ -66,6 +65,8 @@ export class ProductService {
       queryBuilder.andWhere('product.price <= :price', {
         price: Number(options.max_price),
       });
+
+    if (options.limit) queryBuilder.limit(options.limit);
 
     return await queryBuilder.getMany();
   }

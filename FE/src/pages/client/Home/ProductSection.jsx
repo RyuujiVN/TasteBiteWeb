@@ -14,7 +14,6 @@ const ProductSection = () => {
     dispatch(fetchGetListProductClient({ limit: 10 }));
   }, [dispatch]);
 
-  console.log(products);
   return (
     <>
       <section className="product">
@@ -29,7 +28,11 @@ const ProductSection = () => {
                     <Col xl={6} lg={8} md={12} sm={12} xs={24} key={item?.id}>
                       <div className="product__item">
                         <div className="product__img">
-                          <img src={item?.image_url} alt={item?.title} />
+                          <img
+                            loading="lazy"
+                            src={item?.image_url}
+                            alt={item?.title}
+                          />
                         </div>
 
                         <div className="product__content">
@@ -60,7 +63,7 @@ const ProductSection = () => {
             </div>
 
             <div className="product__link">
-              <Link>
+              <Link to="/search">
                 <IoIosArrowForward />
                 Xem danh sách món
               </Link>

@@ -8,7 +8,7 @@ export interface FilterProductAdmin extends PaginationQuery {
 }
 
 export interface FilterProductClient {
-  limit: number;
+  limit?: number;
   search?: string;
   category_id?: string;
   sort_by?: string;

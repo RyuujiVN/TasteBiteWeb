@@ -71,7 +71,7 @@ export class ProductController {
 
   @Get('filter')
   @ApiOperation({ summary: 'Lấy danh sách sản phẩm có phân trang cho client' })
-  @ApiQuery({ name: 'limit', required: true, type: Number, default: 10 })
+  @ApiQuery({ name: 'limit', required: false, type: Number, default: 10 })
   @ApiQuery({
     name: 'search',
     required: false,
@@ -114,7 +114,7 @@ export class ProductController {
     description: 'Giá tối đa',
   })
   getClient(
-    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
+    @Query('limit') limit?: number,
     @Query('search') search?: string,
     @Query('category_id') category_id?: string,
     @Query('last_id') last_id?: string,

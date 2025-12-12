@@ -28,10 +28,11 @@
         align-items: center;
         border-radius: 5px;
         justify-content: center;
+        height: 100%;
       }
 
       &--icon {
-        font-size: 4rem;
+        font-size: 3.4rem;
         color: $color-red-heavy;
       }
 
@@ -132,13 +133,13 @@
 
     &__link {
       margin-top: 30px;
-      cursor: pointer;
 
       a {
         display: flex;
         justify-content: flex-end;
         align-items: center;
         font-size: 2rem;
+        cursor: pointer;
       }
     }
   }

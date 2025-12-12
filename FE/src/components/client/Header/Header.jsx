@@ -1,6 +1,6 @@
 import { Avatar, Dropdown, Flex, Form, Input } from "antd";
-import Logo from "~/assets/images/vy-food.png";
-import { CiSearch } from "react-icons/ci";
+import LogoLetter from "~/assets/images/vy-food.png";
+import Logo from "~/assets/images/vy-food-logo.png";
 import { PiUserCircle } from "react-icons/pi";
 import { IoLogInOutline } from "react-icons/io5";
 import { PiUserCirclePlus } from "react-icons/pi";
@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { fetchGetProfile } from "~/redux/user/userSlice";
 import { useNavigate } from "react-router-dom";
+import Search from "./Search";
 
 const menuLogin = [
   {
@@ -73,27 +74,28 @@ const Header = () => {
 
   useEffect(() => {
     dispatch(fetchGetProfile());
-  }, []);
+  }, [dispatch]);
 
   return (
     <>
       <header className="header">
         <div className="header__container container">
           <div className="header__body">
-            <div className="header__logo" onClick={() => navigate("/")}>
-              <img src={Logo} alt="Logo" height={50} />
+            <div
+              className="header__logo header__logo--letter"
+              onClick={() => navigate("/")}
+            >
+              <img src={LogoLetter} alt="Logo" height={60} />
             </div>
 
-            <div className="header__search">
-              <Form className="header__search--form">
-                <Form.Item name="search">
-                  <Input
-                    placeholder="Tìm kiếm món ăn..."
-                    prefix={<CiSearch />}
-                  />
-                </Form.Item>
-              </Form>
+            <div
+              className="header__logo header__logo--img"
+              onClick={() => navigate("/")}
+            >
+              <img src={Logo} alt="Logo" height={60} />
             </div>
+
+            <Search />
 
             <div className="header__nav">
               <div className="header__auth">
