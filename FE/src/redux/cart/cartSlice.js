@@ -17,7 +17,7 @@ export const fetchCart = createAsyncThunk(
   }
 )
 
-// Get Cart
+// Add Item in Cart
 export const fetchAddCardItem = createAsyncThunk(
   'cart/fetchAddCardItem',
   async (data) => {
@@ -25,6 +25,31 @@ export const fetchAddCardItem = createAsyncThunk(
 
 
     return response.data
+  }
+)
+
+// Update Item in Cart
+export const fetchUpdateCardItem = createAsyncThunk(
+  'cart/fetchUpdateCardItem',
+  async ({ id, data }) => {
+    await instance.put(`/cart/update/${id}`, data)
+
+
+    return {
+      id,
+      ...data
+    }
+  }
+)
+
+// Remove Item in Cart
+export const fetchRemoveCardItem = createAsyncThunk(
+  'cart/fetchRemoveCardItem',
+  async (id) => {
+    await instance.delete(`/cart/delete/${id}`)
+
+
+    return id
   }
 )
 
@@ -50,6 +75,17 @@ export const cartSlice = createSlice({
         state.cart.cart_item.unshift(product)
       else
         state.cart.cart_item[index] = product
+      toast.success('Cập nhật giỏ hàng thành công')
+    })
+
+    builder.addCase(fetchUpdateCardItem.fulfilled, (state, action) => {
+      const product = action.payload
+      const index = state.cart.cart_item.findIndex((item) => item.id === product.id)
+      state.cart.cart_item[index].quantity = product.quantity
+    })
+
+    builder.addCase(fetchRemoveCardItem.fulfilled, (state, action) => {
+      state.cart.cart_item = state.cart.cart_item.filter(item => item.id !== action.payload)
     })
   }
 })

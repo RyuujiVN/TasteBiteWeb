@@ -24,7 +24,9 @@ const ProductSection = () => {
             <div className="product__list">
               <Row gutter={[20, 20]}>
                 {products.length > 0 &&
-                  products.map((item) => <ProductItem product={item} />)}
+                  products.map((item) => (
+                    <ProductItem key={item?.id} product={item} />
+                  ))}
               </Row>
             </div>
 

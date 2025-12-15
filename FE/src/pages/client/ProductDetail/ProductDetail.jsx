@@ -9,7 +9,7 @@ import { BsCartPlus } from "react-icons/bs";
 import { MdOutlineDeliveryDining } from "react-icons/md";
 import { BiShieldQuarter } from "react-icons/bi";
 import "./ProductDetail.scss";
-import { addItem, fetchAddCardItem } from "~/redux/cart/cartSlice";
+import { fetchAddCardItem } from "~/redux/cart/cartSlice";
 
 const ProductDetail = () => {
   const { slug } = useParams();
@@ -43,13 +43,16 @@ const ProductDetail = () => {
     };
 
     fetchProductDetail();
+    window.scrollTo({
+      top: 0,
+      behavior: "auto",
+    });
   }, []);
 
   const hanldeUpdateQuantity = (value, type) => {
     switch (type) {
       case "increase":
         if (quantity < 9999) setQuantity(quantity + 1);
-        console.log(quantity);
         break;
       case "decrease":
         if (quantity > 1) setQuantity(quantity - 1);
@@ -58,7 +61,7 @@ const ProductDetail = () => {
         const num = Number(value);
 
         if (isNaN(num) || num < 1) setQuantity(1);
-        else if (num > 9999) setQuantity(9999);
+        else if (num > 999) setQuantity(999);
         else setQuantity(num);
       }
     }
@@ -132,8 +135,6 @@ const ProductDetail = () => {
                       +
                     </Button>
                     <InputNumber
-                      min={1}
-                      max={9999}
                       controls={false}
                       value={quantity}
                       onChange={(value) =>
@@ -162,16 +163,14 @@ const ProductDetail = () => {
                 </div>
               </div>
               {/* Mô tả sản phẩm */}
-              {product?.description && (
-                <div className="product-detail__description-section">
-                  <h3 className="section-title">Mô tả món ăn</h3>
-                  <div className="section-content">
-                    <div
-                      dangerouslySetInnerHTML={{ __html: product?.description }}
-                    />
-                  </div>
+              <div className="product-detail__description-section">
+                <h3 className="section-title">Mô tả món ăn</h3>
+                <div className="section-content">
+                  <div
+                    dangerouslySetInnerHTML={{ __html: product?.description }}
+                  />
                 </div>
-              )}
+              </div>
             </div>
           </div>
         </div>
