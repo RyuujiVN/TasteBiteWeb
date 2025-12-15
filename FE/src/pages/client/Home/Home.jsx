@@ -3,6 +3,7 @@ import HeroSection from "./HeroSection";
 import ProductSection from "./ProductSection";
 
 const Home = () => {
+  console.log("hi");
   return (
     <>
       <div className="home">

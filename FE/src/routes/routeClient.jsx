@@ -4,6 +4,7 @@ import AccountAddress from "~/pages/client/AccountAddress/AccountAddress";
 import AccountProfile from "~/pages/client/AccountProfile/AccountProfile";
 import Home from "~/pages/client/Home/Home";
 import ProductDetail from "~/pages/client/ProductDetail/ProductDetail";
+import ProductFilter from "~/pages/client/ProductFilter/ProductFiler";
 
 const routesClient = [
   {
@@ -18,6 +19,11 @@ const routesClient = [
       {
         path: "product/:slug",
         element: <ProductDetail />,
+      },
+
+      {
+        path: "/search",
+        element: <ProductFilter />,
       },
 
       {

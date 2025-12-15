@@ -66,12 +66,13 @@ export class ProductController {
     file: Express.Multer.File,
   ): Promise<{ file: string }> {
     const fileUrl = await this.cloudinaryService.uploadFile(file);
-    return { file: fileUrl.url };
+    return { file: fileUrl.secure_url };
   }
 
   @Get('filter')
   @ApiOperation({ summary: 'Lấy danh sách sản phẩm có phân trang cho client' })
-  @ApiQuery({ name: 'limit', required: false, type: Number, default: 10 })
+  @ApiQuery({ name: 'page', required: true, type: Number, default: 1 })
+  @ApiQuery({ name: 'limit', required: true, type: Number, default: 20 })
   @ApiQuery({
     name: 'search',
     required: false,
@@ -114,20 +115,20 @@ export class ProductController {
     description: 'Giá tối đa',
   })
   getClient(
-    @Query('limit') limit?: number,
+    @Query('page') page: number,
+    @Query('limit') limit: number,
     @Query('search') search?: string,
     @Query('category_id') category_id?: string,
-    @Query('last_id') last_id?: string,
     @Query('sort_by') sort_by?: string,
     @Query('order') order?: string,
     @Query('min_price') min_price?: string,
     @Query('max_price') max_price?: string,
-  ): Promise<Product[]> {
+  ): Promise<Pagination<Product>> {
     return this.productService.findAllPaginationClient({
+      page,
       limit,
       search,
       category_id,
-      last_id,
       sort_by,
       order,
       min_price,

@@ -18,11 +18,11 @@ export class FileValidationPipe implements PipeTransform {
         'Định dạng file không hợp lệ (Chỉ chấp nhận .jpg, .png, .jpeg',
       );
 
-    const maxSize = 2 * 1024 * 1024; // Max size
+    const maxSize = 1 * 1024 * 1024; // Max size
 
     if (value.size > maxSize)
       throw new BadRequestException(
-        'File vượt quá dung lượng tối đa cho phép (tối đa 2MB)',
+        'File vượt quá dung lượng tối đa cho phép (tối đa 1MB)',
       );
 
     return value;

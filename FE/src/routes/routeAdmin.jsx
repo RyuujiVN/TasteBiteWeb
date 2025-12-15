@@ -19,141 +19,83 @@ import SendOtp from "~/pages/admin/Auth/SendOtp";
 import ResetPassword from "~/pages/admin/Auth/ResetPassword";
 
 const routesAdmin = [
+  // Routes cho auth
   {
     element: <Auth />,
     children: [
-      {
-        path: "login",
-        element: <Login />,
-      },
-
-      {
-        path: "register",
-        element: <Register />,
-      },
-
-      {
-        path: "forgot-password",
-        element: <ForgotPassword />,
-      },
-
-      {
-        path: "send-otp/:email",
-        element: <SendOtp />,
-      },
-
-      {
-        path: "reset-password",
-        element: <ResetPassword />,
-      },
+      { path: "login", element: <Login /> },
+      { path: "register", element: <Register /> },
+      { path: "forgot-password", element: <ForgotPassword /> },
+      { path: "send-otp/:email", element: <SendOtp /> },
+      { path: "reset-password", element: <ResetPassword /> },
     ],
   },
 
+  // Routes admin
   {
     path: "/admin",
     element: <LayoutDefault />,
     children: [
-      {
-        path: "dashboard",
-        element: <Dashboard />,
-      },
+      { path: "dashboard", element: <Dashboard /> },
 
+      // Product routes
       {
-        path: "",
+        path: "product",
         element: <RbacRoute requiredPermission={permissionEnum.VIEW_PRODUCT} />,
-        children: [
-          {
-            path: "product",
-            element: <Product />,
-          },
-        ],
+        children: [{ path: "", element: <Product /> }],
       },
-
       {
-        path: "",
+        path: "product/add",
         element: <RbacRoute requiredPermission={permissionEnum.ADD_PRODUCT} />,
-        children: [
-          {
-            path: "product/add",
-            element: <AddProduct />,
-          },
-        ],
+        children: [{ path: "", element: <AddProduct /> }],
       },
-
       {
-        path: "",
+        path: "product/update/:id",
         element: (
           <RbacRoute requiredPermission={permissionEnum.UPDATE_PRODUCT} />
         ),
-        children: [
-          {
-            path: "product/update/:id",
-            element: <UpdateProduct />,
-          },
-        ],
+        children: [{ path: "", element: <UpdateProduct /> }],
       },
 
+      // Category routes
       {
-        path: "",
+        path: "categories",
         element: (
           <RbacRoute requiredPermission={permissionEnum.VIEW_CATEGORY} />
         ),
-        children: [
-          {
-            path: "categories",
-            element: <Category />,
-          },
-        ],
+        children: [{ path: "", element: <Category /> }],
       },
 
+      // Role routes
       {
-        path: "",
+        path: "roles",
         element: <RbacRoute requiredPermission={permissionEnum.VIEW_ROLE} />,
-        children: [
-          {
-            path: "roles",
-            element: <Role />,
-          },
-        ],
+        children: [{ path: "", element: <Role /> }],
       },
 
+      // Admin routes
       {
-        path: "",
+        path: "admins",
         element: <RbacRoute requiredPermission={permissionEnum.VIEW_ADMIN} />,
-        children: [
-          {
-            path: "admins",
-            element: <Admin />,
-          },
-        ],
+        children: [{ path: "", element: <Admin /> }],
       },
 
+      // Permission routes
       {
-        path: "",
+        path: "permissions",
         element: (
           <RbacRoute
             requiredPermission={permissionEnum.UPDATE_PERMISSION_ROLE}
           />
         ),
-        children: [
-          {
-            path: "permissions",
-            element: <Permission />,
-          },
-        ],
+        children: [{ path: "", element: <Permission /> }],
       },
     ],
   },
 
-  {
-    path: "/access-denied",
-    element: <AccessDenied />,
-  },
-
-  {
-    path: "*",
-    element: <NotFound />,
-  },
+  // Access denied & 404
+  { path: "/access-denied", element: <AccessDenied /> },
+  { path: "*", element: <NotFound /> },
 ];
 
 export default routesAdmin;

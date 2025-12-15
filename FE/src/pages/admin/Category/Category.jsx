@@ -1,19 +1,16 @@
-import {
-  Button,
-  Card,
-  Divider,
-  Dropdown,
-  Flex,
-  Form,
-  Input,
-  Pagination,
-  Popconfirm,
-  Select,
-  Space,
-  Table,
-  Tag,
-  Tooltip,
-} from "antd";
+import Button from "antd/es/button";
+import Card from "antd/es/card";
+import Divider from "antd/es/divider";
+import Dropdown from "antd/es/dropdown";
+import Form from "antd/es/form";
+import Input from "antd/es/input";
+import Pagination from "antd/es/pagination";
+import Popconfirm from "antd/es/popconfirm";
+import Select from "antd/es/select";
+import Space from "antd/es/space";
+import Table from "antd/es/table";
+import Tag from "antd/es/tag";
+import Tooltip from "antd/es/tooltip";
 import { useEffect, useState } from "react";
 import AddCategory from "./AddCategory";
 import { useDispatch, useSelector } from "react-redux";
@@ -33,6 +30,7 @@ import useDebounce from "~/hooks/useDebounce";
 import { FaPlus } from "react-icons/fa6";
 import { CiFilter } from "react-icons/ci";
 import DetailCategory from "./DetailCategory";
+import { Flex } from "antd";
 
 const columns = [
   {

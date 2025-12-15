@@ -5,14 +5,14 @@ import { Link, useNavigate } from "react-router-dom";
 import { fetchGetListProductClient } from "~/redux/product/productSlice";
 import { formatCurrency } from "~/utils/formatPrice";
 import { IoIosArrowForward } from "react-icons/io";
+import ProductItem from "~/components/ProductItem/ProductItem";
 
 const ProductSection = () => {
   const products = useSelector((state) => state.product.listProduct);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(fetchGetListProductClient({ limit: 10 }));
+    dispatch(fetchGetListProductClient({ limit: 12 }));
   }, [dispatch]);
 
   return (
@@ -25,44 +25,7 @@ const ProductSection = () => {
             <div className="product__list">
               <Row gutter={[20, 20]}>
                 {products.length > 0 &&
-                  products.map((item) => (
-                    <Col xl={6} lg={8} md={12} sm={12} xs={24} key={item?.id}>
-                      <div
-                        className="product__item"
-                        onClick={() => navigate(`/product/${item?.slug}`)}
-                      >
-                        <div className="product__img">
-                          <img
-                            loading="lazy"
-                            src={item?.image_url}
-                            alt={item?.title}
-                          />
-                        </div>
-
-                        <div className="product__content">
-                          <h3 className="product__name">{item?.title}</h3>
-
-                          <div className="product__price">
-                            {item?.discount > 0 ? (
-                              <>
-                                <p className="product__price--old">
-                                  {formatCurrency(item?.price)}
-                                </p>
-
-                                <p className="product__price--new">
-                                  {formatCurrency(item?.new_price)}
-                                </p>
-                              </>
-                            ) : (
-                              <p className="product__price--new">
-                                {formatCurrency(item?.new_price)}
-                              </p>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    </Col>
-                  ))}
+                  products.map((item) => <ProductItem product={item} />)}
               </Row>
             </div>
 

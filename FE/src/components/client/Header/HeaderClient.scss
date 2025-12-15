@@ -1,10 +1,7 @@
-.header {
+.header-client {
   padding: 10px 0;
   box-shadow: inset 0px -0.5px 0px #e6e6e6;
-  position: sticky;
-  top: 0;
-  left: 0;
-  z-index: 9999;
+  z-index: 999;
 
 
   &__body {
@@ -15,6 +12,7 @@
 
   &__logo {
     cursor: pointer;
+    width: max-content;
 
     &--letter {
       @media (max-width: 768px) {
@@ -22,8 +20,17 @@
       }
     }
 
+    img {
+      width: auto;
+      height: 60px;
+      object-fit: cover;
+    }
+
     &--img {
       display: none;
+      width: 70px;
+
+
 
       @media (max-width: 768px) {
         display: block;
@@ -129,6 +136,8 @@
       left: 0;
       background: $color-white;
       overflow-y: auto;
+      z-index: 999;
+      box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
     }
 
     &__item {
@@ -232,7 +241,7 @@
 }
 
 @media (max-width: 992px) {
-  .header {
+  .header-client {
 
     &__auth &__user--name,
     &__cart span {

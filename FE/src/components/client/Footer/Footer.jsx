@@ -16,7 +16,6 @@ import Logo from "~/assets/images/vy-food.png";
 import "./Footer.scss";
 
 const Footer = () => {
-  const [email, setEmail] = useState("");
   return (
     <>
       <footer className="footer">
@@ -24,7 +23,13 @@ const Footer = () => {
           <div className="footer__top">
             <div className="footer__top-content">
               <div className="footer__top-img">
-                <img src={Logo} className="footer__logo" />
+                <img
+                  src={Logo}
+                  className="footer__logo"
+                  width={240}
+                  height={80}
+                  alt="Logo"
+                />
               </div>
 
               <div className="footer__top-subbox">
@@ -40,10 +45,9 @@ const Footer = () => {
                     type="email"
                     className="footer__form-input"
                     placeholder="Nhập email của bạn"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    name="email"
                   />
-                  <button type="submit" className="footer__form-btn">
+                  <button className="footer__form-btn">
                     <span>ĐĂNG KÝ</span>
                     <FaArrowRight />
                   </button>

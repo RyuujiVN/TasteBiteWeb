@@ -16,23 +16,23 @@ const HeroSection = () => {
         <div className="hero__carousel">
           <Carousel arrows infinite autoplay>
             <div className="hero__carousel--img">
-              <img src={HeroImg1} alt="Ảnh" />
+              <img fetchpriority="high" src={HeroImg1} alt="Ảnh" />
             </div>
 
             <div className="hero__carousel--img">
-              <img src={HeroImg2} alt="Ảnh" />
+              <img fetchpriority="high" src={HeroImg2} alt="Ảnh" />
             </div>
 
             <div className="hero__carousel--img">
-              <img src={HeroImg3} alt="Ảnh" />
+              <img fetchpriority="high" src={HeroImg3} alt="Ảnh" />
             </div>
 
             <div className="hero__carousel--img">
-              <img src={HeroImg4} alt="Ảnh" />
+              <img fetchpriority="high" src={HeroImg4} alt="Ảnh" />
             </div>
 
             <div className="hero__carousel--img">
-              <img src={HeroImg5} alt="Ảnh" />
+              <img fetchpriority="high" src={HeroImg5} alt="Ảnh" />
             </div>
           </Carousel>
         </div>

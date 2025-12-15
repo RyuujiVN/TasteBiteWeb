@@ -36,7 +36,7 @@ export class ProductService {
 
   async findAllPaginationClient(
     options: FilterProductClient,
-  ): Promise<Product[]> {
+  ): Promise<Pagination<Product>> {
     const queryBuilder = this.productRepository
       .createQueryBuilder('product')
       .leftJoin('product.category', 'category')
@@ -55,30 +55,20 @@ export class ProductService {
         category_id: Number(options.category_id),
       });
 
-    if (options.last_id)
-      queryBuilder.andWhere('product.id > :id', {
-        id: Number(options.last_id),
-      });
-
     const order: any = options.order;
 
-    if (options.sort_by && order)
+    if (order) {
       queryBuilder.orderBy('product.price', order.toUpperCase());
-    else queryBuilder.orderBy('product.id', 'DESC');
+    } else queryBuilder.orderBy('product.id', 'DESC');
 
-    if (options.min_price)
-      queryBuilder.andWhere('product.price >= :price', {
-        price: Number(options.min_price),
+    if (options.min_price && options.max_price) {
+      queryBuilder.andWhere('product.price BETWEEN :min AND :max', {
+        min: Number(options.min_price),
+        max: Number(options.max_price),
       });
+    }
 
-    if (options.max_price)
-      queryBuilder.andWhere('product.price <= :price', {
-        price: Number(options.max_price),
-      });
-
-    if (options.limit) queryBuilder.limit(options.limit);
-
-    return await queryBuilder.getMany();
+    return paginate<Product>(queryBuilder, options);
   }
 
   async findAllPagination(

@@ -1,6 +1,6 @@
 import "./Account.scss";
 import { Outlet } from "react-router-dom";
-import Sidebar from "./Sidebar";
+import Sidebar from "./AccountSidebar";
 
 const Account = () => {
   return (

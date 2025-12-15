@@ -8,7 +8,7 @@ import { BsCart3 } from "react-icons/bs";
 import { CiUser } from "react-icons/ci";
 import { LuPackageCheck } from "react-icons/lu";
 import { RiLogoutCircleRLine } from "react-icons/ri";
-import "./Header.scss";
+import "./HeaderClient.scss";
 import accountService from "~/services/accountService";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
@@ -67,7 +67,7 @@ const menuUser = [
   },
 ];
 
-const Header = () => {
+const HeaderClient = () => {
   const profile = useSelector((state) => state.user.currentUser);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -78,33 +78,33 @@ const Header = () => {
 
   return (
     <>
-      <header className="header">
-        <div className="header__container container">
-          <div className="header__body">
+      <header className="header-client">
+        <div className="header-client__container container">
+          <div className="header-client__body">
             <div
-              className="header__logo header__logo--letter"
+              className="header-client__logo header-client__logo--letter"
               onClick={() => navigate("/")}
             >
-              <img src={LogoLetter} alt="Logo" height={60} />
+              <img src={LogoLetter} alt="Logo" />
             </div>
 
             <div
-              className="header__logo header__logo--img"
+              className="header-client__logo header-client__logo--img"
               onClick={() => navigate("/")}
             >
-              <img src={Logo} alt="Logo" height={60} />
+              <img src={Logo} alt="Logo" />
             </div>
 
             <Search />
 
-            <div className="header__nav">
-              <div className="header__auth">
+            <div className="header-client__nav">
+              <div className="header-client__auth">
                 {profile ? (
                   <Dropdown menu={{ items: menuUser }}>
-                    <div className="header__auth--dropdown">
-                      <Avatar size={40} src={profile.avatar_url}></Avatar>
+                    <div className="header-client__auth--dropdown">
+                      <Avatar size={40} src={profile.avatar_url} alt="Avatar"></Avatar>
                       <Flex vertical gap={5}>
-                        <div className="header__user--name">
+                        <div className="header-client__user--name">
                           {profile?.user_name}
                         </div>
                       </Flex>
@@ -112,19 +112,19 @@ const Header = () => {
                   </Dropdown>
                 ) : (
                   <Dropdown menu={{ items: menuLogin }}>
-                    <div className="header__auth--dropdown">
-                      <PiUserCircle className="header__icon" />
+                    <div className="header-client__auth--dropdown">
+                      <PiUserCircle className="header-client__icon" />
                       <span>Đăng nhập</span>
                     </div>
                   </Dropdown>
                 )}
               </div>
 
-              <div className="header__cart">
-                <div className="header__cart--icon">
-                  <BsCart3 className="header__icon" />
+              <div className="header-client__cart">
+                <div className="header-client__cart--icon">
+                  <BsCart3 className="header-client__icon" />
 
-                  <div className="header__cart--quantity">0</div>
+                  <div className="header-client__cart--quantity">0</div>
                 </div>
 
                 <span>Giỏ hàng</span>
@@ -137,4 +137,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default HeaderClient;

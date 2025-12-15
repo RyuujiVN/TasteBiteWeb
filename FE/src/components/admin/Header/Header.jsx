@@ -1,5 +1,9 @@
 /* eslint-disable no-unused-vars */
-import { Avatar, Dropdown, Flex, Tooltip, Typography } from "antd";
+import { Flex } from "antd";
+import Avatar from "antd/es/avatar";
+import Dropdown from "antd/es/dropdown";
+import Tooltip from "antd/es/tooltip";
+import Typography from "antd/es/typography";
 import {
   DownOutlined,
   LogoutOutlined,

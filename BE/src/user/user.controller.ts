@@ -72,11 +72,10 @@ export class UserController {
     @UploadedFile(new FileValidationPipe())
     file: Express.Multer.File,
   ): Promise<{ file: string }> {
-    console.log(file);
     const fileUrl = await this.cloudinaryService.uploadFile(file);
 
     return {
-      file: fileUrl.url,
+      file: fileUrl.secure_url,
     };
   }
 
