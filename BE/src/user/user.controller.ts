@@ -26,6 +26,7 @@ import { FileValidationPipe } from 'src/common/pipes/file-validation.pipe';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UpdateUserDTO } from './dtos/update-user.dto';
+import { Cart } from 'src/cart/cart.entity';
 
 @Controller('user')
 @ApiBearerAuth('JWT-auth')
@@ -49,6 +50,15 @@ export class UserController {
   })
   getProfile(@Req() req: any): Promise<User> {
     return this.userService.getProfile(req?.user?.id);
+  }
+
+  @Get('cart')
+  @ApiOperation({
+    summary:
+      'Lấy danh sách các sản phẩm trong giỏ hàng của người dùng hiện tại',
+  })
+  getCart(@Req() req: any) {
+    return this.userService.getCart(req?.user?.id);
   }
 
   @Post('upload')

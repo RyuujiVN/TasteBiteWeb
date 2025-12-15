@@ -3,7 +3,7 @@ import { toast } from 'react-toastify'
 import { instance } from '~/api'
 
 const initialState = {
-  currentUser: JSON.parse(localStorage.getItem('userInfo') | {})
+  currentUser: null
 }
 
 // Current user

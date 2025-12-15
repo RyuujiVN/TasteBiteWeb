@@ -1,9 +1,8 @@
-import { Card, Col, Row } from "antd";
+import { Row } from "antd";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { fetchGetListProductClient } from "~/redux/product/productSlice";
-import { formatCurrency } from "~/utils/formatPrice";
 import { IoIosArrowForward } from "react-icons/io";
 import ProductItem from "~/components/ProductItem/ProductItem";
 
@@ -12,7 +11,7 @@ const ProductSection = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchGetListProductClient({ limit: 12 }));
+    dispatch(fetchGetListProductClient({ page: 1, limit: 20 }));
   }, [dispatch]);
 
   return (

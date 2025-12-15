@@ -1,7 +1,9 @@
+import { Cart } from './../cart/cart.entity';
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
 import { MaxLength } from 'class-validator';
 import { Address } from 'src/address/address.entity';
+import { CartItem } from 'src/cart/cart-item.entity';
 import { Role } from 'src/role/role.entity';
 import {
   Column,
@@ -9,6 +11,7 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -73,4 +76,7 @@ export class User {
 
   @OneToMany(() => Address, (address) => address.user)
   address: Address[];
+
+  @OneToOne(() => Cart, (cart) => cart.user)
+  cart: Cart;
 }

@@ -113,7 +113,7 @@ export const productSlice = createSlice({
     })
 
     builder.addCase(fetchGetListProductClient.fulfilled, (state, action) => {
-      state.listProduct = action.payload
+      state.listProduct = action.payload?.items
     })
 
 

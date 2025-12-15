@@ -15,6 +15,7 @@ import { useEffect } from "react";
 import { fetchGetProfile } from "~/redux/user/userSlice";
 import { useNavigate } from "react-router-dom";
 import Search from "./Search";
+import { fetchCart } from "~/redux/cart/cartSlice";
 
 const menuLogin = [
   {
@@ -69,11 +70,16 @@ const menuUser = [
 
 const HeaderClient = () => {
   const profile = useSelector((state) => state.user.currentUser);
+  const cart = useSelector((state) => state.cart.cart);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
   useEffect(() => {
-    dispatch(fetchGetProfile());
+    if (userInfo) {
+      dispatch(fetchGetProfile());
+      dispatch(fetchCart());
+    }
   }, [dispatch]);
 
   return (
@@ -102,7 +108,11 @@ const HeaderClient = () => {
                 {profile ? (
                   <Dropdown menu={{ items: menuUser }}>
                     <div className="header-client__auth--dropdown">
-                      <Avatar size={40} src={profile.avatar_url} alt="Avatar"></Avatar>
+                      <Avatar
+                        size={40}
+                        src={profile.avatar_url}
+                        alt="Avatar"
+                      ></Avatar>
                       <Flex vertical gap={5}>
                         <div className="header-client__user--name">
                           {profile?.user_name}
@@ -124,7 +134,9 @@ const HeaderClient = () => {
                 <div className="header-client__cart--icon">
                   <BsCart3 className="header-client__icon" />
 
-                  <div className="header-client__cart--quantity">0</div>
+                  <div className="header-client__cart--quantity">
+                    {cart?.cart_item?.length}
+                  </div>
                 </div>
 
                 <span>Giỏ hàng</span>

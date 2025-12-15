@@ -17,6 +17,7 @@ import Register from "~/pages/admin/Auth/Register";
 import ForgotPassword from "~/pages/admin/Auth/ForgotPassword";
 import SendOtp from "~/pages/admin/Auth/SendOtp";
 import ResetPassword from "~/pages/admin/Auth/ResetPassword";
+import ProtectRoute from "~/components/admin/ProtectRoute/ProtectRoute";
 
 const routesAdmin = [
   // Routes cho auth
@@ -33,62 +34,75 @@ const routesAdmin = [
 
   // Routes admin
   {
-    path: "/admin",
-    element: <LayoutDefault />,
+    element: <ProtectRoute />,
     children: [
-      { path: "dashboard", element: <Dashboard /> },
+      {
+        path: "/admin",
+        element: <LayoutDefault />,
+        children: [
+          { path: "dashboard", element: <Dashboard /> },
 
-      // Product routes
-      {
-        path: "product",
-        element: <RbacRoute requiredPermission={permissionEnum.VIEW_PRODUCT} />,
-        children: [{ path: "", element: <Product /> }],
-      },
-      {
-        path: "product/add",
-        element: <RbacRoute requiredPermission={permissionEnum.ADD_PRODUCT} />,
-        children: [{ path: "", element: <AddProduct /> }],
-      },
-      {
-        path: "product/update/:id",
-        element: (
-          <RbacRoute requiredPermission={permissionEnum.UPDATE_PRODUCT} />
-        ),
-        children: [{ path: "", element: <UpdateProduct /> }],
-      },
+          // Product routes
+          {
+            path: "product",
+            element: (
+              <RbacRoute requiredPermission={permissionEnum.VIEW_PRODUCT} />
+            ),
+            children: [{ path: "", element: <Product /> }],
+          },
+          {
+            path: "product/add",
+            element: (
+              <RbacRoute requiredPermission={permissionEnum.ADD_PRODUCT} />
+            ),
+            children: [{ path: "", element: <AddProduct /> }],
+          },
+          {
+            path: "product/update/:id",
+            element: (
+              <RbacRoute requiredPermission={permissionEnum.UPDATE_PRODUCT} />
+            ),
+            children: [{ path: "", element: <UpdateProduct /> }],
+          },
 
-      // Category routes
-      {
-        path: "categories",
-        element: (
-          <RbacRoute requiredPermission={permissionEnum.VIEW_CATEGORY} />
-        ),
-        children: [{ path: "", element: <Category /> }],
-      },
+          // Category routes
+          {
+            path: "categories",
+            element: (
+              <RbacRoute requiredPermission={permissionEnum.VIEW_CATEGORY} />
+            ),
+            children: [{ path: "", element: <Category /> }],
+          },
 
-      // Role routes
-      {
-        path: "roles",
-        element: <RbacRoute requiredPermission={permissionEnum.VIEW_ROLE} />,
-        children: [{ path: "", element: <Role /> }],
-      },
+          // Role routes
+          {
+            path: "roles",
+            element: (
+              <RbacRoute requiredPermission={permissionEnum.VIEW_ROLE} />
+            ),
+            children: [{ path: "", element: <Role /> }],
+          },
 
-      // Admin routes
-      {
-        path: "admins",
-        element: <RbacRoute requiredPermission={permissionEnum.VIEW_ADMIN} />,
-        children: [{ path: "", element: <Admin /> }],
-      },
+          // Admin routes
+          {
+            path: "admins",
+            element: (
+              <RbacRoute requiredPermission={permissionEnum.VIEW_ADMIN} />
+            ),
+            children: [{ path: "", element: <Admin /> }],
+          },
 
-      // Permission routes
-      {
-        path: "permissions",
-        element: (
-          <RbacRoute
-            requiredPermission={permissionEnum.UPDATE_PERMISSION_ROLE}
-          />
-        ),
-        children: [{ path: "", element: <Permission /> }],
+          // Permission routes
+          {
+            path: "permissions",
+            element: (
+              <RbacRoute
+                requiredPermission={permissionEnum.UPDATE_PERMISSION_ROLE}
+              />
+            ),
+            children: [{ path: "", element: <Permission /> }],
+          },
+        ],
       },
     ],
   },

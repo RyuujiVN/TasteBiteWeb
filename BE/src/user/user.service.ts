@@ -1,3 +1,4 @@
+import { CartService } from './../cart/cart.service';
 import {
   ConflictException,
   Injectable,
@@ -6,7 +7,6 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import bcrypt from 'bcryptjs';
-import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { CreateUserDTO } from 'src/user/dtos/create-user.dto';
 import { User } from 'src/user/user.entity';
 import { Not, Repository } from 'typeorm';
@@ -17,6 +17,7 @@ export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    private readonly cartService: CartService,
   ) {}
 
   async register(userDTO: CreateUserDTO): Promise<void> {
@@ -36,7 +37,9 @@ export class UserService {
 
     user.password = await bcrypt.hash(user.password, 10);
 
-    await this.userRepository.save(user);
+    const newUser = await this.userRepository.save(user);
+
+    await this.cartService.create(newUser.id);
   }
 
   async findAll(): Promise<User[]> {
@@ -51,6 +54,17 @@ export class UserService {
     if (!user) throw new UnauthorizedException(user);
 
     return user;
+  }
+
+  async getCart(user_id: number) {
+    const cart = await this.cartService.findOne(user_id);
+
+    if (!cart) throw new UnauthorizedException();
+
+    return {
+      id: cart.id,
+      cart_item: cart.cart_item,
+    };
   }
 
   async updateProfile(id: number, data: UpdateUserDTO): Promise<User> {
