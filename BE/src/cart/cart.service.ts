@@ -3,6 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Cart } from './cart.entity';
 import { Repository } from 'typeorm';
 import { CartItem } from './cart-item.entity';
+import { CreateCartItemDTO } from './dtos/create-cart-item.dto';
+import { ProductService } from 'src/product/product.service';
 
 @Injectable()
 export class CartService {
@@ -11,6 +13,7 @@ export class CartService {
     private readonly cartRepository: Repository<Cart>,
     @InjectRepository(CartItem)
     private readonly cartItemRepository: Repository<CartItem>,
+    private readonly productService: ProductService,
   ) {}
 
   async create(user_id: number): Promise<Cart> {
@@ -28,8 +31,42 @@ export class CartService {
           product: true,
         },
       },
+      order: {
+        cart_item: {
+          id: 'DESC',
+        },
+      },
     });
 
     return cart;
+  }
+
+  async addCartItem(data: CreateCartItemDTO): Promise<CartItem> {
+    // Kiểm tra sản phẩm đã có trong giỏ hàng chưa
+    const cartItemExist = await this.cartItemRepository.findOne({
+      where: {
+        cart_id: data.cart_id,
+        product_id: data.product_id,
+      },
+      relations: ['product'],
+    });
+
+    // Nếu có thì chỉ cập nhật lại quantity
+    if (cartItemExist) {
+      cartItemExist.quantity += data.quantity;
+      return await this.cartItemRepository.save(cartItemExist);
+    }
+
+    // Nếu không thì tạo mới
+    const [cartItem, product] = await Promise.all([
+      this.cartItemRepository.save(data),
+      this.productService.findOneById(data.product_id),
+    ]);
+
+    const newCartItem = {
+      ...cartItem,
+      product: product,
+    };
+    return newCartItem;
   }
 }

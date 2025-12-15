@@ -145,7 +145,7 @@ export class ProductController {
   @Get(':id')
   @ApiOperation({ summary: 'Chi tiết sản phẩm' })
   getDetail(@Param('id', ParseIntPipe) id: number): Promise<Product> {
-    return this.productService.getDetail(id);
+    return this.productService.findOneById(id);
   }
 
   @Get('')

@@ -2,38 +2,17 @@
   padding: 3rem 0;
   background: $bg-blue-white-one;
 
-  &__content {
+  &__info {
     display: flex;
     gap: 40px;
+
+  }
+
+  &__content {
     background: $color-white;
     border-radius: 0.5rem;
     padding: 1.5rem;
     box-shadow: 0 0.4rem 1.2rem rgba(0, 0, 0, 0.08);
-  }
-
-  &__info {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-    gap: 10px;
-
-    &--addition:not(:first-child) {
-      border-left: 1px solid #00000024;
-      padding-left: 10px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-
-      span {
-        font-size: 1.6rem;
-      }
-    }
-  }
-
-  &__rate {
-    display: flex;
-    align-items: center;
-    gap: 5px;
   }
 
   // Left image
@@ -179,10 +158,8 @@
   // DESCRIPTION SECTION
   &__description-section {
     margin-top: 4rem;
-    background: $color-white;
     border-radius: 0.5rem;
     padding: 3rem;
-    box-shadow: 0 0.4rem 1.2rem rgba(0, 0, 0, 0.08);
 
     .section-title {
       font-size: 2.4rem;
@@ -206,7 +183,7 @@
 
   // RESPONSIVE
   @media (max-width: 1024px) {
-    &__content {
+    &__info {
       gap: 30px;
     }
 
@@ -222,7 +199,7 @@
   @media (max-width: 768px) {
     padding: 2rem 0;
 
-    &__content {
+    &__info {
       flex-direction: column;
       padding: 1.5rem;
       gap: 20px;
