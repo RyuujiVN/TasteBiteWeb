@@ -18,7 +18,7 @@ const ProductItem = ({ product }) => {
           </div>
 
           <div className="product__content">
-            <h3 className="product__name">{product?.title}</h3>
+            <h3 className="product__name webkit">{product?.title}</h3>
 
             <div className="product__price">
               {product?.discount > 0 ? (

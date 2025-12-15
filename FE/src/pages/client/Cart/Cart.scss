@@ -1,0 +1,153 @@
+.cart-drawer {
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 3rem;
+    font-weight: 600;
+    justify-content: flex-end;
+
+    .icon {
+      color: $color-red-heavy;
+    }
+  }
+
+  &__content {
+    padding-right: 4px;
+  }
+
+  &__empty {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: $color-gray-one;
+
+    svg {
+      font-size: 48px;
+      margin-bottom: 12px;
+    }
+
+    p {
+      font-size: 15px;
+    }
+  }
+
+  &__footer {
+    padding: 16px 0;
+  }
+
+  &__total {
+    display: flex;
+    justify-content: space-between;
+    font-size: 16px;
+    margin-bottom: 16px;
+    font-size: 2rem;
+    font-weight: 500;
+
+    strong {
+      color: $color-red;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    gap: 12px;
+  }
+
+  &__checkout {
+    background: $color-gradient;
+    border: none;
+
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+}
+
+.cart-item {
+  display: flex;
+  gap: 12px;
+  padding: 16px 0;
+  border-bottom: 1px solid $color-gray-three;
+
+  &__image {
+    width: 80px;
+    height: 80px;
+    flex-shrink: 0;
+    border-radius: 8px;
+    overflow: hidden;
+    background: $color-gray-two;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  &__content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__top {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  &__title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 2px;
+    color: $color-gray-four;
+    line-height: 1.2;
+  }
+
+  &__note {
+    font-size: 13px;
+    color: $color-gray-five;
+  }
+
+  &__price {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    gap: 10px;
+
+    &--new {
+      color: $color-red;
+      font-weight: 600;
+      font-size: 1.8rem;
+    }
+
+    &--old {
+      font-size: 1.6rem;
+      color: $color-gray-one;
+      text-decoration: line-through;
+    }
+  }
+
+  &__bottom {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__quantity {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    .ant-input-number {
+      width: 46px;
+      text-align: center;
+    }
+  }
+}

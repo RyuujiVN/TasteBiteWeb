@@ -11,11 +11,12 @@ import { RiLogoutCircleRLine } from "react-icons/ri";
 import "./HeaderClient.scss";
 import accountService from "~/services/accountService";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { fetchGetProfile } from "~/redux/user/userSlice";
 import { useNavigate } from "react-router-dom";
 import Search from "./Search";
 import { fetchCart } from "~/redux/cart/cartSlice";
+import Cart from "~/pages/client/Cart/Cart";
 
 const menuLogin = [
   {
@@ -69,11 +70,16 @@ const menuUser = [
 ];
 
 const HeaderClient = () => {
+  const [openCart, setOpenCart] = useState(false);
   const profile = useSelector((state) => state.user.currentUser);
   const cart = useSelector((state) => state.cart.cart);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+
+  const handleToggleCart = () => {
+    setOpenCart(!openCart);
+  };
 
   useEffect(() => {
     if (userInfo) {
@@ -130,7 +136,7 @@ const HeaderClient = () => {
                 )}
               </div>
 
-              <div className="header-client__cart">
+              <div className="header-client__cart" onClick={handleToggleCart}>
                 <div className="header-client__cart--icon">
                   <BsCart3 className="header-client__icon" />
 
@@ -145,6 +151,8 @@ const HeaderClient = () => {
           </div>
         </div>
       </header>
+
+      {openCart && <Cart open={openCart} onClose={handleToggleCart} />}
     </>
   );
 };

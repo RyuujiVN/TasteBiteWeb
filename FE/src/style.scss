@@ -101,12 +101,19 @@ a {
   text-align: center;
 }
 
-.font-20{
+.font-20 {
   font-size: 2rem;
 }
 
 .gray {
   color: $color-gray-one;
+}
+
+.webkit {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 // End Other
