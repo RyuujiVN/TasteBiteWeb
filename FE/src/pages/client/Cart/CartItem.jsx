@@ -12,7 +12,7 @@ import useDebounce from "~/hooks/useDebounce";
 
 const Cart = ({ item }) => {
   const [quantity, setQuantity] = useState(item?.quantity);
-  const debounce = useDebounce(quantity, 3000);
+  const debounce = useDebounce(quantity, 300);
   const dispatch = useDispatch();
 
   const hanldeUpdateQuantity = (value, type) => {

@@ -62,6 +62,10 @@ const ProductFilter = () => {
 
       setProducts(res.data?.items || []);
       setMeta(res.data?.meta || null);
+      window.scrollTo({
+        top: 0,
+        behavior: "auto",
+      });
     } finally {
       setLoading(false);
     }

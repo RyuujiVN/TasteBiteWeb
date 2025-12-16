@@ -8,6 +8,11 @@ import { formatCurrency } from "~/utils/formatPrice";
 const Cart = ({ open, onClose }) => {
   const cart = useSelector((state) => state.cart.cart);
 
+  const totalCost = cart?.cart_item?.reduce((total, item) => {
+    const sum = total + item?.product?.new_price * item.quantity;
+    return sum;
+  }, 0);
+
   return (
     <Drawer
       title={
@@ -23,7 +28,7 @@ const Cart = ({ open, onClose }) => {
         <div className="cart-drawer__footer">
           <div className="cart-drawer__total">
             <span>Tổng tiền:</span>
-            <strong>{formatCurrency(0)}</strong>
+            <strong>{formatCurrency(totalCost)}</strong>
           </div>
 
           <div className="cart-drawer__actions">
