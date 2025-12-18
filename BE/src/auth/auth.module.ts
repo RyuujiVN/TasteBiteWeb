@@ -8,11 +8,12 @@ import { JwtModule } from '@nestjs/jwt';
 import { AccessTokenStrategy } from './strategies/access-token.strategy';
 import { MailModule } from 'src/mail/mail.module';
 import { OtpModule } from 'src/otp/otp.module';
+import { Role } from 'src/role/role.entity';
 
 @Module({
   imports: [
     JwtModule.register({}),
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([User, Role]),
     UserModule,
     MailModule,
     OtpModule,

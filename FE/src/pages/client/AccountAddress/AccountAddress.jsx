@@ -1,4 +1,4 @@
-import { Button, Flex, Popconfirm, Tag } from "antd";
+import { Button, Flex, Popconfirm, Spin, Tag } from "antd";
 import { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa6";
 import AddAddress from "./AddAddress";
@@ -40,7 +40,13 @@ const AccountAddress = () => {
   };
 
   useEffect(() => {
-    dispatch(fetchGetAllAddress());
+    const fetchData = async () => {
+      setLoading(true);
+      await dispatch(fetchGetAllAddress());
+      setLoading(false);
+    };
+
+    fetchData();
   }, [dispatch]);
 
   return (
@@ -60,81 +66,88 @@ const AccountAddress = () => {
         </Flex>
 
         <div className="address__body">
-          <div className="address__list">
-            {listAddress.length > 0 &&
-              listAddress.map((item) => (
-                <div className="address__item" key={item.id}>
-                  <Flex justify="space-between" align="center">
-                    <div className="address__user">
-                      <span className="address__user--name">
-                        {item?.full_name}
-                      </span>
+          <Spin spinning={loading}>
+            <div className="address__list">
+              {listAddress.length > 0 &&
+                listAddress.map((item) => (
+                  <div className="address__item" key={item.id}>
+                    <Flex justify="space-between" align="center">
+                      <div className="address__user">
+                        <span className="address__user--name">
+                          {item?.full_name}
+                        </span>
 
-                      <div className="split"></div>
+                        <div className="split"></div>
 
-                      <span className="address__user--phone">
-                        {item?.phone}
-                      </span>
-                    </div>
+                        <span className="address__user--phone">
+                          {item?.phone}
+                        </span>
+                      </div>
 
-                    <div className="address__user--button">
-                      <Button
-                        type="link"
-                        size="middle"
-                        onClick={() => handleSetModal(item)}
-                      >
-                        Cập nhật
-                      </Button>
-
-                      {!item?.is_default && (
-                        <Popconfirm
-                          title="Xoá địa chỉ"
-                          description="Bạn có chắc muốn xoá địa chỉ này"
-                          onConfirm={() => handleDelete(item?.id)}
-                          okText="Xoá"
-                          cancelText="Huỷ"
-                          okButtonProps={{ loading: loading }}
+                      <div className="address__user--button">
+                        <Button
+                          type="link"
+                          size="middle"
+                          onClick={() => handleSetModal(item)}
                         >
-                          <Button type="link" size="middle">
-                            Xoá
-                          </Button>
-                        </Popconfirm>
-                      )}
-                    </div>
-                  </Flex>
+                          Cập nhật
+                        </Button>
 
-                  <Flex justify="space-between" align="center">
-                    <div className="address__info">
-                      <p>
-                        {item?.street} <br />
-                        {item?.ward?.name}, {item?.province?.name}
-                      </p>
-                    </div>
+                        {!item?.is_default && (
+                          <Popconfirm
+                            title="Xoá địa chỉ"
+                            description="Bạn có chắc muốn xoá địa chỉ này"
+                            onConfirm={() => handleDelete(item?.id)}
+                            okText="Xoá"
+                            cancelText="Huỷ"
+                            okButtonProps={{ loading: loading }}
+                          >
+                            <Button type="link" size="middle">
+                              Xoá
+                            </Button>
+                          </Popconfirm>
+                        )}
+                      </div>
+                    </Flex>
 
-                    <Button
-                      disabled={item?.is_default}
-                      variant="outlined"
-                      size="middle"
-                      onClick={() => hanldeChangeDefault(item?.id)}
-                      loading={loading}
-                    >
-                      Thiết lập mặc định
-                    </Button>
-                  </Flex>
+                    <Flex justify="space-between" align="center">
+                      <div className="address__info">
+                        <p>
+                          {item?.street} <br />
+                          {item?.ward?.name}, {item?.province?.name}
+                        </p>
+                      </div>
 
-                  {item?.is_default && (
-                    <Tag variant="outlined" color="volcano">
-                      Mặc định
-                    </Tag>
-                  )}
-                </div>
-              ))}
-          </div>
+                      <Button
+                        disabled={item?.is_default}
+                        variant="outlined"
+                        size="middle"
+                        onClick={() => hanldeChangeDefault(item?.id)}
+                        loading={loading}
+                      >
+                        Thiết lập mặc định
+                      </Button>
+                    </Flex>
+
+                    {item?.is_default && (
+                      <Tag variant="outlined" color="volcano">
+                        Mặc định
+                      </Tag>
+                    )}
+                  </div>
+                ))}
+            </div>
+          </Spin>
         </div>
       </div>
 
       {addAddress && (
-        <AddAddress addAddress={addAddress} setAddAddress={setAddAddress} />
+        <AddAddress
+          addAddress={addAddress}
+          setAddAddress={setAddAddress}
+          loading={loading}
+          setLoading={setLoading}
+        />
       )}
 
       {updateAddress && (
@@ -142,6 +155,8 @@ const AccountAddress = () => {
           updateAddress={updateAddress}
           setUpdateAddress={setUpdateAddress}
           address={address}
+          loading={loading}
+          setLoading={setLoading}
         />
       )}
     </>

@@ -55,15 +55,6 @@
     display: flex;
     gap: 12px;
   }
-
-  &__checkout {
-    background: $color-gradient;
-    border: none;
-
-    &:hover {
-      opacity: 0.9;
-    }
-  }
 }
 
 .cart-item {

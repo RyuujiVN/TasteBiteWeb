@@ -163,10 +163,11 @@ const ProductDetail = () => {
                 </div>
               </div>
               {/* Mô tả sản phẩm */}
-              <div className="product-detail__description-section">
+              <div className="product-detail__description">
                 <h3 className="section-title">Mô tả món ăn</h3>
                 <div className="section-content">
                   <div
+                    className="tinymce-wrapper"
                     dangerouslySetInnerHTML={{ __html: product?.description }}
                   />
                 </div>

@@ -17,7 +17,8 @@ import Register from "~/pages/admin/Auth/Register";
 import ForgotPassword from "~/pages/admin/Auth/ForgotPassword";
 import SendOtp from "~/pages/admin/Auth/SendOtp";
 import ResetPassword from "~/pages/admin/Auth/ResetPassword";
-import ProtectRoute from "~/components/admin/ProtectRoute/ProtectRoute";
+import ProtectRoute from "~/components/ProtectRoute/ProtectRoute";
+import Blog from "~/pages/admin/Blog/Blog";
 
 const routesAdmin = [
   // Routes cho auth
@@ -101,6 +102,15 @@ const routesAdmin = [
               />
             ),
             children: [{ path: "", element: <Permission /> }],
+          },
+
+          // Blog routes
+          {
+            path: "blogs",
+            element: (
+              <RbacRoute requiredPermission={permissionEnum.VIEW_BLOG} />
+            ),
+            children: [{ path: "", element: <Blog /> }],
           },
         ],
       },

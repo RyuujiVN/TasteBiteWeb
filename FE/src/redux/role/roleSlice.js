@@ -121,6 +121,7 @@ export const roleSlice = createSlice({
     })
 
     builder.addCase(fetchUpdatePermissionRole.fulfilled, (state, action) => {
+      console.log(action.payload)
       toast.success("Cập nhật thành công!")
     })
 

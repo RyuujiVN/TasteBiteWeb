@@ -141,7 +141,7 @@ const HeaderClient = () => {
                   <BsCart3 className="header-client__icon" />
 
                   <div className="header-client__cart--quantity">
-                    {cart?.cart_item?.length}
+                    {cart?.cart_item?.length || 0}
                   </div>
                 </div>
 

@@ -11,7 +11,7 @@ const Sidebar = () => {
   return (
     <div className="account__sidebar">
       <div className="account__sidebar-user">
-        <Avatar size={60} src={profile.avatar_url}></Avatar>
+        <Avatar size={60} src={profile?.avatar_url}></Avatar>
         <span className="account__sidebar-name">{profile?.full_name}</span>
       </div>
 

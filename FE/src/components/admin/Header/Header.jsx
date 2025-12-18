@@ -71,10 +71,7 @@ const Header = ({ collapse, setCollapse }) => {
 
             <Dropdown menu={{ items }} className="header__user">
               <Flex align="center" gap={10}>
-                <Avatar
-                  size={40}
-                  src="https://lh5.googleusercontent.com/proxy/o55mBVHW_uXiYhlyFBT7RS-2nbzUyrboSI-GULlVrp72yF2E57fiafhvyIiul9bTI_KBrsgZnO14z4g2eZx_oWNGWHE9yfRvIg"
-                ></Avatar>
+                <Avatar size={40} src={userInfo?.avatar}></Avatar>
                 <Flex vertical gap={5}>
                   <div className="header__user--name">
                     {userInfo?.user_name}

@@ -66,7 +66,6 @@ export class AuthService {
 
     if (user.role) {
       payload.role = user.role.title;
-      payload.permissions = user.role.permissions.split(', ');
     }
 
     const [accessToken, refreshToken] = await Promise.all([
@@ -83,7 +82,10 @@ export class AuthService {
     ]);
 
     return {
-      userInfo: payload,
+      userInfo: {
+        ...payload,
+        permissions: user.role.permissions.split(', '),
+      },
       accessToken: accessToken,
       refreshToken: refreshToken,
     };
@@ -104,7 +106,6 @@ export class AuthService {
         user_name: refreshTokenDecoded.user_name,
         avatar: refreshTokenDecoded.avatar_url,
         role: refreshTokenDecoded?.role,
-        permissions: refreshTokenDecoded?.permissions,
       };
 
       const accessToken = await this.generateToken(

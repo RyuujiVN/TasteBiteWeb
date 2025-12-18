@@ -72,14 +72,8 @@ const rawItems = [
       {
         key: "/posts",
         icon: <FileTextOutlined />,
-        label: <Link to="/admin/posts">Bài viết</Link>,
-        permission: "view-posts",
-      },
-      {
-        key: "/events",
-        icon: <CalendarOutlined />,
-        label: <Link to="/admin/events">Sự kiện</Link>,
-        permission: "view-events",
+        label: <Link to="/admin/blogs">Bài viết</Link>,
+        permission: permissionEnum.VIEW_BLOG,
       },
     ],
   },

@@ -1127,6 +1127,11 @@ dayjs@^1.11.11:
   resolved "https://registry.npmjs.org/dayjs/-/dayjs-1.11.13.tgz"
   integrity sha512-oaMBel6gjolK862uaPQOVTA7q3TZhuSvuMQAAglQDOWYO9A91IrAOUJEyKVlqJlHE0vq5p5UXxzdPfMH/x6xNg==
 
+dayjs@^1.11.19:
+  version "1.11.19"
+  resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.11.19.tgz#15dc98e854bb43917f12021806af897c58ae2938"
+  integrity sha512-t5EcLVS6QPBNqM2z8fakk/NKel+Xzshgt8FFKAn+qwlD1pzZWxh0nVCrvFK7ZDb6XucZeF9z8C7CBWTRIVApAw==
+
 debug@^4.1.0, debug@^4.3.1, debug@^4.3.2:
   version "4.4.0"
   resolved "https://registry.npmjs.org/debug/-/debug-4.4.0.tgz"
@@ -1358,9 +1363,10 @@ fdir@^6.4.3, fdir@^6.4.4:
   dependencies:
     "@ant-design/v5-patch-for-react-19" "^1.0.3"
     "@reduxjs/toolkit" "^2.8.2"
+    "@tinymce/tinymce-react" "^6.3.0"
     antd "^5.24.8"
     axios "^1.9.0"
-    fe "file:C:/Users/Admin/AppData/Local/Yarn/Cache/v6/npm-fe-0.0.0-db01b54c-2648-4977-9b40-e2c60bc5cd92-1763107619060/node_modules/fe"
+    fe "file:C:/Users/Admin/AppData/Local/Yarn/Cache/v6/npm-fe-0.0.0-f75a90a4-544c-4371-bc0e-95240ef3ee1f-1765958816999/node_modules/fe"
     react "^19.0.0"
     react-dom "^19.0.0"
     react-icons "^5.5.0"

@@ -48,8 +48,6 @@ const Permission = () => {
     });
   };
 
-  console.log(roles.length);
-
   const isChecked = (roleId, permission) => {
     const role = permissions.find((r) => r.id === roleId);
     return role?.permissions.includes(permission) || false;
@@ -369,6 +367,7 @@ const Permission = () => {
               ))}
           </tr>
 
+          {/* Quản lý tài khoản admin */}
           <tr className="permission__table--head">
             <td colSpan={roles.length + 1}>Admin</td>
           </tr>
@@ -449,6 +448,88 @@ const Permission = () => {
               ))}
           </tr>
 
+          {/* Quản lý blog */}
+          <tr className="permission__table--head">
+            <td colSpan={roles.length + 1}>Blog</td>
+          </tr>
+
+          <tr>
+            <td>Xem</td>
+            {roles.length > 0 &&
+              roles.map((item) => (
+                <td key={item.title} className="permission__table--check">
+                  <Checkbox
+                    checked={isChecked(item.id, permissionEnum.VIEW_BLOG)}
+                    onChange={(e) =>
+                      handleChange(
+                        item.id,
+                        permissionEnum.VIEW_BLOG,
+                        e.target.checked
+                      )
+                    }
+                  />
+                </td>
+              ))}
+          </tr>
+
+          <tr>
+            <td>Thêm mới</td>
+            {roles.length > 0 &&
+              roles.map((item) => (
+                <td key={item.title} className="permission__table--check">
+                  <Checkbox
+                    checked={isChecked(item.id, permissionEnum.ADD_BLOG)}
+                    onChange={(e) =>
+                      handleChange(
+                        item.id,
+                        permissionEnum.ADD_BLOG,
+                        e.target.checked
+                      )
+                    }
+                  />
+                </td>
+              ))}
+          </tr>
+
+          <tr>
+            <td>Cập nhật</td>
+            {roles.length > 0 &&
+              roles.map((item) => (
+                <td key={item.title} className="permission__table--check">
+                  <Checkbox
+                    checked={isChecked(item.id, permissionEnum.UPDATE_BLOG)}
+                    onChange={(e) =>
+                      handleChange(
+                        item.id,
+                        permissionEnum.UPDATE_BLOG,
+                        e.target.checked
+                      )
+                    }
+                  />
+                </td>
+              ))}
+          </tr>
+
+          <tr>
+            <td>Xoá</td>
+            {roles.length > 0 &&
+              roles.map((item) => (
+                <td key={item.title} className="permission__table--check">
+                  <Checkbox
+                    checked={isChecked(item.id, permissionEnum.DELETE_BLOG)}
+                    onChange={(e) =>
+                      handleChange(
+                        item.id,
+                        permissionEnum.DELETE_BLOG,
+                        e.target.checked
+                      )
+                    }
+                  />
+                </td>
+              ))}
+          </tr>
+
+          {/* Phân quyền */}
           <tr className="permission__table--head">
             <td colSpan={roles.length + 1}>Quyền</td>
           </tr>

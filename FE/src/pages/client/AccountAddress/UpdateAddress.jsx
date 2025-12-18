@@ -11,9 +11,14 @@ import {
 } from "~/redux/address/addressSlice";
 import { toast } from "react-toastify";
 
-const UpdateAddress = ({ address, updateAddress, setUpdateAddress }) => {
+const UpdateAddress = ({
+  address,
+  updateAddress,
+  setUpdateAddress,
+  loading,
+  setLoading,
+}) => {
   const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
   const provinces = useSelector((state) => state.address.listProvince);
   const wards = useSelector((state) => state.address.listWard);
@@ -48,8 +53,8 @@ const UpdateAddress = ({ address, updateAddress, setUpdateAddress }) => {
       form.setFieldsValue({
         full_name: address.full_name,
         phone: address.phone,
-        province: address?.province?.code,
-        ward: address?.ward?.code,
+        province: Number(address?.province?.code),
+        ward: Number(address?.ward?.code),
         street: address.street,
       });
     }
@@ -124,7 +129,7 @@ const UpdateAddress = ({ address, updateAddress, setUpdateAddress }) => {
                         .includes(input.toLowerCase())
                     }
                     options={provinces.map((item) => ({
-                      value: item?.code,
+                      value: Number(item?.code),
                       label: item?.name,
                     }))}
                     placeholder="Tỉnh/Thành phố"
@@ -145,7 +150,7 @@ const UpdateAddress = ({ address, updateAddress, setUpdateAddress }) => {
                         .includes(input.toLowerCase())
                     }
                     options={wards.map((item) => ({
-                      value: item?.code,
+                      value: Number(item?.code),
                       label: item?.name,
                     }))}
                     placeholder="Phường/Xã"

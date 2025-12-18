@@ -28,28 +28,28 @@ export class AddressService {
         // Lấy province
         const provinceRes = await lastValueFrom(
           this.httpService.get(
-            `https://provinces.open-api.vn/api/v2/p/${item.province}`,
+            `https://tinhthanhpho.com/api/v1/new-provinces?keyword=${item.province}`,
           ),
         );
-        const province = provinceRes.data;
+        const province = provinceRes.data?.data[0];
 
         // Lấy ward
         const wardRes = await lastValueFrom(
           this.httpService.get(
-            `https://provinces.open-api.vn/api/v2/w/${item.ward}`,
+            `https://tinhthanhpho.com/api/v1/new-provinces/${item.province}/wards?keyword=${item.ward}`,
           ),
         );
-        const ward = wardRes.data;
+        const ward = wardRes.data?.data[0];
 
         return {
           ...item,
           province: {
             code: province.code,
-            name: province.name,
+            name: `${province.type} ${province.name}`,
           },
           ward: {
             code: ward.code,
-            name: ward.name,
+            name: `${ward.type} ${ward.name}`,
           },
         };
       }),

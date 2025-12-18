@@ -12,6 +12,7 @@ interface ErrorResponsee {
   message: string;
   error?: any;
   stack?: any;
+  url?: any;
 }
 
 @Catch()
@@ -20,6 +21,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
 
   catch(exception: any, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
+    const request = ctx.getRequest<Request>();
     const response = ctx.getResponse<Response>();
 
     const status =
@@ -37,6 +39,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     if (this.configService.get('NODE_ENV') !== 'production') {
       errorResponse.error = exception.response;
       errorResponse.stack = exception.stack;
+      errorResponse.url = request.url;
     }
 
     response.status(status).json(errorResponse);

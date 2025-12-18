@@ -4,15 +4,15 @@ import { useDispatch, useSelector } from "react-redux";
 import "./AccountAddress.scss";
 import {
   fetchAddAddress,
+  fetchGetAllAddress,
   fetchGetProvince,
   fetchGetWard,
   resetWard,
 } from "~/redux/address/addressSlice";
 import { toast } from "react-toastify";
 
-const AddAddress = ({ addAddress, setAddAddress }) => {
+const AddAddress = ({ addAddress, setAddAddress, loading, setLoading }) => {
   const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
   const provinces = useSelector((state) => state.address.listProvince);
   const wards = useSelector((state) => state.address.listWard);
@@ -22,6 +22,7 @@ const AddAddress = ({ addAddress, setAddAddress }) => {
     values.user_id = await toast.promise(dispatch(fetchAddAddress(values)), {
       pending: "Đang thêm...",
     });
+    dispatch(fetchGetAllAddress());
     setLoading(false);
   };
 
@@ -108,7 +109,7 @@ const AddAddress = ({ addAddress, setAddAddress }) => {
                         .includes(input.toLowerCase())
                     }
                     options={provinces.map((item) => ({
-                      value: item?.code,
+                      value: Number(item?.code),
                       label: item?.name,
                     }))}
                     placeholder="Tỉnh/Thành phố"
@@ -129,7 +130,7 @@ const AddAddress = ({ addAddress, setAddAddress }) => {
                         .includes(input.toLowerCase())
                     }
                     options={wards.map((item) => ({
-                      value: item?.code,
+                      value: Number(item?.code),
                       label: item?.name,
                     }))}
                     placeholder="Phường/Xã"

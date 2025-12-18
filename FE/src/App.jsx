@@ -14,6 +14,9 @@ function App() {
 
           components: {
             Typography: {},
+            Button: {
+              colorErrorBg: "#B5292F",
+            },
           },
         }}
       >

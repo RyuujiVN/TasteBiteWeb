@@ -1,5 +1,9 @@
 .address {
 
+  &__list {
+    min-height: 300px;
+  }
+
   &__head {
     font-size: 3rem;
     margin-bottom: 20px;
@@ -28,7 +32,7 @@
   &__info {
     p {
       font-size: 1.8rem;
-      color: $color-gray-four;  
+      color: $color-gray-four;
       line-height: 1.4;
     }
   }

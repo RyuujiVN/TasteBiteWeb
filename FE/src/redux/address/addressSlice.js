@@ -23,7 +23,7 @@ export const fetchGetAllAddress = createAsyncThunk(
 export const fetchGetProvince = createAsyncThunk(
   'address/fetchGetProvince',
   async () => {
-    const response = await axios.get('https://provinces.open-api.vn/api/v2')
+    const response = await axios.get('https://tinhthanhpho.com/api/v1/new-provinces?limit=40')
 
     return response.data
   }
@@ -33,7 +33,7 @@ export const fetchGetProvince = createAsyncThunk(
 export const fetchGetWard = createAsyncThunk(
   'address/fetchGetWard',
   async (provinceId) => {
-    const response = await axios.get(`https://provinces.open-api.vn/api/v2/w?province=${provinceId}`)
+    const response = await axios.get(`https://tinhthanhpho.com/api/v1/new-provinces/${provinceId}/wards?limit=100`)
 
     return response.data
   }
@@ -101,23 +101,23 @@ export const addressSlice = createSlice({
     })
 
     builder.addCase(fetchGetProvince.fulfilled, (state, action) => {
-      state.listProvince = action.payload
+      state.listProvince = action.payload.data
     })
 
     builder.addCase(fetchGetWard.fulfilled, (state, action) => {
-      state.listWard = action.payload
+      state.listWard = action.payload.data
     })
 
     builder.addCase(fetchAddAddress.fulfilled, (state, action) => {
-      state.listAddress.push(action.payload)
+      // state.listAddress.push(action.payload)
       toast.success('Thêm thành công')
     })
 
     builder.addCase(fetchUpdateAddress.fulfilled, (state, action) => {
-      const updatedAdrress = action.payload
-      const index = state.listAddress.findIndex(item => item.id == updatedAdrress.id)
+      // const updatedAdrress = action.payload
+      // const index = state.listAddress.findIndex(item => item.id == updatedAdrress.id)
 
-      state.listAddress[index] = updatedAdrress
+      // state.listAddress[index] = updatedAdrress
       toast.success("Chỉnh sửa thành công!")
     })
 

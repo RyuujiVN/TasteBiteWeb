@@ -16,13 +16,18 @@ export class RoleService {
   ) {}
 
   async findAll(): Promise<Role[]> {
-    return await this.roleRepository.find();
+    return await this.roleRepository.find({
+      order: {
+        id: 'ASC',
+      },
+    });
   }
 
   async findAllPagination(options: PaginationQuery): Promise<Pagination<Role>> {
     const queryBuilder = this.roleRepository
       .createQueryBuilder('role')
-      .select(['role.id', 'role.title', 'role.description']);
+      .select(['role.id', 'role.title', 'role.description'])
+      .orderBy('role.id', 'ASC');
 
     if (options.search)
       queryBuilder.andWhere('role.title ILIKE :title', {
@@ -72,7 +77,6 @@ export class RoleService {
       ),
     );
 
-    console.dir(data, { depth: null });
     return data;
   }
 

@@ -33,4 +33,11 @@ export const permissionEnum = {
 
   // Permission
   UPDATE_PERMISSION_ROLE: 'update_permission_role',
+
+  // Blog
+  VIEW_BLOG: "view_blog",
+  ADD_BLOG: "add_blog",
+  UPDATE_BLOG: "update_blog",
+  DELETE_BLOG: "delete_blog",
+
 };

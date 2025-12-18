@@ -4,14 +4,21 @@ import CartItem from "./CartItem";
 import "./Cart.scss";
 import { useSelector } from "react-redux";
 import { formatCurrency } from "~/utils/formatPrice";
+import { useNavigate } from "react-router-dom";
 
 const Cart = ({ open, onClose }) => {
   const cart = useSelector((state) => state.cart.cart);
+  const navigate = useNavigate();
 
   const totalCost = cart?.cart_item?.reduce((total, item) => {
     const sum = total + item?.product?.new_price * item.quantity;
     return sum;
   }, 0);
+
+  const hanldeOrder = () => {
+    onClose();
+    navigate("/order");
+  };
 
   return (
     <Drawer
@@ -33,10 +40,11 @@ const Cart = ({ open, onClose }) => {
 
           <div className="cart-drawer__actions">
             <Button
-              type="primary"
               block
               size="large"
               className="cart-drawer__checkout"
+              type="primary"
+              onClick={hanldeOrder}
             >
               Thanh toán
             </Button>
