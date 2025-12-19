@@ -28,10 +28,12 @@ import { Flex } from "antd";
 import {
   fetchGetListOrderAdmin,
   fetchUpdateOrderStatus,
+  fetchUpdatePaymentStatus,
 } from "~/redux/order/orderSlice";
 import dayjs from "dayjs";
 import { orderConfig } from "~/constants/order";
 import { DownOutlined } from "@ant-design/icons";
+import { formatCurrency } from "~/utils/formatPrice";
 
 const Order = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -52,6 +54,19 @@ const Order = () => {
         id: orderId,
         data: {
           status: status,
+        },
+      })
+    );
+    setLoading(false);
+  };
+
+  const handleUpdatePaymentStatus = async (orderId, payment_status) => {
+    setLoading(true);
+    await dispatch(
+      fetchUpdatePaymentStatus({
+        id: orderId,
+        data: {
+          payment_status: payment_status,
         },
       })
     );
@@ -167,6 +182,41 @@ const Order = () => {
       key: "payment_status",
       title: "Thanh toán",
       dataIndex: "payment_status",
+      render: (status, record) => {
+        const current = orderConfig.ORDER_PAYMENT_STATUS[status];
+
+        return (
+          <Dropdown
+            trigger={["click"]}
+            menu={{
+              items: Object.entries(orderConfig.ORDER_PAYMENT_STATUS).map(
+                ([key, value]) => ({
+                  key,
+                  label: (
+                    <Tag color={value?.color} style={{ margin: 0 }}>
+                      {value?.text}
+                    </Tag>
+                  ),
+                  onClick: () => handleUpdatePaymentStatus(record.key, key),
+                })
+              ),
+            }}
+          >
+            <Tag
+              color={current?.color || "default"}
+              style={{
+                cursor: "pointer",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 6,
+              }}
+            >
+              {current?.text || status}
+              <DownOutlined style={{ fontSize: 10 }} />
+            </Tag>
+          </Dropdown>
+        );
+      },
     },
 
     {
@@ -272,7 +322,7 @@ const Order = () => {
                   order_code: order?.order_code,
                   customer_name: order?.name,
                   order_date: dayjs(order?.created_at).format("DD/MM/YYYY"),
-                  total_cost: order?.total_cost,
+                  total_cost: `${formatCurrency(order?.total_cost)}đ`,
                   payment_method: order?.payment_method,
                   status: order?.status,
                   payment_status: order?.payment_status,
@@ -284,26 +334,6 @@ const Order = () => {
                           onClick={() => handleSet(category, setDetailCategory)}
                         />
                       </Tooltip>
-
-                      <Tooltip title="Chỉnh sửa">
-                        <AiOutlineEdit
-                          className="table__icon"
-                          onClick={() => handleSet(category, setEditCategory)}
-                        />
-                      </Tooltip>
-
-                      <Popconfirm
-                        title="Xoá loại"
-                        description="Bạn có chắc muốn xoá loại này"
-                        onConfirm={() => handleDelete(category.id)}
-                        okText="Xoá"
-                        cancelText="Huỷ"
-                        okButtonProps={{ loading: loading }}
-                      >
-                        <Tooltip title="Xoá">
-                          <AiOutlineDelete className="table__icon" />
-                        </Tooltip>
-                      </Popconfirm>
                     </Space>
                   ),
                 }))}

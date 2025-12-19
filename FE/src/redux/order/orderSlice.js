@@ -44,6 +44,20 @@ export const fetchUpdateOrderStatus = createAsyncThunk(
   }
 )
 
+// Update Payment Status Order
+export const fetchUpdatePaymentStatus = createAsyncThunk(
+  'cart/fetchUpdatePaymentStatus',
+  async ({ id, data }) => {
+    await instance.patch(`/order/update/payment-status/${id}`, data)
+
+
+    return {
+      id,
+      data
+    }
+  }
+)
+
 
 export const orderSlice = createSlice({
   name: 'order',
@@ -66,6 +80,14 @@ export const orderSlice = createSlice({
 
       state.listOrder[index].status = updatedOrder.data.status
       toast.success("Cập nhật trạng thái đơn hàng thành công!")
+    })
+
+    builder.addCase(fetchUpdatePaymentStatus.fulfilled, (state, action) => {
+      const updatedOrder = action.payload
+      const index = state.listOrder.findIndex(item => item.id == updatedOrder.id)
+
+      state.listOrder[index].payment_status = updatedOrder.data.payment_status
+      toast.success("Cập nhật trạng thái thanh toán thành công!")
     })
 
     builder.addCase(fetchCreateOrder.fulfilled, (state, action) => {

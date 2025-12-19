@@ -6,10 +6,22 @@ const ORDER_STATUS = {
 };
 
 const ORDER_PAYMENT_STATUS = {
-  UNPAID = 'UNPAID',
-  PENDING = 'PENDING',
-  PAID = 'PAID',
-  FAILED = 'FAILED',
+  UNPAID: {
+    text: "Chưa thanh toán",
+    color: "red",
+  },
+  PENDING: {
+    text: "Đang xử lý",
+    color: "orange",
+  },
+  PAID: {
+    text: "Đã thanh toán",
+    color: "green",
+  },
+  FAILED: {
+    text: "Thanh toán thất bại",
+    color: "volcano",
+  },
 };
 
 const ORDER_PAYMENT_METHOD = {
@@ -18,5 +30,7 @@ const ORDER_PAYMENT_METHOD = {
 }
 
 export const orderConfig = {
-  ORDER_STATUS: ORDER_STATUS
+  ORDER_STATUS: ORDER_STATUS,
+  ORDER_PAYMENT_METHOD: ORDER_PAYMENT_METHOD,
+  ORDER_PAYMENT_STATUS: ORDER_PAYMENT_STATUS
 }

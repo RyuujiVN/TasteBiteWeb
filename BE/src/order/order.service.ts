@@ -8,6 +8,7 @@ import { OrderPagination } from './interfaces/filter-order.interface';
 import { paginate, Pagination } from 'nestjs-typeorm-paginate';
 import { InjectRepository } from '@nestjs/typeorm';
 import { OrderStatusEnum } from 'src/common/enums/order.enum';
+import { PaymentStatusEnum } from 'src/common/enums/payment.enum';
 
 @Injectable()
 export class OrderService {
@@ -106,6 +107,17 @@ export class OrderService {
       },
       {
         status: status,
+      },
+    );
+  }
+
+  async updatePaymentStatus(id: number, payment_status: PaymentStatusEnum) {
+    await this.orderRepository.update(
+      {
+        id: id,
+      },
+      {
+        payment_status: payment_status,
       },
     );
   }
