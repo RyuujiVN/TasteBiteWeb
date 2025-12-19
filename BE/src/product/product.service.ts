@@ -11,7 +11,7 @@ import { ProductChangeMultiEnum } from 'src/common/enums/product.enum';
 import {
   FilterProductAdmin,
   FilterProductClient,
-} from './filter-product.interface';
+} from './interfaces/filter-product.interface';
 
 @Injectable()
 export class ProductService {

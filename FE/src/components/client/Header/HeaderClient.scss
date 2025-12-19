@@ -3,7 +3,6 @@
   box-shadow: inset 0px -0.5px 0px #e6e6e6;
   z-index: 999;
 
-
   &__body {
     display: flex;
     justify-content: space-between;
@@ -56,6 +55,10 @@
 
     &--dropdown {
       cursor: pointer;
+    }
+
+    &--name {
+      font-weight: 600;
     }
   }
 

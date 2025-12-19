@@ -19,6 +19,7 @@ import SendOtp from "~/pages/admin/Auth/SendOtp";
 import ResetPassword from "~/pages/admin/Auth/ResetPassword";
 import ProtectRoute from "~/components/ProtectRoute/ProtectRoute";
 import Blog from "~/pages/admin/Blog/Blog";
+import Order from "~/pages/admin/Order/Order";
 
 const routesAdmin = [
   // Routes cho auth
@@ -73,6 +74,15 @@ const routesAdmin = [
               <RbacRoute requiredPermission={permissionEnum.VIEW_CATEGORY} />
             ),
             children: [{ path: "", element: <Category /> }],
+          },
+
+          // Order routes
+          {
+            path: "orders",
+            element: (
+              <RbacRoute requiredPermission={permissionEnum.VIEW_ORDER} />
+            ),
+            children: [{ path: "", element: <Order /> }],
           },
 
           // Role routes

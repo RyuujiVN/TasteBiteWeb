@@ -1,10 +1,22 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { toast } from 'react-toastify'
 import { instance } from '~/api'
 
 const initialState = {
-  cart: null
+  listOrder: [],
+  pagination: {}
 }
+
+// Get List
+export const fetchGetListOrderAdmin = createAsyncThunk(
+  'category/fetchGetListOrderAdmin',
+  async (params) => {
+    const response = await instance.get('/order', {
+      params: params
+    })
+
+    return response.data
+  }
+)
 
 // Create Order
 export const fetchCreateOrder = createAsyncThunk(
@@ -28,9 +40,14 @@ export const orderSlice = createSlice({
   },
 
   extraReducers: (builder) => {
-    // builder.addCase(fetchCart.fulfilled, (state, action) => {
-    //   state.cart = action.payload
-    // })
+    builder.addCase(fetchGetListOrderAdmin.fulfilled, (state, action) => {
+      state.listOrder = action.payload.items
+      state.pagination = action.payload.meta
+    })
+
+    builder.addCase(fetchCreateOrder.fulfilled, (state, action) => {
+      location.href = '/order-success'
+    })
   }
 })
 

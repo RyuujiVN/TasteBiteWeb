@@ -1,19 +1,56 @@
 import { Injectable } from '@nestjs/common';
 import { CreateOrderDTO } from './dtos/create-order.dto';
 import { Order } from './order.entity';
-import { DataSource } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { OrderItem } from './order-item.entity';
 import { CartService } from 'src/cart/cart.service';
+import { OrderPagination } from './interfaces/filter-order.interface';
+import { paginate, Pagination } from 'nestjs-typeorm-paginate';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class OrderService {
   constructor(
     private dataSource: DataSource,
     private readonly cartService: CartService,
+    @InjectRepository(Order)
+    private readonly orderRepository: Repository<Order>,
   ) {}
+
   generateOrderCode = (id: number) => {
     return `DH${id.toString().padStart(6, '0')}`;
   };
+
+  async findAll(options: OrderPagination): Promise<Pagination<Order>> {
+    const queryBuilder = this.orderRepository
+      .createQueryBuilder('order')
+      .orderBy('order.created_at', 'DESC');
+
+    if (options?.search)
+      queryBuilder
+        .andWhere('order.name ILIKE :name', {
+          name: `%${options.search}%`,
+        })
+        .orWhere('order.order_code ILIKE :order_code', {
+          order_code: `%${options.search}%`,
+        });
+
+    if (options?.date_start && options?.date_end)
+      queryBuilder.andWhere(
+        'product.created_at BETWEEN :date_start AND :date_end',
+        {
+          date_start: options.date_start,
+          date_end: options.date_end,
+        },
+      );
+
+    if (options?.status)
+      queryBuilder.andWhere('order.status = :status', {
+        status: `${options.status}`,
+      });
+
+    return paginate<Order>(queryBuilder, options);
+  }
 
   async create(user_id: number, cart_id: number, data: CreateOrderDTO) {
     return await this.dataSource.transaction(async (manager) => {

@@ -63,7 +63,6 @@ const Order = () => {
     };
 
     await dispatch(fetchCreateOrder(payload));
-    navigate("/order-success");
   };
 
   useEffect(() => {

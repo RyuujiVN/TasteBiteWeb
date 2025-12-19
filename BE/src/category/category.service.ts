@@ -4,13 +4,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Category } from './category.entity';
 import { Repository } from 'typeorm';
 import { paginate, Pagination } from 'nestjs-typeorm-paginate';
-import { PaginationQuery } from 'src/common/interfaces/pagination.interface';
 import { CreateCategoryDTO } from './dtos/create-category.dto';
 import { UpdateCategoryDTO } from './dtos/update-category.dto';
-
-interface CategoryPagination extends PaginationQuery {
-  type?: string;
-}
+import { CategoryPagination } from './interfaces/filter-category.interface';
 
 @Injectable()
 export class CategoryService {

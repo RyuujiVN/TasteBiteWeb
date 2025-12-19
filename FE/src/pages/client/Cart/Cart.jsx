@@ -5,6 +5,7 @@ import "./Cart.scss";
 import { useSelector } from "react-redux";
 import { formatCurrency } from "~/utils/formatPrice";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Cart = ({ open, onClose }) => {
   const cart = useSelector((state) => state.cart.cart);
@@ -16,8 +17,12 @@ const Cart = ({ open, onClose }) => {
   }, 0);
 
   const hanldeOrder = () => {
-    onClose();
-    navigate("/order");
+    if (cart?.cart_item?.length > 0) {
+      onClose();
+      navigate("/order");
+    } else {
+      toast.error("Không có món trong giỏ hàng");
+    }
   };
 
   return (

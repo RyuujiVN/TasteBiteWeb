@@ -1,4 +1,4 @@
-import { PaginationQuery } from './../common/interfaces/pagination.interface';
+import { PaginationQuery } from '../../common/interfaces/pagination.interface';
 
 export interface FilterProductAdmin extends PaginationQuery {
   category_id?: string;

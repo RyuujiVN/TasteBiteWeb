@@ -1,7 +1,7 @@
 import { Button, Col, InputNumber, Rate, Row, Divider } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import FoodLoading from "~/components/Loading/FoodLoading";
 import productService from "~/services/productService";
 import { formatCurrency } from "~/utils/formatPrice";
@@ -14,23 +14,44 @@ import { fetchAddCardItem } from "~/redux/cart/cartSlice";
 const ProductDetail = () => {
   const { slug } = useParams();
   const [product, setProduct] = useState(null);
-  const [loading, setLoading] = useState();
+  const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
   const cart = useSelector((state) => state.cart.cart);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const handleAddCart = () => {
+  const handleAddCart = async () => {
+    setLoading(true);
     const payload = {
       cart_id: cart?.id,
       product_id: product?.id,
       quantity: quantity,
     };
-    dispatch(fetchAddCardItem(payload));
+    await dispatch(fetchAddCardItem(payload));
+    setLoading(false);
+  };
+
+  const handleOrder = async () => {
+    setLoading(true);
+    const payload = {
+      cart_id: cart?.id,
+      product_id: product?.id,
+      quantity: quantity,
+    };
+
+    try {
+      await dispatch(fetchAddCardItem(payload)).unwrap();
+      navigate("/order");
+    } catch (error) {
+      console.error("Lỗi khi thêm sản phẩm:", error);
+    } finally {
+      setLoading(false);
+    }
+    setLoading(false);
   };
 
   useEffect(() => {
     const fetchProductDetail = async () => {
-      setLoading(true);
       try {
         const res = await productService.getDetail(slug);
 
@@ -86,7 +107,7 @@ const ProductDetail = () => {
                   <h3 className="product-detail__title">{product?.title}</h3>
                   <div className="product-detail__price">
                     <span className="product-detail__price--new">
-                      {formatCurrency(product?.new_price)}
+                      {formatCurrency(product?.new_price)}đ
                     </span>
 
                     {product?.discount > 0 && (
@@ -152,11 +173,17 @@ const ProductDetail = () => {
                     <Button
                       className="product-detail__cart"
                       onClick={handleAddCart}
+                      loading={loading}
                     >
                       <BsCartPlus /> Thêm vào giỏ hàng
                     </Button>
 
-                    <Button className="product-detail__payment" type="primary">
+                    <Button
+                      className="product-detail__payment"
+                      type="primary"
+                      loading={loading}
+                      onClick={handleOrder}
+                    >
                       Mua ngay
                     </Button>
                   </div>

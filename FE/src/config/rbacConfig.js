@@ -15,7 +15,6 @@ export const permissionEnum = {
 
   // Order
   VIEW_ORDER: "view_order",
-  ADD_ORDER: "add_order",
   UPDATE_ORDER: "update_order",
   DELETE_ORDER: "delete_order",
 

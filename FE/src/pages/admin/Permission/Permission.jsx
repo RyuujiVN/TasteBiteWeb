@@ -89,16 +89,6 @@ const Permission = () => {
               ))}
           </tr>
 
-          <tr>
-            <td>Chọn tất cả</td>
-            {roles.length > 0 &&
-              roles.map((item) => (
-                <td key={item.title} className="permission__table--check">
-                  <Checkbox />
-                </td>
-              ))}
-          </tr>
-
           <tr></tr>
 
           <tr className="permission__table--head">
@@ -521,6 +511,68 @@ const Permission = () => {
                       handleChange(
                         item.id,
                         permissionEnum.DELETE_BLOG,
+                        e.target.checked
+                      )
+                    }
+                  />
+                </td>
+              ))}
+          </tr>
+
+          {/* Quản lý đơn hàng */}
+          <tr className="permission__table--head">
+            <td colSpan={roles.length + 1}>Đơn hàng</td>
+          </tr>
+
+          <tr>
+            <td>Xem</td>
+            {roles.length > 0 &&
+              roles.map((item) => (
+                <td key={item.title} className="permission__table--check">
+                  <Checkbox
+                    checked={isChecked(item.id, permissionEnum.VIEW_ORDER)}
+                    onChange={(e) =>
+                      handleChange(
+                        item.id,
+                        permissionEnum.VIEW_ORDER,
+                        e.target.checked
+                      )
+                    }
+                  />
+                </td>
+              ))}
+          </tr>
+
+          <tr>
+            <td>Cập nhật</td>
+            {roles.length > 0 &&
+              roles.map((item) => (
+                <td key={item.title} className="permission__table--check">
+                  <Checkbox
+                    checked={isChecked(item.id, permissionEnum.UPDATE_ORDER)}
+                    onChange={(e) =>
+                      handleChange(
+                        item.id,
+                        permissionEnum.UPDATE_ORDER,
+                        e.target.checked
+                      )
+                    }
+                  />
+                </td>
+              ))}
+          </tr>
+
+          <tr>
+            <td>Xoá</td>
+            {roles.length > 0 &&
+              roles.map((item) => (
+                <td key={item.title} className="permission__table--check">
+                  <Checkbox
+                    checked={isChecked(item.id, permissionEnum.DELETE_ORDER)}
+                    onChange={(e) =>
+                      handleChange(
+                        item.id,
+                        permissionEnum.DELETE_ORDER,
                         e.target.checked
                       )
                     }

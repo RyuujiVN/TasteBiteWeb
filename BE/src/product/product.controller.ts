@@ -153,7 +153,7 @@ export class ProductController {
   @UseGuards(JwtAccessAuthGuard, PermissionGuard)
   @ApiOperation({ summary: 'Lấy danh sách sản phẩm có phân trang' })
   @ApiQuery({ name: 'page', required: true, type: Number, default: 1 })
-  @ApiQuery({ name: 'limit', required: true, type: Number, default: 10 })
+  @ApiQuery({ name: 'limit', required: true, type: Number, default: 20 })
   @ApiQuery({
     name: 'search',
     required: false,

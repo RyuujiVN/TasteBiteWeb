@@ -13,6 +13,9 @@ const ProductItem = ({ product }) => {
           className="product__item"
           onClick={() => navigate(`/product/${product?.slug}`)}
         >
+          {product?.discount > 0 && (
+            <div className="product__discount">{product?.discount}%</div>
+          )}
           <div className="product__img">
             <img loading="lazy" src={product?.image_url} alt={product?.title} />
           </div>
@@ -24,16 +27,16 @@ const ProductItem = ({ product }) => {
               {product?.discount > 0 ? (
                 <>
                   <p className="product__price--old">
-                    {formatCurrency(product?.price)}
+                    {formatCurrency(product?.price)}đ
                   </p>
 
                   <p className="product__price--new">
-                    {formatCurrency(product?.new_price)}
+                    {formatCurrency(product?.new_price)}đ
                   </p>
                 </>
               ) : (
                 <p className="product__price--new">
-                  {formatCurrency(product?.new_price)}
+                  {formatCurrency(product?.new_price)}đ
                 </p>
               )}
             </div>

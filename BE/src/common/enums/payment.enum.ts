@@ -4,8 +4,8 @@ export enum PaymentMethodEnum {
 }
 
 export enum PaymentStatusEnum {
-  UNPAID = 'Chưa thanh toán',
-  PENDING = 'Đang xử lý',
-  PAID = 'Đã thanh toán',
-  FAILED = 'Thanh toán thất bại',
+  UNPAID = 'UNPAID',
+  PENDING = 'PENDING',
+  PAID = 'PAID',
+  FAILED = 'FAILED',
 }

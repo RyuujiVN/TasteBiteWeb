@@ -120,7 +120,7 @@ const HeaderClient = () => {
                         alt="Avatar"
                       ></Avatar>
                       <Flex vertical gap={5}>
-                        <div className="header-client__user--name">
+                        <div className="header-client__auth--name">
                           {profile?.user_name}
                         </div>
                       </Flex>
