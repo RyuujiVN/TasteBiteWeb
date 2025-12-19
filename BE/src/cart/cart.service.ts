@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Cart } from './cart.entity';
-import { Repository } from 'typeorm';
+import { EntityManager, Repository } from 'typeorm';
 import { CartItem } from './cart-item.entity';
 import { CreateCartItemDTO } from './dtos/create-cart-item.dto';
 import { ProductService } from 'src/product/product.service';
@@ -80,11 +80,22 @@ export class CartService {
     );
   }
 
+  // Xoá một item trong cart
   async removeCartItem(id: number) {
     const result = await this.cartItemRepository.delete({
       id: id,
     });
 
     if (result.affected === 0) throw new NotFoundException();
+  }
+
+  // Xoá tất cả item trong cart transaction
+  async deleteAllItem(manager: EntityManager, cart_id: number) {
+    const result = await manager.delete(CartItem, {
+      cart_id: cart_id,
+    });
+
+    if (result.affected === 0)
+      throw new NotFoundException('Không có món trong giỏ hàng');
   }
 }

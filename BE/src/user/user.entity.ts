@@ -4,6 +4,7 @@ import { Exclude } from 'class-transformer';
 import { MaxLength } from 'class-validator';
 import { Address } from 'src/address/address.entity';
 import { CartItem } from 'src/cart/cart-item.entity';
+import { Order } from 'src/order/order.entity';
 import { Role } from 'src/role/role.entity';
 import {
   Column,
@@ -76,6 +77,9 @@ export class User {
 
   @OneToMany(() => Address, (address) => address.user)
   address: Address[];
+
+  @OneToMany(() => Order, (order) => order.user)
+  orders: Order[];
 
   @OneToOne(() => Cart, (cart) => cart.user)
   cart: Cart;

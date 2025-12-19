@@ -22,10 +22,6 @@ const ProductDetail = ({ open, onClose, product }) => {
           {product.title}
         </Descriptions.Item>
 
-        <Descriptions.Item label="Mô tả">
-          <div dangerouslySetInnerHTML={{ __html: product.description }} />
-        </Descriptions.Item>
-
         <Descriptions.Item label="Giá">
           {formatCurrency(product.price)}
         </Descriptions.Item>

@@ -7,6 +7,7 @@ const initialState = {
   listAddress: [],
   listProvince: [],
   listWard: [],
+  addressDefaultId: [],
 }
 
 // Get All
@@ -98,6 +99,9 @@ export const addressSlice = createSlice({
 
     builder.addCase(fetchGetAllAddress.fulfilled, (state, action) => {
       state.listAddress = action.payload
+
+      const address = action.payload.find(item => item.is_default)
+      state.addressDefaultId = address?.id
     })
 
     builder.addCase(fetchGetProvince.fulfilled, (state, action) => {
@@ -109,15 +113,10 @@ export const addressSlice = createSlice({
     })
 
     builder.addCase(fetchAddAddress.fulfilled, (state, action) => {
-      // state.listAddress.push(action.payload)
       toast.success('Thêm thành công')
     })
 
     builder.addCase(fetchUpdateAddress.fulfilled, (state, action) => {
-      // const updatedAdrress = action.payload
-      // const index = state.listAddress.findIndex(item => item.id == updatedAdrress.id)
-
-      // state.listAddress[index] = updatedAdrress
       toast.success("Chỉnh sửa thành công!")
     })
 

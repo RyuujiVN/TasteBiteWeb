@@ -72,13 +72,13 @@ const Cart = ({ item }) => {
             <div className="cart-item__price">
               {/* GIÁ MỚI */}
               <span className="cart-item__price--new">
-                {formatCurrency(item?.product?.new_price)}
+                {formatCurrency(item?.product?.new_price)}đ
               </span>
 
               {/* GIÁ CŨ */}
               {item?.product?.discount > 0 && (
                 <span className="cart-item__price--old">
-                  {formatCurrency(item?.product?.price)}
+                  {formatCurrency(item?.product?.price)}đ
                 </span>
               )}
             </div>

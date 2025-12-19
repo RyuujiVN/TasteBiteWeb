@@ -114,7 +114,7 @@ const AccountAddress = () => {
                       <div className="address__info">
                         <p>
                           {item?.street} <br />
-                          {item?.ward?.name}, {item?.province?.name}
+                          {`${item?.ward?.name}, ${item?.province?.name}`}
                         </p>
                       </div>
 

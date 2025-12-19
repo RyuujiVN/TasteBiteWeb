@@ -35,7 +35,7 @@ const Cart = ({ open, onClose }) => {
         <div className="cart-drawer__footer">
           <div className="cart-drawer__total">
             <span>Tổng tiền:</span>
-            <strong>{formatCurrency(totalCost)}</strong>
+            <strong>{formatCurrency(totalCost)}đ</strong>
           </div>
 
           <div className="cart-drawer__actions">

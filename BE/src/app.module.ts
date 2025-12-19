@@ -19,6 +19,7 @@ import { HttpModule } from '@nestjs/axios';
 import { APP_FILTER } from '@nestjs/core';
 import { GlobalExceptionFilter } from './common/filters/global-exception.filter';
 import { CartModule } from './cart/cart.module';
+import { OrderModule } from './order/order.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { CartModule } from './cart/cart.module';
     OtpModule,
     AddressModule,
     CartModule,
+    OrderModule,
   ],
   controllers: [AppController],
   providers: [

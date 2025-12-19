@@ -47,7 +47,7 @@ export class AuthService {
   ): Promise<{ userInfo: any; accessToken: string; refreshToken: string }> {
     const user = await this.userRepository.findOne({
       where: { email: data.email },
-      relations: ['role'],
+      relations: ['role', 'cart'],
     });
 
     if (!user) throw new ForbiddenException('Tài khoản hoặc mật khẩu sai!');
@@ -62,6 +62,7 @@ export class AuthService {
       email: user.email,
       user_name: user.user_name,
       avatar: user.avatar_url,
+      cart_id: user.cart?.id,
     };
 
     if (user.role) {

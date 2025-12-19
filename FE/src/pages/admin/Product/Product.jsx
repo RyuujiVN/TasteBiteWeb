@@ -34,7 +34,7 @@ import {
   fetchUpdateMultiProduct,
 } from "~/redux/product/productSlice";
 import { formatCurrency } from "~/utils/formatPrice";
-import ProductDetail from "./DetailProduct";
+import ProductDetail from "./ProductDetail";
 import { FaSortAmountDown } from "react-icons/fa";
 
 const columns = [

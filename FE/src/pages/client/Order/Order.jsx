@@ -1,46 +1,69 @@
-import {
-  Button,
-  Col,
-  Divider,
-  Flex,
-  Form,
-  Input,
-  Radio,
-  Row,
-  Select,
-  Tag,
-} from "antd";
+import { Button, Col, Divider, Flex, Form, Radio, Row, Select } from "antd";
 import { date } from "~/constants/date";
 import "./Order.scss";
 import TextArea from "antd/es/input/TextArea";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchGetAllAddress } from "~/redux/address/addressSlice";
+import { formatCurrency } from "~/utils/formatPrice";
+import { toast } from "react-toastify";
+import { fetchCreateOrder } from "~/redux/order/orderSlice";
+import { useNavigate } from "react-router-dom";
 
 const Order = () => {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
   const listAddress = useSelector((state) => state.address.listAddress);
+  const cart = useSelector((state) => state.cart.cart);
+  const addressDefaultId = useSelector((state) => state.cart.addressDefaultId);
+  const totalCost = cart?.cart_item?.reduce((total, item) => {
+    const sum = total + item?.product?.new_price * item.quantity;
+    return sum;
+  }, 0);
 
-  const hanldeSubmit = (values) => {
-    console.log(values);
-  };
+  const navigate = useNavigate();
 
-  const handleAddressChange = (e) => {
-    const address = listAddress.find((item) => item.id === e.target.value);
+  const hanldeSubmit = async (values) => {
+    const address = listAddress.find(
+      (item) => item.id === values.shipping_address
+    );
 
-    if (address) {
-      form.setFieldsValue({
-        shipping_address: {
-          id: address.id,
-          full_name: address.full_name,
-          phone: address.phone,
-          street: address.street,
-          ward: address.ward?.name,
-          province: address.province?.name,
-        },
-      });
+    if (!address) {
+      toast.error("Vui lòng điền địa chỉ nhận hàng");
+      return;
     }
+
+    const line_items = cart?.cart_item?.map((item) => {
+      return {
+        product_id: item.product_id,
+        quantity: item?.quantity,
+        price: {
+          retail: item?.product?.price,
+          sale: item?.product?.new_price,
+        },
+      };
+    });
+
+    const payload = {
+      name: address.full_name,
+      phone: address.phone,
+      shipping_address: {
+        street: address.street,
+        ward: address.ward?.name,
+        province: address.province?.name,
+      },
+      line_items: line_items,
+      payment_method: values.payment_method,
+      note: values.note,
+      delivery: {
+        date: values.delivery_date,
+        delivery_time_type: values.delivery_time_type,
+        delivery_time_range: values.delivery_time_range,
+      },
+    };
+
+    await dispatch(fetchCreateOrder(payload));
+    navigate("/order-success");
   };
 
   useEffect(() => {
@@ -58,11 +81,12 @@ const Order = () => {
               initialValues={{
                 delivery_date: date.today.format("YYYY-MM-DD"),
                 delivery_time_type: "NOW",
+                shipping_address: addressDefaultId,
               }}
             >
               <Row gutter={[20, 20]}>
                 {/* Order Left */}
-                <Col lg={12} md={24} sm={24}>
+                <Col lg={14} md={14} sm={24} xs={24}>
                   <div className="order__card">
                     <h3 className="order__title">Thông tin đơn hàng</h3>
                     <Divider />
@@ -143,7 +167,7 @@ const Order = () => {
                     </Form.Item>
 
                     <h4 className="form__label">Ghi chú đơn hàng</h4>
-                    <Form.Item name="description">
+                    <Form.Item name="note" style={{ margin: 0 }}>
                       <TextArea
                         rows={4}
                         style={{ resize: "none" }}
@@ -157,18 +181,19 @@ const Order = () => {
                       <h3 className="order__title">Địa chỉ nhận hàng</h3>
                       <Button type="primary">+ Thêm địa chỉ</Button>
                     </Flex>
-                    <Divider />
 
                     <Form.Item
-                      name={["shipping_address", "id"]}
-                      rules={[
-                        { required: true, message: "Vui lòng chọn địa chỉ" },
-                      ]}
+                      name="shipping_address"
+                      initialValue={addressDefaultId}
                     >
-                      <Radio.Group className="address__radio-group">
+                      <Radio.Group className="order__address w-100">
                         {listAddress.map((item) => (
-                          <Radio key={item.id} value={item.id}>
-                            <div className="address__item">
+                          <Radio
+                            key={item.id}
+                            value={item.id}
+                            className="w-100"
+                          >
+                            <div className="order__address--item address">
                               <Flex justify="space-between" align="center">
                                 <div className="address__user">
                                   <span className="address__user--name">
@@ -191,61 +216,101 @@ const Order = () => {
                                   </p>
                                 </div>
                               </Flex>
-
-                              {item?.is_default && (
-                                <Tag variant="outlined" color="volcano">
-                                  Mặc định
-                                </Tag>
-                              )}
                             </div>
                           </Radio>
                         ))}
-                      </Radio.Group>
-                    </Form.Item>
-
-                    <Form.Item
-                      name={["shipping_address", "id"]}
-                      rules={[
-                        { required: true, message: "Vui lòng chọn địa chỉ" },
-                      ]}
-                    >
-                      <Radio.Group className="address__radio-group">
-                        <Radio key={1} value={1}>
-                          <div className="address__item">
-                            <Flex justify="space-between" align="center">
-                              <div className="address__user">
-                                <span className="address__user--name">
-                                  Nguyễn Bảo Long
-                                </span>
-
-                                <div className="split"></div>
-
-                                <span className="address__user--phone">
-                                  0796510027
-                                </span>
-                              </div>
-                            </Flex>
-
-                            <Flex justify="space-between" align="center">
-                              <div className="address__info">
-                                <p>
-                                  44 Nguyễn Bỉnh Khiêm <br />
-                                  Phường Phú Xuân, Thành phố Huế
-                                </p>
-                              </div>
-                            </Flex>
-                            <Tag variant="outlined" color="volcano">
-                              Mặc định
-                            </Tag>
-                          </div>
-                        </Radio>
                       </Radio.Group>
                     </Form.Item>
                   </div>
                 </Col>
 
                 {/* Order Right */}
-                <Col lg={12} md={24} sm={24}></Col>
+                <Col lg={10} md={10} sm={24} xs={24}>
+                  <div className="order__card order__card--right">
+                    <h3 className="order__title">Đơn hàng</h3>
+                    <table className="order__products">
+                      <tbody className="order__products--item">
+                        <tr>
+                          <td>Tên món</td>
+                          <td>Giá</td>
+                        </tr>
+
+                        {cart?.cart_item &&
+                          cart?.cart_item?.map((item) => (
+                            <tr key={item?.id}>
+                              {/* Tên sản phẩm */}
+                              <td className="order__products--name">
+                                {item?.product?.title} x {item?.quantity}
+                              </td>
+
+                              {/* Giá */}
+                              <td className="order__products--price">
+                                {formatCurrency(item?.product?.new_price)}đ
+                              </td>
+                            </tr>
+                          ))}
+                      </tbody>
+                    </table>
+                    <Divider />
+
+                    <Flex
+                      justify="space-between"
+                      className="order__cost order__cost--total"
+                    >
+                      <div className="order__cost--title">Tiền hàng</div>
+                      <div>{formatCurrency(totalCost)}đ</div>
+                    </Flex>
+
+                    <Flex
+                      justify="space-between"
+                      className="order__cost order__cost--shipping"
+                    >
+                      <div className="order__cost--title">Phí vận chuyển</div>
+                      <div>{formatCurrency(30000)}đ</div>
+                    </Flex>
+
+                    <Divider />
+
+                    <h3 className="order__title">Thanh toán</h3>
+
+                    <Form.Item
+                      name="payment_method"
+                      initialValue="CASH"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Vui lòng chọn phương thức thanh toán",
+                        },
+                      ]}
+                    >
+                      <Radio.Group className="order__payment">
+                        <Radio value="CASH">Tiền mặt</Radio>
+                        <Radio value="BANK">Chuyển khoản</Radio>
+                      </Radio.Group>
+                    </Form.Item>
+
+                    <Flex
+                      justify="space-between"
+                      className="order__cost order__cost--final"
+                    >
+                      <div className="order__cost--title">Tổng tiền</div>
+                      <div className="price">
+                        {formatCurrency(totalCost + 30000)}đ
+                      </div>
+                    </Flex>
+
+                    <Form.Item>
+                      <Button
+                        block
+                        size="large"
+                        type="primary"
+                        htmlType="submit"
+                      >
+                        Đặt hàng
+                      </Button>
+                    </Form.Item>
+                  </div>
+                </Col>
               </Row>
             </Form>
           </div>

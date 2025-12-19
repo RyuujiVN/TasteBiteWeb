@@ -21,7 +21,6 @@ import {
   fetchUpdateProduct,
 } from "~/redux/product/productSlice";
 import { formatCurrency, parseCurrency } from "~/utils/formatPrice";
-import ProductDetail from "./DetailProduct";
 
 const UpdateProduct = () => {
   const [fileUrl, setFileUrl] = useState(null);

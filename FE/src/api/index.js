@@ -32,6 +32,7 @@ instance.interceptors.response.use(function (response) {
 }, function (error) {
   // Any status codes that falls outside the range of 2xx cause this function to trigger
   // Do something with response error
+  console.log(error.response)
   if (error.response.status === 401) {
     adminService.logout().then(
       () => {
@@ -40,7 +41,7 @@ instance.interceptors.response.use(function (response) {
     )
   }
 
-  // if (error.response.status === 403) location.href = '/access-denied'
+  if (error.response.status === 403) location.href = '/access-denied'
 
   const originalRequest = error.config;
   if (error.response.status === 410 && !originalRequest._retry) {
@@ -61,13 +62,10 @@ instance.interceptors.response.use(function (response) {
         //     location.href = '/login'
         //   }
         // )
-
-        console.log(err)
         return Promise.reject(err)
       })
   }
 
-  console.log(error.response)
 
   if (error.response.status !== 401) {
     toast.error(error.response?.data?.message || error.message)
