@@ -25,7 +25,10 @@ import useDebounce from "~/hooks/useDebounce";
 import { FaPlus } from "react-icons/fa6";
 import { CiFilter } from "react-icons/ci";
 import { Flex } from "antd";
-import { fetchGetListOrderAdmin } from "~/redux/order/orderSlice";
+import {
+  fetchGetListOrderAdmin,
+  fetchUpdateOrderStatus,
+} from "~/redux/order/orderSlice";
 import dayjs from "dayjs";
 import { orderConfig } from "~/constants/order";
 import { DownOutlined } from "@ant-design/icons";
@@ -41,6 +44,19 @@ const Order = () => {
   const pagination = useSelector((state) => state.order.pagination);
 
   const debounced = useDebounce(search, 500, setSearchParams);
+
+  const handleUpdateStatus = async (orderId, status) => {
+    setLoading(true);
+    await dispatch(
+      fetchUpdateOrderStatus({
+        id: orderId,
+        data: {
+          status: status,
+        },
+      })
+    );
+    setLoading(false);
+  };
 
   const handleSet = (value, setModal) => {
     setCategory(value);
@@ -101,6 +117,12 @@ const Order = () => {
     },
 
     {
+      key: "payment_method",
+      title: "Phương thức",
+      dataIndex: "payment_method",
+    },
+
+    {
       key: "status",
       title: "Trạng thái",
       dataIndex: "status",
@@ -119,7 +141,7 @@ const Order = () => {
                       {value.text}
                     </Tag>
                   ),
-                  // onClick: () => handleUpdateStatus(record.key, key),
+                  onClick: () => handleUpdateStatus(record.key, key),
                 })
               ),
             }}
@@ -244,12 +266,14 @@ const Order = () => {
                 className="table"
                 columns={columns}
                 pagination={false}
+                loading={loading}
                 dataSource={orders.map((order) => ({
-                  key: order?._id,
+                  key: order?.id,
                   order_code: order?.order_code,
                   customer_name: order?.name,
                   order_date: dayjs(order?.created_at).format("DD/MM/YYYY"),
                   total_cost: order?.total_cost,
+                  payment_method: order?.payment_method,
                   status: order?.status,
                   payment_status: order?.payment_status,
                   action: (

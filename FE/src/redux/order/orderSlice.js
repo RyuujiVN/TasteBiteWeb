@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { toast } from 'react-toastify'
 import { instance } from '~/api'
 
 const initialState = {
@@ -29,6 +30,20 @@ export const fetchCreateOrder = createAsyncThunk(
   }
 )
 
+// Update Status Order
+export const fetchUpdateOrderStatus = createAsyncThunk(
+  'cart/fetchUpdateOrderStatus',
+  async ({ id, data }) => {
+    await instance.patch(`/order/update/status/${id}`, data)
+
+
+    return {
+      id,
+      data
+    }
+  }
+)
+
 
 export const orderSlice = createSlice({
   name: 'order',
@@ -43,6 +58,14 @@ export const orderSlice = createSlice({
     builder.addCase(fetchGetListOrderAdmin.fulfilled, (state, action) => {
       state.listOrder = action.payload.items
       state.pagination = action.payload.meta
+    })
+
+    builder.addCase(fetchUpdateOrderStatus.fulfilled, (state, action) => {
+      const updatedOrder = action.payload
+      const index = state.listOrder.findIndex(item => item.id == updatedOrder.id)
+
+      state.listOrder[index].status = updatedOrder.data.status
+      toast.success("Cập nhật trạng thái đơn hàng thành công!")
     })
 
     builder.addCase(fetchCreateOrder.fulfilled, (state, action) => {

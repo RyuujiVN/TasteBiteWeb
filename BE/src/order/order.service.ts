@@ -7,6 +7,7 @@ import { CartService } from 'src/cart/cart.service';
 import { OrderPagination } from './interfaces/filter-order.interface';
 import { paginate, Pagination } from 'nestjs-typeorm-paginate';
 import { InjectRepository } from '@nestjs/typeorm';
+import { OrderStatusEnum } from 'src/common/enums/order.enum';
 
 @Injectable()
 export class OrderService {
@@ -24,7 +25,7 @@ export class OrderService {
   async findAll(options: OrderPagination): Promise<Pagination<Order>> {
     const queryBuilder = this.orderRepository
       .createQueryBuilder('order')
-      .orderBy('order.created_at', 'DESC');
+      .orderBy('order.id', 'DESC');
 
     if (options?.search)
       queryBuilder
@@ -96,5 +97,16 @@ export class OrderService {
       await this.cartService.deleteAllItem(manager, cart_id);
       return savedOrder;
     });
+  }
+
+  async updateStatus(id: number, status: OrderStatusEnum) {
+    await this.orderRepository.update(
+      {
+        id: id,
+      },
+      {
+        status: status,
+      },
+    );
   }
 }

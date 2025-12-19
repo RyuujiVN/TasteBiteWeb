@@ -3,7 +3,9 @@ import {
   Controller,
   DefaultValuePipe,
   Get,
+  Param,
   ParseIntPipe,
+  Patch,
   Post,
   Query,
   Req,
@@ -19,6 +21,7 @@ import { PermissionGuard } from 'src/guards/permission.guard';
 import { Pagination } from 'nestjs-typeorm-paginate';
 import { OrderStatusEnum } from 'src/common/enums/order.enum';
 import { Order } from './order.entity';
+import { UpdateStatusOrderDTO } from './dtos/update-status-order.dto';
 
 @Controller('order')
 @UseGuards(JwtAccessAuthGuard, PermissionGuard)
@@ -62,12 +65,19 @@ export class OrderController {
     });
   }
 
-  @Post('create')
-  @ApiOperation({ summary: 'Tạo mới đơn hàng' })
+  @Patch('update/status/:id')
+  @ApiOperation({ summary: 'Cập nhật trạng thái đơn hàng' })
   @ApiBody({
-    type: CreateOrderDTO,
+    type: UpdateStatusOrderDTO,
   })
-  create(@Req() req: any, @Body() data: CreateOrderDTO) {
-    return this.orderService.create(req?.user?.id, req?.user?.cart_id, data);
+  async create(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() data: UpdateStatusOrderDTO,
+  ) {
+    await this.orderService.updateStatus(id, data.status);
+
+    return {
+      message: 'Cập nhật trạng thái thành công',
+    };
   }
 }

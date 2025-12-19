@@ -195,7 +195,7 @@ const Category = () => {
                 columns={columns}
                 pagination={false}
                 dataSource={categories.map((category) => ({
-                  key: category?._id,
+                  key: category?.id,
                   title: category?.title,
                   description: category?.description,
                   type:
