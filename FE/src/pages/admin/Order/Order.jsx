@@ -13,10 +13,7 @@ import Tag from "antd/es/tag";
 import Tooltip from "antd/es/tooltip";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fectchDeleteCategory } from "~/redux/category/categorySlice";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
-import { AiOutlineEdit } from "react-icons/ai";
-import { AiOutlineDelete } from "react-icons/ai";
 import { IoIosSearch } from "react-icons/io";
 import "./Order.scss";
 import { toast } from "react-toastify";
@@ -34,6 +31,8 @@ import dayjs from "dayjs";
 import { orderConfig } from "~/constants/order";
 import { DownOutlined } from "@ant-design/icons";
 import { formatCurrency } from "~/utils/formatPrice";
+import DatePicker from "antd/es/date-picker";
+const { RangePicker } = DatePicker;
 
 const Order = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -46,6 +45,16 @@ const Order = () => {
   const pagination = useSelector((state) => state.order.pagination);
 
   const debounced = useDebounce(search, 500, setSearchParams);
+
+  const updateParams = (filters) => {
+    const currentParams = Object.fromEntries(searchParams.entries());
+
+    setSearchParams({
+      ...currentParams,
+      ...filters,
+      page: 1,
+    });
+  };
 
   const handleUpdateStatus = async (orderId, status) => {
     setLoading(true);
@@ -76,15 +85,6 @@ const Order = () => {
   const handleSet = (value, setModal) => {
     setCategory(value);
     setModal(true);
-  };
-
-  const handleDelete = (id) => {
-    setLoading(true);
-    toast.promise(dispatch(fectchDeleteCategory(id)), {
-      pending: "Đang xoá...",
-    });
-
-    setLoading(false);
   };
 
   const handleFilter = (value) => {
@@ -257,54 +257,100 @@ const Order = () => {
                 </Form.Item>
               </Form>
 
-              <div className="category__action">
-                <Space>
-                  <Dropdown
-                    menu={{
-                      items: [
-                        {
-                          key: "filter",
-                          label: (
-                            <div
-                              className="filter-dropdown__content"
-                              onClick={(e) => e.stopPropagation()}
-                            >
-                              <Form layout="vertical">
-                                <Form.Item
-                                  label="Danh mục sản phẩm"
-                                  name="category"
-                                >
-                                  <Select
-                                    placeholder="Chọn danh mục"
-                                    onChange={handleFilter}
-                                  >
-                                    <Select.Option value="">
-                                      Tất cả
-                                    </Select.Option>
+              <Dropdown
+                trigger={["click"]}
+                menu={{
+                  items: [
+                    {
+                      key: "filter",
+                      label: (
+                        <div
+                          className="filter-dropdown__content"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <Form layout="vertical">
+                            {/* STATUS */}
+                            <Form.Item label="Trạng thái đơn hàng">
+                              <Select
+                                placeholder="Chọn trạng thái"
+                                defaultValue="ALL"
+                                onChange={(value) => {
+                                  updateParams({
+                                    status: value === "ALL" ? "" : value,
+                                  });
+                                }}
+                              >
+                                <Select.Option value="ALL">
+                                  Tất cả
+                                </Select.Option>
 
-                                    <Select.Option value="Đồ ăn">
-                                      Đồ ăn
+                                {Object.entries(orderConfig.ORDER_STATUS).map(
+                                  ([key, value]) => (
+                                    <Select.Option key={key} value={key}>
+                                      {value.text}
                                     </Select.Option>
+                                  )
+                                )}
+                              </Select>
+                            </Form.Item>
 
-                                    <Select.Option value="Nước uống">
-                                      Nước uống
-                                    </Select.Option>
-                                  </Select>
-                                </Form.Item>
-                              </Form>
-                            </div>
-                          ),
-                        },
-                      ],
-                    }}
-                    trigger={["click"]}
-                  >
-                    <Button>
-                      <CiFilter /> Bộ lọc
-                    </Button>
-                  </Dropdown>
-                </Space>
-              </div>
+                            {/* PAYMENT */}
+                            <Form.Item label="Trạng thái thanh toán">
+                              <Select
+                                placeholder="Chọn trạng thái thanh toán"
+                                defaultValue="ALL"
+                                onChange={(value) => {
+                                  updateParams({
+                                    payment_status:
+                                      value === "ALL" ? "" : value,
+                                  });
+                                }}
+                              >
+                                <Select.Option value="ALL">
+                                  Tất cả
+                                </Select.Option>
+
+                                {Object.entries(
+                                  orderConfig.ORDER_PAYMENT_STATUS
+                                ).map(([key, value]) => (
+                                  <Select.Option key={key} value={key}>
+                                    {value.text}
+                                  </Select.Option>
+                                ))}
+                              </Select>
+                            </Form.Item>
+
+                            {/* DATE RANGE */}
+                            <Form.Item label="Khoảng ngày">
+                              <RangePicker
+                                format="DD/MM/YYYY"
+                                onChange={(dates) => {
+                                  if (!dates) {
+                                    updateParams({
+                                      from_date: undefined,
+                                      to_date: undefined,
+                                    });
+                                    return;
+                                  }
+
+                                  updateParams({
+                                    date_start: dates[0].format("YYYY-MM-DD"),
+                                    date_end: dates[1].format("YYYY-MM-DD"),
+                                  });
+                                }}
+                              />
+                            </Form.Item>
+                          </Form>
+                        </div>
+                      ),
+                    },
+                  ],
+                }}
+              >
+                <Button>
+                  <CiFilter /> Bộ lọc
+                </Button>
+              </Dropdown>
             </Flex>
           </div>
 

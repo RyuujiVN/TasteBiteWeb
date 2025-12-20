@@ -39,7 +39,7 @@ export class OrderService {
 
     if (options?.date_start && options?.date_end)
       queryBuilder.andWhere(
-        'product.created_at BETWEEN :date_start AND :date_end',
+        'order.created_at BETWEEN :date_start AND :date_end',
         {
           date_start: options.date_start,
           date_end: options.date_end,

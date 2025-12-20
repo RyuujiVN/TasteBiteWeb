@@ -8,7 +8,8 @@ const useDebounce = (value, delay, setSearchParams) => {
     const handler = setTimeout(() => {
       if (value != null && setSearchParams) {
         setSearchParams({
-          search: value
+          search: value,
+          page: 1
         })
       }
 

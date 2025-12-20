@@ -63,12 +63,6 @@ const Header = ({ collapse, setCollapse }) => {
             </p>
           </div>
           <Flex gap={20} align="center">
-            <Tooltip title="Notification">
-              <div className="header__notification">
-                <NotificationIcon />
-              </div>
-            </Tooltip>
-
             <Dropdown menu={{ items }} className="header__user">
               <Flex align="center" gap={10}>
                 <Avatar size={40} src={userInfo?.avatar}></Avatar>

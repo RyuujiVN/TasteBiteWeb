@@ -4,6 +4,7 @@ import {
   Divider,
   Flex,
   Form,
+  Image,
   Input,
   Pagination,
   Popconfirm,
@@ -145,7 +146,9 @@ const Admin = () => {
                   key: admin?.id,
                   full_name: admin?.full_name,
                   email: admin?.email,
-                  avatar: admin?.avatar_url,
+                  avatar: (
+                    <Image src={admin?.avatar_url} alt={admin?.full_name} width={100} />
+                  ),
                   role: admin?.role?.title,
                   action: (
                     <Space size={20}>
