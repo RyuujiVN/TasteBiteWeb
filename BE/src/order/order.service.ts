@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateOrderDTO } from './dtos/create-order.dto';
 import { Order } from './order.entity';
 import { DataSource, Repository } from 'typeorm';
@@ -22,6 +22,22 @@ export class OrderService {
   generateOrderCode = (id: number) => {
     return `DH${id.toString().padStart(6, '0')}`;
   };
+
+  async findOneByid(id: number): Promise<Order> {
+    const order = await this.orderRepository
+      .createQueryBuilder('order')
+      .leftJoinAndSelect('order.orderItems', 'orderItem')
+      .leftJoin('orderItem.product', 'product')
+      .addSelect(['product.id', 'product.title', 'product.image_url'])
+      .where('order.id = :id', { id })
+      .getOne();
+
+    if (!order) {
+      throw new NotFoundException('Không tìm thấy đơn hàng');
+    }
+
+    return order;
+  }
 
   async findAll(options: OrderPagination): Promise<Pagination<Order>> {
     const queryBuilder = this.orderRepository
@@ -51,6 +67,11 @@ export class OrderService {
         status: `${options.status}`,
       });
 
+    if (options?.payment_status)
+      queryBuilder.andWhere('order.payment_status = :payment_status', {
+        payment_status: `${options.payment_status}`,
+      });
+
     return paginate<Order>(queryBuilder, options);
   }
 
@@ -68,7 +89,7 @@ export class OrderService {
         note: data.note,
         payment_method: data.payment_method,
         shipping_fee: 30000,
-        total_cost: totalCost,
+        total_cost: totalCost + 30000,
         user_id: user_id,
         shipping_address: data.shipping_address,
         delivery: data.delivery,
@@ -107,6 +128,7 @@ export class OrderService {
       },
       {
         status: status,
+        updated_at: new Date(),
       },
     );
   }
@@ -118,6 +140,7 @@ export class OrderService {
       },
       {
         payment_status: payment_status,
+        updated_at: new Date(),
       },
     );
   }

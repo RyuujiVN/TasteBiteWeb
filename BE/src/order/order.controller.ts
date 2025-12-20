@@ -23,6 +23,7 @@ import { OrderStatusEnum } from 'src/common/enums/order.enum';
 import { Order } from './order.entity';
 import { UpdateStatusOrderDTO } from './dtos/update-status-order.dto';
 import { UpdatePaymentStatusDTO } from './dtos/update-payment-status.dto';
+import { PaymentStatusEnum } from 'src/common/enums/payment.enum';
 
 @Controller('order')
 @UseGuards(JwtAccessAuthGuard, PermissionGuard)
@@ -53,6 +54,7 @@ export class OrderController {
     @Query('limit', new DefaultValuePipe(20), ParseIntPipe) limit: number,
     @Query('search') search?: string,
     @Query('status') status?: OrderStatusEnum,
+    @Query('payment_status') payment_status?: PaymentStatusEnum,
     @Query('date_start') date_start?: Date,
     @Query('date_end') date_end?: Date,
   ): Promise<Pagination<Order>> {
@@ -61,9 +63,16 @@ export class OrderController {
       limit,
       search,
       status,
+      payment_status,
       date_start,
       date_end,
     });
+  }
+
+  @Get(':id')
+  @ApiOperation({ summary: 'Chi tiết đơn hàng' })
+  getDetail(@Param('id') id: number): Promise<Order> {
+    return this.orderService.findOneByid(id);
   }
 
   @Post('create')
@@ -76,6 +85,7 @@ export class OrderController {
   }
 
   @Patch('update/status/:id')
+  @Permissions(Permission.UPDATE_ORDER)
   @ApiOperation({ summary: 'Cập nhật trạng thái đơn hàng' })
   @ApiBody({
     type: UpdateStatusOrderDTO,

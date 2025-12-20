@@ -32,14 +32,15 @@ import { orderConfig } from "~/constants/order";
 import { DownOutlined } from "@ant-design/icons";
 import { formatCurrency } from "~/utils/formatPrice";
 import DatePicker from "antd/es/date-picker";
+import OrderDetail from "./OrderDetail";
 const { RangePicker } = DatePicker;
 
 const Order = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [detailCategory, setDetailCategory] = useState(false);
+  const [orderDetail, setOrderDetail] = useState(false);
+  const [orderId, setOrderId] = useState(null);
   const [search, setSearch] = useState(null);
-  const [category, setCategory] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const orders = useSelector((state) => state.order.listOrder);
   const pagination = useSelector((state) => state.order.pagination);
@@ -83,17 +84,8 @@ const Order = () => {
   };
 
   const handleSet = (value, setModal) => {
-    setCategory(value);
+    setOrderId(value);
     setModal(true);
-  };
-
-  const handleFilter = (value) => {
-    const searchObject = Object.fromEntries(searchParams.entries());
-
-    setSearchParams({
-      ...searchObject,
-      type: value,
-    });
   };
 
   const handleChangePage = (page, size) => {
@@ -227,6 +219,7 @@ const Order = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       const searchObject = Object.fromEntries(searchParams.entries());
 
       await dispatch(fetchGetListOrderAdmin(searchObject));
@@ -237,12 +230,14 @@ const Order = () => {
   }, [debounced, dispatch, searchParams]);
 
   return (
-    <div className="category">
-      <div className="category__header box-head">
-        <h2 className="category__header--title box-head__title">Loại món</h2>
+    <div className="order-admin">
+      <div className="order-admin__header box-head">
+        <h2 className="order-admin__header--title box-head__title">
+          Danh sách đơn hàng
+        </h2>
       </div>
 
-      <div className="category__body">
+      <div className="order-admin__body">
         <Card className="card">
           <div className="card__header">
             <Flex justify="space-between" align="center">
@@ -369,7 +364,9 @@ const Order = () => {
                   customer_name: order?.name,
                   order_date: dayjs(order?.created_at).format("DD/MM/YYYY"),
                   total_cost: `${formatCurrency(order?.total_cost)}đ`,
-                  payment_method: order?.payment_method,
+                  payment_method:
+                    orderConfig.ORDER_PAYMENT_METHOD[order?.payment_method] ||
+                    order?.payment_method,
                   status: order?.status,
                   payment_status: order?.payment_status,
                   action: (
@@ -377,7 +374,7 @@ const Order = () => {
                       <Tooltip title="Xem chi tiết">
                         <MdOutlineRemoveRedEye
                           className="table__icon"
-                          onClick={() => handleSet(category, setDetailCategory)}
+                          onClick={() => handleSet(order?.id, setOrderDetail)}
                         />
                       </Tooltip>
                     </Space>
@@ -400,12 +397,8 @@ const Order = () => {
         </Card>
       </div>
 
-      {detailCategory && (
-        <DetailCategory
-          open={detailCategory}
-          setOpen={setDetailCategory}
-          category={category}
-        />
+      {orderDetail && (
+        <OrderDetail open={orderDetail} setOpen={setOrderDetail} id={orderId} />
       )}
     </div>
   );

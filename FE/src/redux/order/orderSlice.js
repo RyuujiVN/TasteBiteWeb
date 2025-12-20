@@ -4,7 +4,8 @@ import { instance } from '~/api'
 
 const initialState = {
   listOrder: [],
-  pagination: {}
+  pagination: {},
+  orderDetail: null
 }
 
 // Get List
@@ -14,6 +15,16 @@ export const fetchGetListOrderAdmin = createAsyncThunk(
     const response = await instance.get('/order', {
       params: params
     })
+
+    return response.data
+  }
+)
+
+// Get Detail
+export const fetchGetDetailOrder = createAsyncThunk(
+  'product/fetchGetDetailOrder',
+  async (id) => {
+    const response = await instance.get(`/order/${id}`)
 
     return response.data
   }
@@ -72,6 +83,10 @@ export const orderSlice = createSlice({
     builder.addCase(fetchGetListOrderAdmin.fulfilled, (state, action) => {
       state.listOrder = action.payload.items
       state.pagination = action.payload.meta
+    })
+
+    builder.addCase(fetchGetDetailOrder.fulfilled, (state, action) => {
+      state.orderDetail = action.payload
     })
 
     builder.addCase(fetchUpdateOrderStatus.fulfilled, (state, action) => {

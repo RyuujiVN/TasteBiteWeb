@@ -2,7 +2,6 @@ import { CartService } from './../cart/cart.service';
 import {
   ConflictException,
   Injectable,
-  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';

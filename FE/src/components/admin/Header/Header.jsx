@@ -11,7 +11,7 @@ import {
 } from "@ant-design/icons";
 import { NotificationIcon } from "~/components/CustomeIcon/CustomeIcon";
 import "~/components/admin/Header/Header.scss";
-import logo from "~/assets/images/logo.png";
+import logo from "~/assets/images/vy-food-logo.png";
 import accountService from "~/services/accountService";
 
 const items = [
@@ -48,7 +48,6 @@ const Header = ({ collapse, setCollapse }) => {
         <div className="header--left">
           <div className="header__logo">
             <img src={logo} alt="logo" />
-            <h2 className="header__logo--title">Foody</h2>
           </div>
         </div>
 

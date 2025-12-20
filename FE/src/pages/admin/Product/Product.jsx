@@ -174,12 +174,14 @@ const Product = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       const searchObject = Object.fromEntries(searchParams.entries());
 
       await Promise.all([
         dispatch(fetchGetListProduct(searchObject)),
         dispatch(fetchGetAllCategory()),
       ]);
+      setLoading(false);
     };
 
     fetchData();
@@ -431,6 +433,7 @@ const Product = () => {
                 className="table"
                 columns={columns}
                 pagination={false}
+                loading={loading}
                 rowSelection={{ selectedRowKeys, onChange: onSelectChange }}
                 dataSource={products.map((product) => ({
                   key: product?.id,

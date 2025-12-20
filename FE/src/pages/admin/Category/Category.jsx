@@ -105,9 +105,15 @@ const Category = () => {
   };
 
   useEffect(() => {
-    const searchObject = Object.fromEntries(searchParams.entries());
+    const fetchData = async () => {
+      setLoading(true);
+      const searchObject = Object.fromEntries(searchParams.entries());
 
-    dispatch(fetchGetListCategory(searchObject));
+      dispatch(fetchGetListCategory(searchObject));
+      setLoading(false);
+    };
+
+    fetchData();
   }, [debounced, dispatch, searchParams]);
 
   return (
@@ -194,6 +200,7 @@ const Category = () => {
                 className="table"
                 columns={columns}
                 pagination={false}
+                loading={loading}
                 dataSource={categories.map((category) => ({
                   key: category?.id,
                   title: category?.title,

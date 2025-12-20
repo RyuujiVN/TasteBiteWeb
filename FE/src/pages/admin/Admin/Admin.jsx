@@ -96,10 +96,18 @@ const Admin = () => {
   };
 
   useEffect(() => {
-    const searchObject = Object.fromEntries(searchParams.entries());
+    const fetchData = async () => {
+      setLoading(true);
+      const searchObject = Object.fromEntries(searchParams.entries());
 
-    dispatch(fetchGetListAdmin(searchObject));
+      await dispatch(fetchGetListAdmin(searchObject));
+      setLoading(false);
+    };
+
+    fetchData();
   }, [debounced, dispatch, searchParams]);
+
+  console.log(loading);
 
   return (
     <div className="category">
@@ -142,12 +150,17 @@ const Admin = () => {
                 className="table"
                 columns={columns}
                 pagination={false}
+                loading={loading}
                 dataSource={admins.map((admin) => ({
                   key: admin?.id,
                   full_name: admin?.full_name,
                   email: admin?.email,
                   avatar: (
-                    <Image src={admin?.avatar_url} alt={admin?.full_name} width={100} />
+                    <Image
+                      src={admin?.avatar_url}
+                      alt={admin?.full_name}
+                      width={100}
+                    />
                   ),
                   role: admin?.role?.title,
                   action: (
