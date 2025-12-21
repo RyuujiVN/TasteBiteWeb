@@ -7,6 +7,15 @@ import { PaymentService } from './payment.service';
 export class PaymentController {
   constructor(private readonly paymentService: PaymentService) {}
 
+  @Post('create')
+  @ApiOperation({ summary: 'Tạo lại link chuyển khoản' })
+  @ApiBody({
+    type: CreatePaymentLinkDTO,
+  })
+  createPaymentLink(@Body() data: CreatePaymentLinkDTO): Promise<string> {
+    return this.paymentService.retryCheckoutLink(data);
+  }
+
   @Post('receive-webhook')
   handleWebhook(@Body() body: any) {
     console.log(body);

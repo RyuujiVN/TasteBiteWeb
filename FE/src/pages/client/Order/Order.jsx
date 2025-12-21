@@ -1,18 +1,31 @@
-import { Button, Col, Divider, Flex, Form, Radio, Row, Select } from "antd";
+import {
+  Button,
+  Col,
+  Divider,
+  Flex,
+  Form,
+  Radio,
+  Row,
+  Select,
+  Spin,
+} from "antd";
 import { date } from "~/constants/date";
 import "./Order.scss";
 import TextArea from "antd/es/input/TextArea";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchGetAllAddress } from "~/redux/address/addressSlice";
 import { formatCurrency } from "~/utils/formatPrice";
 import { toast } from "react-toastify";
 import { fetchCreateOrder } from "~/redux/order/orderSlice";
+import AddAddress from "../AccountAddress/AddAddress";
 
 const Order = () => {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
   const listAddress = useSelector((state) => state.address.listAddress);
+  const [loading, setLoading] = useState(false);
+  const [addAddress, setAddAddress] = useState();
   const cart = useSelector((state) => state.cart.cart);
   const addressDefaultId = useSelector((state) => state.cart.addressDefaultId);
   const totalCost = cart?.cart_item?.reduce((total, item) => {
@@ -68,7 +81,13 @@ const Order = () => {
   };
 
   useEffect(() => {
-    dispatch(fetchGetAllAddress());
+    const fetchData = async () => {
+      setLoading(true);
+      await dispatch(fetchGetAllAddress());
+      setLoading(false);
+    };
+
+    fetchData();
   }, [dispatch]);
 
   return (
@@ -180,48 +199,55 @@ const Order = () => {
                   <div className="order__card">
                     <Flex align="center" justify="space-between">
                       <h3 className="order__title">Địa chỉ nhận hàng</h3>
-                      <Button type="primary">+ Thêm địa chỉ</Button>
+                      <Button
+                        type="primary"
+                        onClick={() => setAddAddress(true)}
+                      >
+                        + Thêm địa chỉ
+                      </Button>
                     </Flex>
 
-                    <Form.Item
-                      name="shipping_address"
-                      initialValue={addressDefaultId}
-                    >
-                      <Radio.Group className="order__address w-100">
-                        {listAddress.map((item) => (
-                          <Radio
-                            key={item.id}
-                            value={item.id}
-                            className="w-100"
-                          >
-                            <div className="order__address--item address">
-                              <Flex justify="space-between" align="center">
-                                <div className="address__user">
-                                  <span className="address__user--name">
-                                    {item?.full_name}
-                                  </span>
+                    <Spin spinning={loading}>
+                      <Form.Item
+                        name="shipping_address"
+                        initialValue={addressDefaultId}
+                      >
+                        <Radio.Group className="order__address w-100">
+                          {listAddress.map((item) => (
+                            <Radio
+                              key={item.id}
+                              value={item.id}
+                              className="w-100"
+                            >
+                              <div className="order__address--item address">
+                                <Flex justify="space-between" align="center">
+                                  <div className="address__user">
+                                    <span className="address__user--name">
+                                      {item?.full_name}
+                                    </span>
 
-                                  <div className="split"></div>
+                                    <div className="split"></div>
 
-                                  <span className="address__user--phone">
-                                    {item?.phone}
-                                  </span>
-                                </div>
-                              </Flex>
+                                    <span className="address__user--phone">
+                                      {item?.phone}
+                                    </span>
+                                  </div>
+                                </Flex>
 
-                              <Flex justify="space-between" align="center">
-                                <div className="address__info">
-                                  <p>
-                                    {item?.street} <br />
-                                    {item?.ward?.name}, {item?.province?.name}
-                                  </p>
-                                </div>
-                              </Flex>
-                            </div>
-                          </Radio>
-                        ))}
-                      </Radio.Group>
-                    </Form.Item>
+                                <Flex justify="space-between" align="center">
+                                  <div className="address__info">
+                                    <p>
+                                      {item?.street} <br />
+                                      {item?.ward?.name}, {item?.province?.name}
+                                    </p>
+                                  </div>
+                                </Flex>
+                              </div>
+                            </Radio>
+                          ))}
+                        </Radio.Group>
+                      </Form.Item>
+                    </Spin>
                   </div>
                 </Col>
 
@@ -316,6 +342,15 @@ const Order = () => {
             </Form>
           </div>
         </div>
+
+        {addAddress && (
+          <AddAddress
+            addAddress={addAddress}
+            setAddAddress={setAddAddress}
+            loading={loading}
+            setLoading={setLoading}
+          />
+        )}
       </div>
     </>
   );

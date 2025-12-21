@@ -8,7 +8,7 @@ const initialState = {
   orderDetail: null
 }
 
-// Get List
+// Get List For Admin
 export const fetchGetListOrderAdmin = createAsyncThunk(
   'category/fetchGetListOrderAdmin',
   async (params) => {
@@ -19,6 +19,19 @@ export const fetchGetListOrderAdmin = createAsyncThunk(
     return response.data
   }
 )
+
+// Get List For Client
+export const fetchGetListOrderClient = createAsyncThunk(
+  'category/fetchGetListOrderClient',
+  async (params) => {
+    const response = await instance.get('/order/my-order', {
+      params: params
+    })
+
+    return response.data
+  }
+)
+
 
 // Get Detail
 export const fetchGetDetailOrder = createAsyncThunk(
@@ -80,6 +93,11 @@ export const orderSlice = createSlice({
 
   extraReducers: (builder) => {
     builder.addCase(fetchGetListOrderAdmin.fulfilled, (state, action) => {
+      state.listOrder = action.payload.items
+      state.pagination = action.payload.meta
+    })
+
+    builder.addCase(fetchGetListOrderClient.fulfilled, (state, action) => {
       state.listOrder = action.payload.items
       state.pagination = action.payload.meta
     })

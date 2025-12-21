@@ -22,7 +22,7 @@ const AddAddress = ({ addAddress, setAddAddress, loading, setLoading }) => {
     values.user_id = await toast.promise(dispatch(fetchAddAddress(values)), {
       pending: "Đang thêm...",
     });
-    dispatch(fetchGetAllAddress());
+    await dispatch(fetchGetAllAddress());
     setLoading(false);
   };
 

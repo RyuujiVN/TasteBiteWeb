@@ -49,6 +49,12 @@ export class OrderController {
     type: String,
     description: 'Lọc theo trạng thái đơn hàng',
   })
+  @ApiQuery({
+    name: 'payment_status',
+    required: false,
+    type: String,
+    description: 'Lọc theo trạng thái thanh toán',
+  })
   @ApiQuery({ name: 'date_start', required: false, type: Date })
   @ApiQuery({ name: 'date_end', required: false, type: Date })
   findAllAdmin(
@@ -60,7 +66,7 @@ export class OrderController {
     @Query('date_start') date_start?: Date,
     @Query('date_end') date_end?: Date,
   ): Promise<Pagination<Order>> {
-    return this.orderService.findAll({
+    return this.orderService.findAllAdmin({
       page,
       limit,
       search,
@@ -68,6 +74,39 @@ export class OrderController {
       payment_status,
       date_start,
       date_end,
+    });
+  }
+
+  @Get('my-order')
+  @Permissions(Permission.VIEW_ORDER)
+  @ApiOperation({ summary: 'Danh sách đơn đặt hàng cho client' })
+  @ApiQuery({ name: 'page', required: true, type: Number, default: 1 })
+  @ApiQuery({ name: 'limit', required: true, type: Number, default: 20 })
+  @ApiQuery({
+    name: 'search',
+    required: false,
+    type: String,
+    description: 'Tìm kiếm theo mã đơn hàng',
+  })
+  @ApiQuery({
+    name: 'status',
+    required: false,
+    type: String,
+    description: 'Lọc theo trạng thái đơn hàng',
+  })
+  findAllClient(
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
+    @Query('limit', new DefaultValuePipe(20), ParseIntPipe) limit: number,
+    @Req() req: any,
+    @Query('search') search?: string,
+    @Query('status') status?: OrderStatusEnum,
+  ): Promise<Pagination<Order>> {
+    return this.orderService.findAllClient({
+      page,
+      limit,
+      search,
+      status,
+      user_id: req?.user?.id,
     });
   }
 

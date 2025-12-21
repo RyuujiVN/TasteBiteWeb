@@ -1,0 +1,130 @@
+.purchase {
+  padding: 16px;
+
+  &__title {
+    font-size: 2.4rem;
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  &__item {
+    background: $color-white;
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border: 1px solid #ddd;
+  }
+
+  &__item-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+
+  &__order-code {
+    font-weight: 600;
+    color: $color-gray-four;
+  }
+
+  &__products {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  &__product {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  &__product-img {
+    width: 80px;
+    height: 80px;
+    border-radius: 6px;
+    object-fit: cover;
+    background: $bg-blue-white-two;
+  }
+
+  &__product-info {
+    flex: 1;
+  }
+
+  &__product-name {
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  &__product-qty {
+    font-size: 1.4rem;
+    margin-top: 4px;
+    display: inline-block;
+  }
+
+  &__price {
+    display: flex;
+    gap: 5px;
+
+    &--retail {
+      color: $color-gray-one;
+      text-decoration: line-through;
+    }
+
+    &--sale {
+      font-size: 1.8rem;
+      color: $color-red-heavy;
+    }
+  }
+
+  &__cancel {
+    color: $color-red;
+
+    &:hover {
+      background: none !important;
+      color: $color-red !important;
+    }
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 16px;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 8px;
+  }
+
+  &__btn {
+
+    &--success {
+      background: $color-green;
+      color: $color-white;
+    }
+
+    &--detail {
+      background: $color-gray-two;
+      color: $color-gray-four;
+      border: none;
+    }
+  }
+
+  &__total {
+    display: flex;
+    align-items: center;
+
+    span {
+      margin-left: 8px;
+      font-size: 2rem;
+      color: $color-red-heavy;
+    }
+  }
+}

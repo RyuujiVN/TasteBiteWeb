@@ -1,14 +1,13 @@
-import {
-  BadGatewayException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateOrderDTO } from './dtos/create-order.dto';
 import { Order } from './order.entity';
 import { DataSource, Repository } from 'typeorm';
 import { OrderItem } from './order-item.entity';
 import { CartService } from 'src/cart/cart.service';
-import { OrderPagination } from './interfaces/filter-order.interface';
+import {
+  OrderPaginationAdmin,
+  OrderPaginationClient,
+} from './interfaces/filter-order.interface';
 import { paginate, Pagination } from 'nestjs-typeorm-paginate';
 import { InjectRepository } from '@nestjs/typeorm';
 import { OrderStatusEnum } from 'src/common/enums/order.enum';
@@ -48,7 +47,34 @@ export class OrderService {
     return order;
   }
 
-  async findAll(options: OrderPagination): Promise<Pagination<Order>> {
+  async findAllClient(
+    options: OrderPaginationClient,
+  ): Promise<Pagination<Order>> {
+    const queryBuilder = this.orderRepository
+      .createQueryBuilder('order')
+      .andWhere('order.user_id = :user_id', {
+        user_id: options.user_id,
+      })
+      .leftJoinAndSelect('order.orderItems', 'orderItem')
+      .leftJoin('orderItem.product', 'product')
+      .addSelect(['product.id', 'product.title', 'product.image_url'])
+      .orderBy('order.id', 'DESC');
+    if (options?.search)
+      queryBuilder.andWhere('order.order_code ILIKE :order_code', {
+        order_code: `%${options.search}%`,
+      });
+
+    if (options?.status)
+      queryBuilder.andWhere('order.status = :status', {
+        status: `${options.status}`,
+      });
+
+    return paginate<Order>(queryBuilder, options);
+  }
+
+  async findAllAdmin(
+    options: OrderPaginationAdmin,
+  ): Promise<Pagination<Order>> {
     const queryBuilder = this.orderRepository
       .createQueryBuilder('order')
       .orderBy('order.id', 'DESC');
@@ -144,26 +170,54 @@ export class OrderService {
   }
 
   async updateStatus(id: number, status: OrderStatusEnum) {
-    await this.orderRepository.update(
-      {
-        id: id,
-      },
-      {
-        status: status,
-        updated_at: new Date(),
-      },
-    );
+    // Nếu status là cancel thì cập nhật thêm payment_status
+    if (status === OrderStatusEnum.CANCELLED) {
+      await this.orderRepository.update(
+        {
+          id: id,
+        },
+        {
+          status: status,
+          payment_status: PaymentStatusEnum.PAID,
+          updated_at: new Date(),
+        },
+      );
+    } else {
+      await this.orderRepository.update(
+        {
+          id: id,
+        },
+        {
+          status: status,
+          updated_at: new Date(),
+        },
+      );
+    }
   }
 
   async updatePaymentStatus(id: number, payment_status: PaymentStatusEnum) {
-    await this.orderRepository.update(
-      {
-        id: id,
-      },
-      {
-        payment_status: payment_status,
-        updated_at: new Date(),
-      },
-    );
+    // Nếu payment_status là fail thì cập nhật thêm status
+    if (payment_status === PaymentStatusEnum.FAILED) {
+      await this.orderRepository.update(
+        {
+          id: id,
+        },
+        {
+          payment_status: payment_status,
+          status: OrderStatusEnum.CANCELLED,
+          updated_at: new Date(),
+        },
+      );
+    } else {
+      await this.orderRepository.update(
+        {
+          id: id,
+        },
+        {
+          payment_status: payment_status,
+          updated_at: new Date(),
+        },
+      );
+    }
   }
 }
