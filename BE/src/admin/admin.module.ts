@@ -4,9 +4,10 @@ import { AdminController } from './admin.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from 'src/user/user.entity';
 import { RoleModule } from 'src/role/role.module';
+import { CartModule } from 'src/cart/cart.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User]), RoleModule],
+  imports: [TypeOrmModule.forFeature([User]), RoleModule, CartModule],
   providers: [AdminService],
   controllers: [AdminController],
 })

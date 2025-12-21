@@ -65,9 +65,8 @@ export class AuthService {
       cart_id: user.cart?.id,
     };
 
-    if (user.role) {
-      payload.role = user.role.title;
-    }
+    if (!user.role) payload.role = 'User';
+    else payload.role = user.role.title;
 
     const [accessToken, refreshToken] = await Promise.all([
       this.generateToken(
@@ -85,7 +84,7 @@ export class AuthService {
     return {
       userInfo: {
         ...payload,
-        permissions: user.role.permissions.split(', '),
+        permissions: user.role?.permissions?.split(', '),
       },
       accessToken: accessToken,
       refreshToken: refreshToken,

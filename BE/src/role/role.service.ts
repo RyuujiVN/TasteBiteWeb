@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateRoleDTO } from './dtos/create-role.dto';
-import { Repository } from 'typeorm';
+import { Not, Repository } from 'typeorm';
 import { Role } from './role.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UpdateRoleDTO } from './dtos/update-role.dto';
@@ -17,6 +17,9 @@ export class RoleService {
 
   async findAll(): Promise<Role[]> {
     return await this.roleRepository.find({
+      where: {
+        title: Not('User'),
+      },
       order: {
         id: 'ASC',
       },

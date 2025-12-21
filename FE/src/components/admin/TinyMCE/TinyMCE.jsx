@@ -6,8 +6,6 @@ const TinyMCE = ({ content, descriptionRef }) => {
     const formData = new FormData();
     formData.append("file", blobInfo.blob());
     const res = await instance.post("/product/upload", formData);
-
-    console.log(res.data);
     return res.data.file;
   };
 

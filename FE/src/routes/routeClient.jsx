@@ -10,6 +10,7 @@ import PaymentFailed from "~/pages/client/Payment/PaymentFailed";
 import PaymentSuccess from "~/pages/client/Payment/PaymentSuccess";
 import ProductDetail from "~/pages/client/ProductDetail/ProductDetail";
 import ProductFilter from "~/pages/client/ProductFilter/ProductFiler";
+import Purchase from "~/pages/client/Purchase/Purchase";
 
 const routesClient = [
   {
@@ -46,6 +47,11 @@ const routesClient = [
               {
                 path: "address",
                 element: <AccountAddress />,
+              },
+
+              {
+                path: "purchases",
+                element: <Purchase />,
               },
             ],
           },

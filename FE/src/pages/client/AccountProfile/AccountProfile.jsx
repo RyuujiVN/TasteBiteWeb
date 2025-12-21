@@ -69,7 +69,7 @@ const AccountProfile = () => {
       return;
     }
 
-    const isLt1M = file.size / 1024 / 1024 < 2;
+    const isLt1M = file.size / 1024 / 1024 < 1;
     if (!isLt1M) {
       message.error("Kích thước file không được vượt quá 1MB!");
       return;

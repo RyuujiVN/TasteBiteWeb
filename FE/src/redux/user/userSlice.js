@@ -48,7 +48,7 @@ export const userSlice = createSlice({
 
     builder.addCase(fetchUpdateProfile.fulfilled, (state, action) => {
       state.currentUser = action.payload
-      localStorage.setItem('userInfo', action.payload)
+      localStorage.setItem('userInfo', JSON.stringify(action.payload))
       toast.success("Cập nhật thông tin thành công!");
     })
   }

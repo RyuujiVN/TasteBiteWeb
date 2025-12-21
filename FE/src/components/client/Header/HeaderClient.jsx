@@ -44,9 +44,9 @@ const menuUser = [
   },
 
   {
-    key: "order",
+    key: "purchase",
     label: (
-      <div onClick={() => (location.href = "/account/orders")}>
+      <div onClick={() => (location.href = "/account/purchases")}>
         Đơn hàng của tôi
       </div>
     ),

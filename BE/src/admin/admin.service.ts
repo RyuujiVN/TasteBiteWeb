@@ -12,6 +12,7 @@ import bcrypt from 'bcryptjs';
 import { UpdateAdminDTO } from './dtos/update-admin.dto';
 import { paginate, Pagination } from 'nestjs-typeorm-paginate';
 import { PaginationQuery } from 'src/common/interfaces/pagination.interface';
+import { CartService } from 'src/cart/cart.service';
 
 @Injectable()
 export class AdminService {
@@ -19,6 +20,7 @@ export class AdminService {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     private readonly roleService: RoleService,
+    private readonly cartService: CartService,
   ) {}
 
   async findAllPagination(options: PaginationQuery): Promise<Pagination<User>> {
@@ -53,7 +55,9 @@ export class AdminService {
     admin.password = await bcrypt.hash(admin.password, 10);
     admin.role = role;
 
-    return await this.userRepository.save(admin);
+    const savedAdmin = await this.userRepository.save(admin);
+    await this.cartService.create(savedAdmin.id);
+    return savedAdmin;
   }
 
   async updateAdmin(id: number, data: UpdateAdminDTO): Promise<User> {

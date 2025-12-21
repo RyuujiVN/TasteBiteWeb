@@ -16,6 +16,7 @@ const AddAdmin = ({ addAdmin, setAddAdmin }) => {
   const hanldeSubmit = async (values) => {
     setLoading(true);
     delete values.confirm_password;
+    values.full_name = values.full_name.trim();
     toast.promise(dispatch(fetchAddAdmin(values)), {
       pending: "Đang thêm...",
     });
@@ -46,7 +47,6 @@ const AddAdmin = ({ addAdmin, setAddAdmin }) => {
             <Form.Item
               label="Họ tên:"
               name="full_name"
-              normalize={(value) => value?.trim()}
               rules={[
                 {
                   required: true,
