@@ -107,6 +107,7 @@ export class AuthService {
         user_name: refreshTokenDecoded.user_name,
         avatar: refreshTokenDecoded.avatar_url,
         role: refreshTokenDecoded?.role,
+        cart_id: refreshTokenDecoded?.cart_id,
       };
 
       const accessToken = await this.generateToken(

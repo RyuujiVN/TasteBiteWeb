@@ -9,6 +9,7 @@ import {
   Post,
   Query,
   Req,
+  Res,
   UseGuards,
 } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiQuery } from '@nestjs/swagger';
@@ -24,6 +25,7 @@ import { Order } from './order.entity';
 import { UpdateStatusOrderDTO } from './dtos/update-status-order.dto';
 import { UpdatePaymentStatusDTO } from './dtos/update-payment-status.dto';
 import { PaymentStatusEnum } from 'src/common/enums/payment.enum';
+import { ppid } from 'process';
 
 @Controller('order')
 @UseGuards(JwtAccessAuthGuard, PermissionGuard)
@@ -80,8 +82,20 @@ export class OrderController {
   @ApiBody({
     type: CreateOrderDTO,
   })
-  create(@Req() req: any, @Body() data: CreateOrderDTO) {
-    return this.orderService.create(req?.user?.id, req?.user?.cart_id, data);
+  async create(@Req() req: any, @Body() data: CreateOrderDTO) {
+    const paymentLink = await this.orderService.create(
+      req?.user?.id,
+      req?.user?.cart_id,
+      data,
+    );
+
+    if (!paymentLink)
+      return {
+        payment_url: 'http://localhost:5173/order/success',
+      };
+    return {
+      payment_url: paymentLink,
+    };
   }
 
   @Patch('update/status/:id')

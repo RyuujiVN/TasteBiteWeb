@@ -36,7 +36,6 @@ export const fetchCreateOrder = createAsyncThunk(
   async (data) => {
     const response = await instance.post("/order/create", data)
 
-
     return response.data
   }
 )
@@ -103,10 +102,6 @@ export const orderSlice = createSlice({
 
       state.listOrder[index].payment_status = updatedOrder.data.payment_status
       toast.success("Cập nhật trạng thái thanh toán thành công!")
-    })
-
-    builder.addCase(fetchCreateOrder.fulfilled, (state, action) => {
-      location.href = '/order-success'
     })
   }
 })

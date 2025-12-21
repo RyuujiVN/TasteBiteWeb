@@ -26,7 +26,6 @@ import { FileValidationPipe } from 'src/common/pipes/file-validation.pipe';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UpdateUserDTO } from './dtos/update-user.dto';
-import { Cart } from 'src/cart/cart.entity';
 
 @Controller('user')
 @ApiBearerAuth('JWT-auth')

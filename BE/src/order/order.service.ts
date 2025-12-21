@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadGatewayException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateOrderDTO } from './dtos/create-order.dto';
 import { Order } from './order.entity';
 import { DataSource, Repository } from 'typeorm';
@@ -8,13 +12,18 @@ import { OrderPagination } from './interfaces/filter-order.interface';
 import { paginate, Pagination } from 'nestjs-typeorm-paginate';
 import { InjectRepository } from '@nestjs/typeorm';
 import { OrderStatusEnum } from 'src/common/enums/order.enum';
-import { PaymentStatusEnum } from 'src/common/enums/payment.enum';
+import {
+  PaymentMethodEnum,
+  PaymentStatusEnum,
+} from 'src/common/enums/payment.enum';
+import { PaymentService } from 'src/payment/payment.service';
 
 @Injectable()
 export class OrderService {
   constructor(
-    private dataSource: DataSource,
+    private readonly dataSource: DataSource,
     private readonly cartService: CartService,
+    private readonly paymentService: PaymentService,
     @InjectRepository(Order)
     private readonly orderRepository: Repository<Order>,
   ) {}
@@ -117,7 +126,20 @@ export class OrderService {
 
       // 5. Xoá hết tất cả item trong cart của user
       await this.cartService.deleteAllItem(manager, cart_id);
-      return savedOrder;
+
+      // 6. Kiểm tra phương thứ thanh toán, nếu là chuyển khoản thì tạo link mã qr thanh toán
+      if (savedOrder.payment_method === PaymentMethodEnum.BANK) {
+        const paymentPayload = {
+          orderCode: savedOrder.id,
+          description: `Thanh toán ${savedOrder.order_code}`,
+          amount: Number(savedOrder.total_cost),
+          cancelUrl: 'http://localhost:5173/payment/failed',
+          returnUrl: 'http://localhost:5173/payment/success',
+        };
+        const paymentLink =
+          await this.paymentService.createPaymentLink(paymentPayload);
+        return paymentLink;
+      }
     });
   }
 

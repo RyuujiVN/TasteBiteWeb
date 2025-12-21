@@ -8,7 +8,6 @@ import { fetchGetAllAddress } from "~/redux/address/addressSlice";
 import { formatCurrency } from "~/utils/formatPrice";
 import { toast } from "react-toastify";
 import { fetchCreateOrder } from "~/redux/order/orderSlice";
-import { useNavigate } from "react-router-dom";
 
 const Order = () => {
   const [form] = Form.useForm();
@@ -20,8 +19,6 @@ const Order = () => {
     const sum = total + item?.product?.new_price * item.quantity;
     return sum;
   }, 0);
-
-  const navigate = useNavigate();
 
   const hanldeSubmit = async (values) => {
     const address = listAddress.find(
@@ -62,7 +59,12 @@ const Order = () => {
       },
     };
 
-    await dispatch(fetchCreateOrder(payload));
+    try {
+      const response = await dispatch(fetchCreateOrder(payload)).unwrap();
+      window.location.href = response.payment_url;
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
