@@ -82,10 +82,7 @@ export class AuthService {
     ]);
 
     return {
-      userInfo: {
-        ...payload,
-        permissions: user.role?.permissions?.split(', '),
-      },
+      userInfo: payload,
       accessToken: accessToken,
       refreshToken: refreshToken,
     };

@@ -3,7 +3,7 @@ import { toast } from 'react-toastify'
 import { instance } from '~/api'
 
 const initialState = {
-  currentUser: null
+  currentUser: null,
 }
 
 // Current user
@@ -15,7 +15,6 @@ export const fetchGetProfile = createAsyncThunk(
     return response.data
   }
 )
-
 
 // Update profile
 export const fetchUpdateProfile = createAsyncThunk(

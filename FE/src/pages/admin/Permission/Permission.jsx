@@ -5,6 +5,7 @@ import { permissionEnum } from "~/config/rbacConfig";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchGetAllRole,
+  fetchGetPermissions,
   fetchUpdatePermissionRole,
 } from "~/redux/role/roleSlice";
 import { toast } from "react-toastify";
@@ -13,6 +14,7 @@ const Permission = () => {
   const [permissions, setPermissions] = useState([]);
   const [loading, setLoading] = useState(false);
   const roles = useSelector((state) => state.role.listRole);
+  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
   const dispatch = useDispatch();
 
   const hanldeSubmit = async () => {
@@ -24,6 +26,7 @@ const Permission = () => {
     await toast.promise(dispatch(fetchUpdatePermissionRole(payload)), {
       pending: "Đang cập nhật...",
     });
+    dispatch(fetchGetPermissions({ role: userInfo?.role }));
     setLoading(false);
   };
 

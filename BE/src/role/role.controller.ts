@@ -59,6 +59,17 @@ export class RoleController {
     });
   }
 
+  @Get('permissions')
+  @ApiOperation({ summary: 'Lấy danh sách permission cho một role' })
+  @ApiQuery({
+    name: 'role',
+    required: true,
+    type: String,
+  })
+  getPermissionsRole(@Query('role') role: string): Promise<string[]> {
+    return this.roleService.getPermissionsRole(role);
+  }
+
   @Post('create')
   @Permissions(Permission.ADD_ROLE)
   @ApiOperation({ summary: 'Tạo mới role' })

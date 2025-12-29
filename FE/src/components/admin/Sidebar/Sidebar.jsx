@@ -13,8 +13,8 @@ import {
 import { RiShieldUserLine, RiLockPasswordLine } from "react-icons/ri";
 import { Link, useLocation } from "react-router-dom";
 import "./Sidebar.scss";
-import { usePermission } from "~/hooks/usePermission";
 import { permissionEnum } from "~/config/rbacConfig";
+import { useSelector } from "react-redux";
 
 const rawItems = [
   {
@@ -117,14 +117,13 @@ const rawItems = [
 
 const Sidebar = () => {
   const location = useLocation();
-  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-  const permissions = userInfo?.permissions || [];
+  const permissions = useSelector((state) => state.role.permissionsRole);
 
   const filterItems = (items) => {
     return items
       .map((group) => {
         const filteredChildren = group.children?.filter((child) =>
-          permissions.includes(child.permission)
+          permissions?.includes(child.permission)
         );
         if (!filteredChildren || filteredChildren.length === 0) return null;
         return { ...group, children: filteredChildren };

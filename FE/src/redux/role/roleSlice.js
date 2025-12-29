@@ -6,6 +6,7 @@ const initialState = {
   listRole: [],
   pagination: {},
   roleDetail: null,
+  permissionsRole: []
 }
 
 // Get All
@@ -13,6 +14,18 @@ export const fetchGetAllRole = createAsyncThunk(
   'role/fetchGetAllRole',
   async () => {
     const response = await instance.get('/role/get-all')
+
+    return response.data
+  }
+)
+
+// Get permissions role
+export const fetchGetPermissions = createAsyncThunk(
+  'role/fetchGetPermissions',
+  async (query) => {
+    const response = await instance.get('/role/permissions', {
+      params: query
+    })
 
     return response.data
   }
@@ -106,6 +119,10 @@ export const roleSlice = createSlice({
       state.roleDetail = action.payload
     })
 
+    builder.addCase(fetchGetPermissions.fulfilled, (state, action) => {
+      state.permissionsRole = action.payload
+    })
+
     builder.addCase(fetchAddRole.fulfilled, (state, action) => {
       state.listRole.push(action.payload)
       state.pagination.itemCount++
@@ -121,7 +138,7 @@ export const roleSlice = createSlice({
     })
 
     builder.addCase(fetchUpdatePermissionRole.fulfilled, (state, action) => {
-      console.log(action.payload)
+
       toast.success("Cập nhật thành công!")
     })
 

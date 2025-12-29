@@ -9,10 +9,12 @@ import {
   LogoutOutlined,
   SettingOutlined,
 } from "@ant-design/icons";
-import { NotificationIcon } from "~/components/CustomeIcon/CustomeIcon";
 import "~/components/admin/Header/Header.scss";
 import logo from "~/assets/images/vy-food-logo.png";
 import accountService from "~/services/accountService";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { fetchGetProfile } from "~/redux/user/userSlice";
 
 const items = [
   {
@@ -39,7 +41,15 @@ const items = [
 
 const Header = ({ collapse, setCollapse }) => {
   const { Text } = Typography;
+  const profile = useSelector((state) => state.user.currentUser);
+  const dispatch = useDispatch();
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+
+  useEffect(() => {
+    if (userInfo) {
+      dispatch(fetchGetProfile());
+    }
+  }, [dispatch]);
 
   return (
     <>

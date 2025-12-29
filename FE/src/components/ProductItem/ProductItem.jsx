@@ -8,7 +8,7 @@ const ProductItem = ({ product }) => {
   const navigate = useNavigate();
   return (
     <>
-      <Col xl={6} lg={8} md={12} sm={12} xs={24}>
+      <Col xl={6} lg={8} md={8} sm={12} xs={24}>
         <div
           className="product__item"
           onClick={() => navigate(`/product/${product?.slug}`)}

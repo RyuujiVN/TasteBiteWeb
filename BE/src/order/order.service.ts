@@ -178,7 +178,7 @@ export class OrderService {
         },
         {
           status: status,
-          payment_status: PaymentStatusEnum.PAID,
+          payment_status: PaymentStatusEnum.UNPAID,
           updated_at: new Date(),
         },
       );

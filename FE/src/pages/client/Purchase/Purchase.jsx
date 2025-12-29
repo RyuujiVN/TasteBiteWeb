@@ -1,4 +1,4 @@
-import { Button, Flex, Tabs, Tag } from "antd";
+import { Button, Flex, Pagination, Tabs, Tag } from "antd";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { orderConfig } from "~/constants/order";
@@ -10,13 +10,15 @@ import "./Purchase.scss";
 import { formatCurrency } from "~/utils/formatPrice";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import OrderDetail from "~/pages/admin/Order/OrderDetail";
-import paymentService from "~/services/paymentService";
 import { Spin } from "antd";
+import { useSearchParams } from "react-router-dom";
 
 const Purchase = () => {
   const dispatch = useDispatch();
   const orders = useSelector((state) => state.order.listOrder);
-  const [loading, setLoading] = useState(true);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const pagination = useSelector((state) => state.order.pagination);
+  const [loading, setLoading] = useState(false);
   const [orderDetail, setOrderDetail] = useState(false);
   const [filter, setFilter] = useState({
     status: "",
@@ -33,6 +35,16 @@ const Purchase = () => {
       label: value.text,
     })),
   ];
+
+  const handleChangePage = (page, size) => {
+    const searchObject = Object.fromEntries(searchParams.entries());
+
+    setSearchParams({
+      ...searchObject,
+      page: page,
+      limit: size,
+    });
+  };
 
   const handleSet = (value, setModal) => {
     setOrderId(value);
@@ -63,12 +75,15 @@ const Purchase = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       await dispatch(fetchGetListOrderClient(filter));
       setLoading(false);
     };
 
     fetchData();
   }, [dispatch, filter]);
+
+  console.log(pagination);
 
   return (
     <>
@@ -174,6 +189,17 @@ const Purchase = () => {
             />
           )}
         </div>
+
+        <Pagination
+          current={parseInt(searchParams.get("page")) || 1}
+          total={pagination?.itemCount}
+          align="center"
+          showTotal={(total) => `Tổng: ${total} đơn hàng`}
+          showSizeChanger
+          onChange={handleChangePage}
+          pageSizeOptions={[1, 10, 20, 50]}
+          className="mt-20"
+        />
       </Spin>
     </>
   );

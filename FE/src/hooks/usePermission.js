@@ -1,7 +1,8 @@
+import { useSelector } from "react-redux";
 
 
 export const usePermission = (permission) => {
-  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+  const permissions = useSelector((state) => state.role.permissionsRole);
 
-  return userInfo?.permissions?.includes(permission)
+  return permissions?.includes(permission)
 }

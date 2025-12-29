@@ -50,6 +50,19 @@ export class RoleService {
     return role;
   }
 
+  async getPermissionsRole(roleTitle: string): Promise<string[]> {
+    const role = await this.roleRepository
+      .createQueryBuilder('role')
+      .where('LOWER(role.title) = LOWER(:title)', {
+        title: roleTitle,
+      })
+      .getOne();
+
+    if (!role) return [];
+
+    return role.permissions.split(', ');
+  }
+
   async create(data: CreateRoleDTO): Promise<Role> {
     const role = new Role();
 

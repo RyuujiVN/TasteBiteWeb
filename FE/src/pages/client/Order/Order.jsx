@@ -27,7 +27,6 @@ const Order = () => {
   const [loading, setLoading] = useState(false);
   const [addAddress, setAddAddress] = useState();
   const cart = useSelector((state) => state.cart.cart);
-  const addressDefaultId = useSelector((state) => state.cart.addressDefaultId);
   const totalCost = cart?.cart_item?.reduce((total, item) => {
     const sum = total + item?.product?.new_price * item.quantity;
     return sum;
@@ -90,6 +89,18 @@ const Order = () => {
     fetchData();
   }, [dispatch]);
 
+  useEffect(() => {
+    if (listAddress.length > 0) {
+      const defaultAddress = listAddress.find((item) => item.is_default);
+
+      if (defaultAddress) {
+        form.setFieldsValue({
+          shipping_address: defaultAddress.id,
+        });
+      }
+    }
+  }, [listAddress]);
+
   return (
     <>
       <div className="order">
@@ -101,7 +112,6 @@ const Order = () => {
               initialValues={{
                 delivery_date: date.today.format("YYYY-MM-DD"),
                 delivery_time_type: "NOW",
-                shipping_address: addressDefaultId,
               }}
             >
               <Row gutter={[20, 20]}>
@@ -208,10 +218,7 @@ const Order = () => {
                     </Flex>
 
                     <Spin spinning={loading}>
-                      <Form.Item
-                        name="shipping_address"
-                        initialValue={addressDefaultId}
-                      >
+                      <Form.Item name="shipping_address">
                         <Radio.Group className="order__address w-100">
                           {listAddress.map((item) => (
                             <Radio
