@@ -17,9 +17,11 @@ const logout = async () => {
 
 const refreshToken = async () => {
   const refreshToken = localStorage.getItem("refreshToken")
-  return await instance.post("/auth/refresh-token", {
+  const response = await instance.post("/auth/refresh-token", {
     refreshToken: refreshToken
   })
+
+  return response.data;
 }
 
 const forgotPassword = async (data) => {

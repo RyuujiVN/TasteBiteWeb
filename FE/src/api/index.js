@@ -24,6 +24,8 @@ instance.interceptors.request.use(function (config) {
   return Promise.reject(error);
 });
 
+let refreshTokenPromise = null;
+
 // Add a response interceptor
 instance.interceptors.response.use(function (response) {
   // Any status code that lie within the range of 2xx cause this function to trigger
@@ -32,41 +34,48 @@ instance.interceptors.response.use(function (response) {
 }, function (error) {
   // Any status codes that falls outside the range of 2xx cause this function to trigger
   // Do something with response error
-  console.log(error.response)
-  // if (error.response.status === 401) {
-  //   adminService.logout().then(
-  //     () => {
-  //       location.href = '/login'
-  //     }
-  //   )
-  // }
-
-  // if (error.response.status === 403) location.href = '/access-denied'
-
-  const originalRequest = error.config;
-  if (error.response.status === 410 && !originalRequest._retry) {
-    originalRequest._retry = true
-
-    return adminService.refreshToken()
-      .then(
-        (res) => {
-          const { accessToken } = res.data;
-          localStorage.setItem('accessToken', accessToken);
-          instance.defaults.headers.Authorization = `Bearer ${accessToken}`;
-          return instance(originalRequest)
-        }
-      )
-      .catch((err) => {
-        // adminService.logout().then(
-        //   () => {
-        //     location.href = '/login'
-        //   }
-        // )
-        return Promise.reject(err)
-      })
+  if (error.response.status === 401) {
+    adminService.logout().then(
+      () => {
+        location.href = '/login'
+      }
+    )
   }
 
+  if (error.response.status === 403) location.href = '/access-denied'
 
+  const originalRequest = error.config;
+  if (error.response.status === 410 && originalRequest) {
+
+    if (!refreshTokenPromise) {
+      refreshTokenPromise = adminService.refreshToken()
+        .then(
+          (res) => {
+            const { accessToken } = res;
+            localStorage.setItem('accessToken', accessToken);
+            instance.defaults.headers.Authorization = `Bearer ${accessToken}`;
+          }
+        )
+        .catch((err) => {
+          console.log(err)
+          adminService.logout().then(
+            () => {
+              location.href = '/login'
+            }
+          )
+          return Promise.reject(err)
+        })
+        .finally(() => {
+          refreshTokenPromise = null
+        })
+    }
+
+    return refreshTokenPromise.then(() => {
+      return instance(originalRequest)
+    })
+  }
+
+  console.log(error.response)
   if (error.response.status !== 401) {
     toast.error(error.response?.data?.message || error.message)
   }
