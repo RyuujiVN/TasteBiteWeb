@@ -76,9 +76,9 @@ const Category = () => {
     setModal(true);
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     setLoading(true);
-    toast.promise(dispatch(fectchDeleteCategory(id)), {
+    await toast.promise(dispatch(fectchDeleteCategory(id)), {
       pending: "Đang xoá...",
     });
 
@@ -109,7 +109,7 @@ const Category = () => {
       setLoading(true);
       const searchObject = Object.fromEntries(searchParams.entries());
 
-      dispatch(fetchGetListCategory(searchObject));
+      await dispatch(fetchGetListCategory(searchObject));
       setLoading(false);
     };
 

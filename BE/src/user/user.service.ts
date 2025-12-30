@@ -118,4 +118,11 @@ export class UserService {
 
     return await this.userRepository.save(user);
   }
+
+  async delete(id: number) {
+    const result = await this.userRepository.delete({ id: id });
+
+    if (result.affected === 0)
+      throw new NotFoundException('Không tìm thấy user!');
+  }
 }

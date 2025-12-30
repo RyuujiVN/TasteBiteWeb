@@ -25,6 +25,7 @@ import { FaPlus } from "react-icons/fa6";
 import { CiFilter } from "react-icons/ci";
 import { Flex, Image } from "antd";
 import {
+  fetchDeleteUser,
   fetchGetListUser,
   fetchUpdateUserStatus,
 } from "~/redux/user/userSlice";
@@ -92,9 +93,9 @@ const Customer = () => {
     setLoading(false);
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     setLoading(true);
-    toast.promise(dispatch(fectchDeleteCategory(id)), {
+    await toast.promise(dispatch(fetchDeleteUser(id)), {
       pending: "Đang xoá...",
     });
 
@@ -258,7 +259,7 @@ const Customer = () => {
                       <Popconfirm
                         title="Xoá tài khoản"
                         description="Bạn có chắc muốn xoá tài khoản này"
-                        onConfirm={() => handleDelete(category.id)}
+                        onConfirm={() => handleDelete(user.id)}
                         okText="Xoá"
                         cancelText="Huỷ"
                         okButtonProps={{ loading: loading }}

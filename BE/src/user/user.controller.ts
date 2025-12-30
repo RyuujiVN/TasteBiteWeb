@@ -3,6 +3,7 @@ import {
   ClassSerializerInterceptor,
   Controller,
   DefaultValuePipe,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -145,5 +146,16 @@ export class UserController {
   })
   updateProfile(@Req() req: any, @Body() data: UpdateUserDTO): Promise<User> {
     return this.userService.updateProfile(req?.user?.id, data);
+  }
+
+  @Delete('delete/:id')
+  @Permissions(Permission.DELETE_ROLE)
+  @ApiOperation({ summary: 'Xoá tài khoản user' })
+  async deleteRole(@Param('id', ParseIntPipe) id: number) {
+    await this.userService.delete(id);
+
+    return {
+      message: 'Xoá thành công!',
+    };
   }
 }

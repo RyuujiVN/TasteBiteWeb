@@ -50,6 +50,16 @@ export const fetchUpdateProfile = createAsyncThunk(
   }
 )
 
+// Delete
+export const fetchDeleteUser = createAsyncThunk(
+  'product/fetchDeleteUser',
+  async (id, { dispatch }) => {
+    const response = await instance.delete(`/user/delete/${id}`)
+    dispatch(deleteUser(id))
+    return response.data
+  }
+)
+
 export const userSlice = createSlice({
   name: 'user',
   initialState,
@@ -61,6 +71,11 @@ export const userSlice = createSlice({
 
       state.currentUser = action.payload.userInfo;
 
+    },
+
+    deleteUser: (state, action) => {
+      state.listUser = state.listUser.filter(item => item.id != action.payload)
+      state.pagination.itemCount--
     }
   },
 
@@ -88,10 +103,14 @@ export const userSlice = createSlice({
       localStorage.setItem('userInfo', JSON.stringify(action.payload))
       toast.success("Cập nhật thông tin thành công!");
     })
+
+    builder.addCase(fetchDeleteUser.fulfilled, (state, action) => {
+      toast.success(action.payload.message)
+    })
   }
 })
 
 // Action creators are generated for each case reducer function
-export const { login } = userSlice.actions
+export const { login, deleteUser } = userSlice.actions
 
 export default userSlice.reducer
