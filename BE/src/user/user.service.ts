@@ -2,6 +2,7 @@ import { CartService } from './../cart/cart.service';
 import {
   ConflictException,
   Injectable,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -10,6 +11,9 @@ import { CreateUserDTO } from 'src/user/dtos/create-user.dto';
 import { User } from 'src/user/user.entity';
 import { Not, Repository } from 'typeorm';
 import { UpdateUserDTO } from './dtos/update-user.dto';
+import { PaginationUser } from './interfaces/pagination-user.interface';
+import { paginate, Pagination } from 'nestjs-typeorm-paginate';
+import { UpdateUserStatusDTO } from './dtos/update-user-status.dto';
 
 @Injectable()
 export class UserService {
@@ -41,8 +45,23 @@ export class UserService {
     await this.cartService.create(newUser.id);
   }
 
-  async findAll(): Promise<User[]> {
-    return await this.userRepository.find();
+  async findAllPagination(options: PaginationUser): Promise<Pagination<User>> {
+    const queryBuilder = this.userRepository
+      .createQueryBuilder('user')
+      .where('user.role_id IS NULL')
+      .orderBy('user.id', 'DESC');
+
+    if (options.search)
+      queryBuilder.andWhere('user.email ILIKE :email', {
+        email: `%${options.search}%`,
+      });
+
+    if (options.status)
+      queryBuilder.andWhere('user.status = :status', {
+        status: options.status,
+      });
+
+    return paginate<User>(queryBuilder, options);
   }
 
   async getProfile(id: number): Promise<User> {
@@ -64,6 +83,20 @@ export class UserService {
       id: cart.id,
       cart_item: cart.cart_item,
     };
+  }
+
+  async updateStatus(id: number, data: UpdateUserStatusDTO): Promise<User> {
+    const user = await this.userRepository.findOne({
+      where: {
+        id: id,
+      },
+    });
+
+    if (!user) throw new NotFoundException('Không tìm thấy người dùng');
+
+    Object.assign(user, data);
+
+    return await this.userRepository.save(user);
   }
 
   async updateProfile(id: number, data: UpdateUserDTO): Promise<User> {

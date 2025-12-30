@@ -20,6 +20,7 @@ import ResetPassword from "~/pages/admin/Auth/ResetPassword";
 import ProtectRoute from "~/components/ProtectRoute/ProtectRoute";
 import Blog from "~/pages/admin/Blog/Blog";
 import Order from "~/pages/admin/Order/Order";
+import Customer from "~/pages/admin/Customer/Customer";
 
 const routesAdmin = [
   // Routes cho auth
@@ -121,6 +122,15 @@ const routesAdmin = [
               <RbacRoute requiredPermission={permissionEnum.VIEW_BLOG} />
             ),
             children: [{ path: "", element: <Blog /> }],
+          },
+
+          // Customer routes
+          {
+            path: "customers",
+            element: (
+              <RbacRoute requiredPermission={permissionEnum.VIEW_USER} />
+            ),
+            children: [{ path: "", element: <Customer /> }],
           },
         ],
       },

@@ -4,13 +4,37 @@ import { instance } from '~/api'
 
 const initialState = {
   currentUser: null,
+  listUser: [],
+  pagination: null,
 }
+
+// Get List
+export const fetchGetListUser = createAsyncThunk(
+  'user/fetchGetListUser',
+  async (params) => {
+    const response = await instance.get('/user', {
+      params: params
+    })
+
+    return response.data
+  }
+)
 
 // Current user
 export const fetchGetProfile = createAsyncThunk(
   'user/fetchGetProfile',
   async () => {
     const response = await instance.get('/user/profile')
+
+    return response.data
+  }
+)
+
+// Update status
+export const fetchUpdateUserStatus = createAsyncThunk(
+  'user/fetchUpdateUserStatus',
+  async ({ id, data }) => {
+    const response = await instance.patch(`/user/update/${id}`, data)
 
     return response.data
   }
@@ -41,8 +65,22 @@ export const userSlice = createSlice({
   },
 
   extraReducers: (builder) => {
+    builder.addCase(fetchGetListUser.fulfilled, (state, action) => {
+      state.listUser = action.payload.items
+      state.pagination = action.payload.meta
+    })
+
+
     builder.addCase(fetchGetProfile.fulfilled, (state, action) => {
       state.currentUser = action.payload
+    })
+
+    builder.addCase(fetchUpdateUserStatus.fulfilled, (state, action) => {
+      const updatedUser = action.payload
+      const index = state.listUser.findIndex(item => item.id == updatedUser.id)
+
+      state.listUser[index] = updatedUser
+      toast.success("Cập nhật trạng thái thành công!")
     })
 
     builder.addCase(fetchUpdateProfile.fulfilled, (state, action) => {

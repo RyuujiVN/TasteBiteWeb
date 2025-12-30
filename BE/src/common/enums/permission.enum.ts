@@ -23,6 +23,10 @@ export enum Permission {
   UPDATE_ADMIN = 'update_admin',
   DELETE_ADMIN = 'delete_admin',
 
+  // User
+  VIEW_USER = 'view_user',
+  DELETE_USER = 'delete_user',
+
   // Role
   VIEW_ROLE = 'view_role',
   ADD_ROLE = 'add_role',

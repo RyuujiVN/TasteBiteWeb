@@ -148,6 +148,7 @@
       display: flex;
       gap: 15px;
       margin: 10px 0;
+      padding-bottom: 10px;
       border-bottom: 1px solid #ddd;
       cursor: pointer;
     }
@@ -161,6 +162,19 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
+      }
+    }
+
+    &__link {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    &__button {
+      color: $color-red-heavy;
+
+      &:hover {
+        color: $color-red-heavy !important;
       }
     }
 

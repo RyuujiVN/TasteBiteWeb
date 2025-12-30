@@ -2,10 +2,13 @@ import {
   Body,
   ClassSerializerInterceptor,
   Controller,
+  DefaultValuePipe,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
+  Query,
   Req,
   UploadedFile,
   UseGuards,
@@ -16,6 +19,7 @@ import {
   ApiBody,
   ApiConsumes,
   ApiOperation,
+  ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
 import { User } from './user.entity';
@@ -26,6 +30,10 @@ import { FileValidationPipe } from 'src/common/pipes/file-validation.pipe';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UpdateUserDTO } from './dtos/update-user.dto';
+import { Permission } from 'src/common/enums/permission.enum';
+import { Permissions } from 'src/common/decorators/permission.decorator';
+import { Pagination } from 'nestjs-typeorm-paginate';
+import { UpdateUserStatusDTO } from './dtos/update-user-status.dto';
 
 @Controller('user')
 @ApiBearerAuth('JWT-auth')
@@ -38,9 +46,35 @@ export class UserController {
     private readonly cloudinaryService: CloudinaryService,
   ) {}
 
-  @Get('get-all')
-  async findAll(): Promise<User[]> {
-    return await this.userService.findAll();
+  @Get('')
+  @Permissions(Permission.VIEW_USER)
+  @ApiOperation({ summary: 'Lấy danh sách user có phân trang' })
+  @ApiQuery({ name: 'page', required: true, type: Number, default: 1 })
+  @ApiQuery({ name: 'limit', required: true, type: Number, default: 10 })
+  @ApiQuery({
+    name: 'search',
+    required: false,
+    type: String,
+    description: 'Tìm kiếm theo email',
+  })
+  @ApiQuery({
+    name: 'status',
+    required: false,
+    type: Boolean,
+    description: 'Lọc theo trạng thái',
+  })
+  findAllRolePagination(
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
+    @Query('search') search?: string,
+    @Query('status') status?: boolean,
+  ): Promise<Pagination<User>> {
+    return this.userService.findAllPagination({
+      page,
+      limit,
+      search,
+      status,
+    });
   }
 
   @Get('profile')
@@ -86,6 +120,20 @@ export class UserController {
     return {
       file: fileUrl.secure_url,
     };
+  }
+
+  @Patch('update/:id')
+  @ApiOperation({
+    summary: 'Cập nhật thông tin người dùng',
+  })
+  @ApiBody({
+    type: UpdateUserDTO,
+  })
+  updateStatus(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() data: UpdateUserStatusDTO,
+  ): Promise<User> {
+    return this.userService.updateStatus(id, data);
   }
 
   @Patch('update')

@@ -3,7 +3,6 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
 import { MaxLength } from 'class-validator';
 import { Address } from 'src/address/address.entity';
-import { CartItem } from 'src/cart/cart-item.entity';
 import { Order } from 'src/order/order.entity';
 import { Role } from 'src/role/role.entity';
 import {
@@ -50,6 +49,12 @@ export class User {
   @Column({ nullable: true })
   @MaxLength(10)
   phone: string;
+
+  @ApiProperty({
+    description: 'Trạng thái hoạt động',
+  })
+  @Column({ default: true })
+  status: boolean;
 
   @ApiProperty({
     example: 'test123@gmail.com',

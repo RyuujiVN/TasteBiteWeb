@@ -1,4 +1,4 @@
-import { Form, Input } from "antd";
+import { Button, Divider, Form, Input } from "antd";
 import { useEffect, useRef, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import useDebounce from "~/hooks/useDebounce";
@@ -35,7 +35,7 @@ const Search = () => {
           search: debounce.trim(),
         });
 
-        setProducts(res.data);
+        setProducts(res.data.items);
       } catch (error) {
         console.log(error);
       } finally {
@@ -56,7 +56,7 @@ const Search = () => {
               placeholder="Tìm kiếm món ăn..."
               prefix={<CiSearch />}
               onChange={(e) => setKeyword(e.target.value)}
-              onBlur={() => setShowResult(false)}
+              // onBlur={() => setShowResult(false)}
               onFocus={() => setShowResult(true)}
               ref={inputRef}
             />
@@ -72,28 +72,40 @@ const Search = () => {
                   </div>
                 </div>
               ) : products?.length > 0 ? (
-                products?.map((item) => (
-                  <div className="search__item" key={item?.id}>
-                    <div className="search__img">
-                      <img src={item?.image_url} alt={item?.title} />
-                    </div>
+                <>
+                  {products.map((item) => (
+                    <div className="search__item" key={item?.id}>
+                      <div className="search__img">
+                        <img src={item?.image_url} alt={item?.title} />
+                      </div>
 
-                    <div className="search__info">
-                      <h3 className="search__info--title">{item?.title}</h3>
-                      <div className="search__price">
-                        <span className="search__price--new">
-                          {formatCurrency(item?.new_price)}
-                        </span>
-
-                        {item?.discount > 0 && (
-                          <span className="search__price--old">
-                            {formatCurrency(item?.price)}
+                      <div className="search__info">
+                        <h3 className="search__info--title">{item?.title}</h3>
+                        <div className="search__price">
+                          <span className="search__price--new">
+                            {formatCurrency(item?.new_price)}
                           </span>
-                        )}
+
+                          {item?.discount > 0 && (
+                            <span className="search__price--old">
+                              {formatCurrency(item?.price)}
+                            </span>
+                          )}
+                        </div>
                       </div>
                     </div>
+                  ))}
+
+                  <div className="search__link">
+                    <Button
+                      type="link"
+                      onClick={handleSearch}
+                      className="search__button"
+                    >
+                      Xem tất cả sản phẩm
+                    </Button>
                   </div>
-                ))
+                </>
               ) : (
                 <div className="search__no-product">
                   Không có sản phẩm nào...

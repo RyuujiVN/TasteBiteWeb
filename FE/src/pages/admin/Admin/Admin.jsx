@@ -107,8 +107,6 @@ const Admin = () => {
     fetchData();
   }, [debounced, dispatch, searchParams]);
 
-  console.log(loading);
-
   return (
     <div className="category">
       <div className="category__header box-head">

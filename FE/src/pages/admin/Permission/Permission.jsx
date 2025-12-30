@@ -584,6 +584,68 @@ const Permission = () => {
               ))}
           </tr>
 
+          {/* Quản lý người dùng */}
+          <tr className="permission__table--head">
+            <td colSpan={roles.length + 1}>Khách hàng</td>
+          </tr>
+
+          <tr>
+            <td>Xem</td>
+            {roles.length > 0 &&
+              roles.map((item) => (
+                <td key={item.title} className="permission__table--check">
+                  <Checkbox
+                    checked={isChecked(item.id, permissionEnum.VIEW_USER)}
+                    onChange={(e) =>
+                      handleChange(
+                        item.id,
+                        permissionEnum.VIEW_USER,
+                        e.target.checked
+                      )
+                    }
+                  />
+                </td>
+              ))}
+          </tr>
+
+          <tr>
+            <td>Cập nhật</td>
+            {roles.length > 0 &&
+              roles.map((item) => (
+                <td key={item.title} className="permission__table--check">
+                  <Checkbox
+                    checked={isChecked(item.id, permissionEnum.UPDATE_USER)}
+                    onChange={(e) =>
+                      handleChange(
+                        item.id,
+                        permissionEnum.UPDATE_USER,
+                        e.target.checked
+                      )
+                    }
+                  />
+                </td>
+              ))}
+          </tr>
+
+          <tr>
+            <td>Xoá</td>
+            {roles.length > 0 &&
+              roles.map((item) => (
+                <td key={item.title} className="permission__table--check">
+                  <Checkbox
+                    checked={isChecked(item.id, permissionEnum.DELETE_USER)}
+                    onChange={(e) =>
+                      handleChange(
+                        item.id,
+                        permissionEnum.DELETE_USER,
+                        e.target.checked
+                      )
+                    }
+                  />
+                </td>
+              ))}
+          </tr>
+
           {/* Phân quyền */}
           <tr className="permission__table--head">
             <td colSpan={roles.length + 1}>Quyền</td>

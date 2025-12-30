@@ -61,7 +61,7 @@ const rawItems = [
         key: "/customers",
         icon: <UserOutlined />,
         label: <Link to="/admin/customers">Khách hàng</Link>,
-        permission: "view-customers",
+        permission: permissionEnum.VIEW_USER,
       },
     ],
   },

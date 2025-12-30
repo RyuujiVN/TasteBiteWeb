@@ -110,7 +110,7 @@ const ProductFilter = () => {
       >
         {/* SEARCH */}
         <div className="filter-search-bar">
-          <Form.Item name="search" style={{ flex: 1, marginBottom: 0 }}>
+          <Form.Item name="search" style={{ flex: 1, marginBottom: 0 }} className="w-100">
             <Input
               size="large"
               placeholder="Tìm kiếm sản phẩm..."
