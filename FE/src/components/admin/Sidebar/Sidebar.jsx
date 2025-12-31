@@ -76,18 +76,6 @@ const rawItems = [
   },
   {
     type: "group",
-    label: "NỘI DUNG & HỆ THỐNG",
-    children: [
-      {
-        key: "/posts",
-        icon: <FileTextOutlined />,
-        label: <Link to="/admin/blogs">Bài viết</Link>,
-        permission: permissionEnum.VIEW_BLOG,
-      },
-    ],
-  },
-  {
-    type: "group",
     label: "QUYỀN",
     children: [
       {
@@ -107,18 +95,6 @@ const rawItems = [
         icon: <RiLockPasswordLine size={18} />,
         label: <Link to="/admin/permissions">Phân quyền</Link>,
         permission: permissionEnum.UPDATE_PERMISSION_ROLE,
-      },
-    ],
-  },
-  {
-    type: "group",
-    label: "HỖ TRỢ KHÁCH HÀNG",
-    children: [
-      {
-        key: "/chat",
-        icon: <MessageOutlined />,
-        label: <Link to="/admin/chat">Chat khách hàng</Link>,
-        permission: "view-chat",
       },
     ],
   },

@@ -41,7 +41,7 @@ const Sidebar = () => {
         </NavLink>
 
         <NavLink
-          to="/account/orders"
+          to="/account/purchases"
           className={({ isActive }) =>
             `account__sidebar-item ${
               isActive ? "account__sidebar-item--active" : ""
