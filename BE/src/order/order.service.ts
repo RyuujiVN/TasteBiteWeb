@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateOrderDTO } from './dtos/create-order.dto';
 import { Order } from './order.entity';
-import { DataSource, Repository } from 'typeorm';
+import { Between, DataSource, Repository } from 'typeorm';
 import { OrderItem } from './order-item.entity';
 import { CartService } from 'src/cart/cart.service';
 import {
@@ -25,11 +25,13 @@ export class OrderService {
     private readonly paymentService: PaymentService,
     @InjectRepository(Order)
     private readonly orderRepository: Repository<Order>,
+    @InjectRepository(OrderItem)
+    private readonly orderItemRepository: Repository<OrderItem>,
   ) {}
 
-  generateOrderCode = (id: number) => {
+  generateOrderCode(id: number) {
     return `DH${id.toString().padStart(6, '0')}`;
-  };
+  }
 
   async findOneByid(id: number): Promise<Order> {
     const order = await this.orderRepository
@@ -108,6 +110,139 @@ export class OrderService {
       });
 
     return paginate<Order>(queryBuilder, options);
+  }
+
+  async findAllOrderByMonth(year: number, month: number): Promise<Order[]> {
+    const start = new Date(year, month, 1);
+    const end = new Date(year, month + 1, 1);
+
+    const result = await this.orderRepository
+      .createQueryBuilder('order')
+      .select(`TO_CHAR(order.created_at, 'DD/MM')`, 'date')
+      .addSelect('SUM(order.total_cost)', 'total')
+      .where('order.payment_status = :status', {
+        status: PaymentStatusEnum.PAID,
+      })
+      .andWhere('order.created_at >= :start', { start })
+      .andWhere('order.created_at < :end', { end })
+      .groupBy('date')
+      .orderBy('date', 'ASC')
+      .getRawMany();
+
+    return result;
+  }
+
+  async findAllOrderByYear(year: number): Promise<Order[]> {
+    const start = new Date(year, 0, 1);
+    const end = new Date(year + 1, 0, 1);
+
+    const result = await this.orderRepository
+      .createQueryBuilder('order')
+      .select("TO_CHAR(order.created_at, 'MM/YYYY')", 'date')
+      .addSelect('SUM(order.total_cost)', 'total')
+      .where('order.payment_status = :status', {
+        status: PaymentStatusEnum.PAID,
+      })
+      .andWhere('order.created_at >= :start', { start })
+      .andWhere('order.created_at < :end', { end })
+      .groupBy('date')
+      .orderBy('date', 'ASC')
+      .getRawMany();
+
+    return result;
+  }
+
+  async totalCostOrderByYear(year: number): Promise<number> {
+    const start = new Date(year, 0, 1);
+    const end = new Date(year + 1, 0, 1);
+
+    const result = await this.orderRepository
+      .createQueryBuilder('order')
+      .select('SUM(order.total_cost)', 'total')
+      .where('order.payment_status = :status', {
+        status: PaymentStatusEnum.PAID,
+      })
+      .andWhere('order.created_at BETWEEN :start AND :end', {
+        start,
+        end,
+      })
+      .getRawOne();
+
+    return result?.total;
+  }
+
+  async getTopSellingProducts(limit: number) {
+    const result = await this.orderItemRepository
+      .createQueryBuilder('item')
+      .innerJoin('item.order', 'order')
+      .innerJoin('item.product', 'product')
+      .select([
+        'product.id AS "product_id"',
+        'product.title',
+        'product.image_url',
+        'SUM(item.quantity) AS "total_sold"',
+        'SUM(item.sale * item.quantity) AS "total_sale"',
+      ])
+      .where('order.payment_status = :status', {
+        status: PaymentStatusEnum.PAID,
+      })
+      .groupBy('product.id')
+      .addGroupBy('product.title')
+      .orderBy('total_sold', 'DESC')
+      .limit(limit)
+      .getRawMany();
+
+    return result;
+  }
+
+  async countOrderByYear(year: number): Promise<number> {
+    const start = new Date(year, 0, 1);
+    const end = new Date(year + 1, 0, 1);
+    return await this.orderRepository.count({
+      where: {
+        created_at: Between(start, end),
+      },
+    });
+  }
+
+  async findAllOrderCompletedByMonth(
+    year: number,
+    month: number,
+  ): Promise<number> {
+    const start = new Date(year, month, 1);
+    const end = new Date(year, month + 1, 1);
+
+    const result = await this.orderRepository
+      .createQueryBuilder('order')
+      .select('COUNT(order.id)', 'quantity')
+      .where('order.status = :status', {
+        status: OrderStatusEnum.COMPLETED,
+      })
+      .andWhere('order.created_at >= :start', { start })
+      .andWhere('order.created_at < :end', { end })
+      .getRawOne();
+
+    return Number(result.quantity);
+  }
+
+  async findAllOrderCancelledByMonth(
+    year: number,
+    month: number,
+  ): Promise<number> {
+    const start = new Date(year, month, 1);
+    const end = new Date(year, month + 1, 1);
+
+    const result = await this.orderRepository
+      .createQueryBuilder('order')
+      .select('COUNT(order.id)', 'quantity')
+      .where('order.status = :status', {
+        status: OrderStatusEnum.CANCELLED,
+      })
+      .andWhere('order.created_at >= :start', { start })
+      .andWhere('order.created_at < :end', { end })
+      .getRawOne();
+
+    return Number(result.quantity);
   }
 
   async create(user_id: number, cart_id: number, data: CreateOrderDTO) {

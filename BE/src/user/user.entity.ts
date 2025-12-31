@@ -74,6 +74,9 @@ export class User {
   @Column({ name: 'role_id', nullable: true })
   role_id?: number;
 
+  @Column('date', { default: () => 'CURRENT_DATE' })
+  created_at: Date;
+
   @ManyToOne(() => Role, (role) => role.user, {
     onDelete: 'CASCADE',
   })

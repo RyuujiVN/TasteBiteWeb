@@ -1,0 +1,34 @@
+.kpi-card {
+  display: flex;
+  align-items: center;
+  border-radius: 12px;
+  padding: 20px;
+
+  .ant-card-body {
+    padding: 0;
+    display: flex;
+    align-items: center;
+  }
+
+  &__icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    margin-right: 16px;
+    color: $color-red-heavy;
+  }
+
+  &__value {
+    font-size: 22px;
+    font-weight: 600;
+  }
+
+  &__label {
+    margin-top: 4px;
+    color: #8c8c8c;
+  }
+}

@@ -94,6 +94,7 @@ const Permission = () => {
 
           <tr></tr>
 
+          {/* Sản phẩm */}
           <tr className="permission__table--head">
             <td colSpan={roles.length + 1}>Sản phẩm</td>
           </tr>
@@ -197,7 +198,33 @@ const Permission = () => {
           </tr>
 
           <tr></tr>
+          {/* Thống kê */}
+          <tr className="permission__table--head">
+            <td colSpan={roles.length + 1}>Thống kê</td>
+          </tr>
 
+          <tr>
+            <td>Xem</td>
+            {roles.length > 0 &&
+              roles.map((item) => (
+                <td key={item.title} className="permission__table--check">
+                  <Checkbox
+                    checked={isChecked(item.id, permissionEnum.VIEW_DASHBOARD)}
+                    onChange={(e) =>
+                      handleChange(
+                        item.id,
+                        permissionEnum.VIEW_DASHBOARD,
+                        e.target.checked
+                      )
+                    }
+                  />
+                </td>
+              ))}
+          </tr>
+
+          <tr></tr>
+
+          {/* Danh mục */}
           <tr className="permission__table--head">
             <td colSpan={roles.length + 1}>Danh mục</td>
           </tr>
@@ -280,6 +307,7 @@ const Permission = () => {
 
           <tr></tr>
 
+          {/* Role */}
           <tr className="permission__table--head">
             <td colSpan={roles.length + 1}>Role</td>
           </tr>

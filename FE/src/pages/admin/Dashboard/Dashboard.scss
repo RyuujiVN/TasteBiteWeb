@@ -1,0 +1,53 @@
+.dashboard {
+  padding: 24px;
+  background: #f5f7fb;
+
+  &__charts {
+    margin-top: 24px;
+  }
+
+  &__product {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+}
+
+.order-status-summary {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  margin-top: 16px;
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-top: 4px;
+    }
+
+    .value {
+      font-size: 18px;
+      font-weight: 600;
+      line-height: 1;
+    }
+
+    .label {
+      font-size: 13px;
+      color: #8c8c8c;
+    }
+
+    &.completed .dot {
+      background-color: #52c41a;
+    }
+
+    &.cancelled .dot {
+      background-color: #ff4d4f;
+    }
+  }
+}

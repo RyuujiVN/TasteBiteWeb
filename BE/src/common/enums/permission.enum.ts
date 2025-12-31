@@ -35,4 +35,7 @@ export enum Permission {
 
   // Permission
   UPDATE_PERMISSION_ROLE = 'update_permission_role',
+
+  // Dashboard
+  VIEW_DASHBOARD = 'view_dashboard',
 }

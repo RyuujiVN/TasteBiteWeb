@@ -9,6 +9,7 @@ import {
   CalendarOutlined,
   TagsOutlined,
   MessageOutlined,
+  HomeOutlined,
 } from "@ant-design/icons";
 import { RiShieldUserLine, RiLockPasswordLine } from "react-icons/ri";
 import { Link, useLocation } from "react-router-dom";
@@ -22,10 +23,18 @@ const rawItems = [
     label: "TỔNG QUAN",
     children: [
       {
+        key: "/overview",
+        icon: <HomeOutlined />,
+        label: <Link to="/admin/overview">Trang tổng quan</Link>,
+        permission: permissionEnum.VIEW_OVERVIEW,
+        public: true,
+      },
+
+      {
         key: "/dashboard",
         icon: <DashboardOutlined />,
-        label: <Link to="/dashboard">Thống kê</Link>,
-        permission: "view-dashboard",
+        label: <Link to="/admin/dashboard">Thống kê</Link>,
+        permission: permissionEnum.VIEW_DASHBOARD,
       },
     ],
   },
@@ -122,9 +131,11 @@ const Sidebar = () => {
   const filterItems = (items) => {
     return items
       .map((group) => {
-        const filteredChildren = group.children?.filter((child) =>
-          permissions?.includes(child.permission)
-        );
+        const filteredChildren = group.children?.filter((child) => {
+          if (child.public) return true;
+          return permissions?.includes(child.permission);
+        });
+
         if (!filteredChildren || filteredChildren.length === 0) return null;
         return { ...group, children: filteredChildren };
       })

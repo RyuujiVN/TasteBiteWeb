@@ -9,7 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import bcrypt from 'bcryptjs';
 import { CreateUserDTO } from 'src/user/dtos/create-user.dto';
 import { User } from 'src/user/user.entity';
-import { Not, Repository } from 'typeorm';
+import { Between, IsNull, Not, Repository } from 'typeorm';
 import { UpdateUserDTO } from './dtos/update-user.dto';
 import { PaginationUser } from './interfaces/pagination-user.interface';
 import { paginate, Pagination } from 'nestjs-typeorm-paginate';
@@ -72,6 +72,18 @@ export class UserService {
     if (!user) throw new UnauthorizedException(user);
 
     return user;
+  }
+
+  async countUserByMonth(year: number, month: number): Promise<number> {
+    const start = new Date(year, month, 1);
+    const end = new Date(year + 1, month + 1, 1);
+
+    return await this.userRepository.count({
+      where: {
+        role_id: IsNull(),
+        created_at: Between(start, end),
+      },
+    });
   }
 
   async getCart(user_id: number) {

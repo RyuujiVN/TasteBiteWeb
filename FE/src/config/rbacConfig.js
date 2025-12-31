@@ -44,4 +44,7 @@ export const permissionEnum = {
   UPDATE_BLOG: "update_blog",
   DELETE_BLOG: "delete_blog",
 
+  // Dashboard
+  VIEW_DASHBOARD: "view_dashboard",
+  VIEW_OVERVIEW: "view_overview"
 };
