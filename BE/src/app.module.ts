@@ -16,18 +16,27 @@ import { dataSourceOptions } from 'db/data-source';
 import { OtpModule } from './otp/otp.module';
 import { AddressModule } from './address/address.module';
 import { HttpModule } from '@nestjs/axios';
-import { APP_FILTER } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { GlobalExceptionFilter } from './common/filters/global-exception.filter';
 import { CartModule } from './cart/cart.module';
 import { OrderModule } from './order/order.module';
 import { PaymentModule } from './payment/payment.module';
 import { RevenueModule } from './revenue/revenue.module';
+import { seconds, ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       load: [configurationConfig],
+    }),
+    ThrottlerModule.forRoot({
+      throttlers: [
+        {
+          limit: 4,
+          ttl: seconds(10),
+        },
+      ],
     }),
     UserModule,
     TypeOrmModule.forRoot(dataSourceOptions),
@@ -52,6 +61,10 @@ import { RevenueModule } from './revenue/revenue.module';
       provide: APP_FILTER,
       useClass: GlobalExceptionFilter,
     },
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard
+    }
   ],
 })
 export class AppModule {}
