@@ -12,7 +12,7 @@ WORKDIR /app
 
 COPY . .
 RUN npm run build
-RUN npm run prune --omit=dev
+RUN npm prune --omit=dev
 
 ## Run stage ##
 FROM node:20-alpine
