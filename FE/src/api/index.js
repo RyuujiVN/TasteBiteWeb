@@ -4,7 +4,7 @@ import adminService from "~/services/accountService";
 
 
 export const instance = axios.create({
-  baseURL: "http://localhost:3000",
+  baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:3000/api",
   withCredentials: true,
   timeout: 10 * 60 * 1000
 })

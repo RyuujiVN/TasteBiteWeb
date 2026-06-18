@@ -10,6 +10,9 @@ async function bootstrap() {
 
   app.enableCors(corsOptions);
 
+  // Thêm prefix cho url api
+  app.setGlobalPrefix('api');
+
   const config = new DocumentBuilder()
     .setTitle('Food Delivery')
     .setDescription('Đây là api document cho web Food Delivery')
