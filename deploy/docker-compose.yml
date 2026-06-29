@@ -4,7 +4,7 @@ services:
     container_name: tastebite-db
     restart: always
     environment:
-      - POSTGRES_DB=${POSTGRES_DB:-tastebite}
+      - POSTGRES_DB=${POSTGRES_DB:-Tastebite}
       - POSTGRES_USER=${POSTGRES_USER:-postgres}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-123456}
     volumes:
@@ -12,7 +12,11 @@ services:
     ports:
       - "5432:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-tastebite}"]
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-Tastebite}",
+        ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -33,7 +37,7 @@ services:
         condition: service_healthy
     ports:
       - "${PORT:-3000}:3000"
-  
+
   fe:
     image: ${FE_IMAGE:?Set FE_IMAGE in .env}
     container_name: tastebite-fe
@@ -43,6 +47,6 @@ services:
       - be
     ports:
       - "80:80"
-  
+
 volumes:
-  postgre_data:
+  postgres_data:
