@@ -159,8 +159,8 @@ jobs:
           script: |
             set -e
 
-            FE_IMAGE="${{ steps.vars.outputs.fe_iamge }}:${{ github.sha }}"
-            BE_IMAGE="${{ steps.vars.outputs.be_iamge }}:${{ github.sha }}"
+            FE_IMAGE="${{ steps.vars.outputs.fe_image }}:${{ github.sha }}"
+            BE_IMAGE="${{ steps.vars.outputs.be_image }}:${{ github.sha }}"
 
             cd ${{ secrets.VPS_DEPLOY_PATH }}
             {
