@@ -109,3 +109,81 @@ jobs:
           tags: |
             ${{ steps.vars.outputs.be_image }}:latest
             ${{ steps.vars.outputs.be_image }}:${{ github.sha }}
+
+  pull-and-deploy:
+    name: Pull and Deploy FE + BE + DB
+    runs-on: ubuntu-latest
+    needs: build-and-push
+    if: github.event_name == 'push' &&  github.ref == 'refs/head/main'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Derive lowercase image names
+        id: vars
+        shell: bash
+        run: |
+          DOCKERHUB_USER="${{ secrets.DOCKERHUB_USERNAME }}"
+          echo "fe_image=${{ env.REGISTRY }}/$DOCKERHUB_USER/tastebite-fe" >> "$GITHUB_OUTPUT"
+          echo "be_image=${{ env.REGISTRY }}/$DOCKERHUB_USER/tastebite-be" >> "$GITHUB_OUTPUT"
+
+      - name: Ensure deploy folder exist on VM
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.VPS_PORT }}
+          script: |
+            mkdir -p "${{ secrets.VPS_DEPLOY_PATH }}"
+
+      - name: Copy Docker Compose file to server
+        uses: appleboy/scp-action@v1
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.VPS_PORT }}
+          source: deploy/docker-compose.yml
+          target: ${{ secrets.VPS_DEPLOY_PATH }}
+          strip_components: 1
+
+      - name: Pull and run stack on VM
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.VPS_PORT }}
+          script: |
+            set -e
+
+            FE_IMAGE="${{ steps.vars.outputs.fe_iamge }}:${{ github.sha }}"
+            BE_IMAGE="${{ steps.vars.outputs.be_iamge }}:${{ github.sha }}"
+
+            cd "${{ secrets.VPS_DEPLOY_PATH}} "
+            {
+              echo "FE_IMAGE=$FE_IMAGE"
+              echo "BE_IMAGE=$BE_IMAGE"
+            } > .env
+
+            if [ -n "${{ secrets.ENV }}"]; then
+              printf "\n%s\n" "${{ secrets.env }}" >> .env
+            fi
+
+            : > env.be
+            if [ -n "${{ secrets.ENV_BE }}"]; then
+              printf "%s\n" "${{ secrets.ENV_BE }}" > .env.be
+            fi
+
+            : > env.fe
+            if [ -n "${{ secrets.ENV_FE }}"]; then
+              printf "%s\n" "${{ secrets.ENV_FE }}" > .env.fe
+            fi
+
+            docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" -p "${{ secrets.DOCKERHUB_TOKEN }}"
+
+            docker compose -f docker-compose.yml run --rm --no-deps be npm run migration:run
+            docker compose -f docker-compose.yml pull
+            docker compose -f docker-compose.yml up -d --remove-orphans

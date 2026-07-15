@@ -29,7 +29,7 @@ services:
     pull_policy: always
     env_file:
       - .env
-      - .env.app
+      - .env.be
     environment:
       PORT: ${PORT:-3000}
     depends_on:
@@ -43,6 +43,8 @@ services:
     container_name: tastebite-fe
     restart: always
     pull_policy: always
+    env_file:
+      - .env.fe
     depends_on:
       - be
     ports:
