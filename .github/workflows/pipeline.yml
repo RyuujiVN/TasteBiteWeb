@@ -168,17 +168,17 @@ jobs:
               echo "BE_IMAGE=$BE_IMAGE"
             } > .env
 
-            if [ -n "${{ secrets.ENV }}"]; then
-              printf "\n%s\n" "${{ secrets.env }}" >> .env
+            if [ -n "${{ secrets.ENV }}" ]; then
+              printf "\n%s\n" "${{ secrets.ENV }}" >> .env
             fi
 
-            : > env.be
-            if [ -n "${{ secrets.ENV_BE }}"]; then
+            : > .env.be
+            if [ -n "${{ secrets.ENV_BE }}" ]; then
               printf "%s\n" "${{ secrets.ENV_BE }}" > .env.be
             fi
 
-            : > env.fe
-            if [ -n "${{ secrets.ENV_FE }}"]; then
+            : > .env.fe
+            if [ -n "${{ secrets.ENV_FE }}" ]; then
               printf "%s\n" "${{ secrets.ENV_FE }}" > .env.fe
             fi
 
