@@ -162,7 +162,7 @@ jobs:
             FE_IMAGE="${{ steps.vars.outputs.fe_iamge }}:${{ github.sha }}"
             BE_IMAGE="${{ steps.vars.outputs.be_iamge }}:${{ github.sha }}"
 
-            cd "${{ secrets.VPS_DEPLOY_PATH }}"
+            cd ${{ secrets.VPS_DEPLOY_PATH }}
             {
               echo "FE_IMAGE=$FE_IMAGE"
               echo "BE_IMAGE=$BE_IMAGE"
